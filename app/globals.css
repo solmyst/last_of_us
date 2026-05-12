@@ -1,0 +1,168 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  /* Background layers — dark theme only, no toggle */
+  --bg-base: #080810;       /* deepest — page background */
+  --bg-surface: #0e0e1a;    /* cards, panels */
+  --bg-elevated: #14141f;   /* hover states, code blocks */
+  --bg-overlay: #1c1c2e;    /* modals, tooltips */
+
+  /* Borders */
+  --border-subtle: rgba(255,255,255,0.05);
+  --border-default: rgba(255,255,255,0.09);
+  --border-strong: rgba(255,255,255,0.16);
+
+  /* Text */
+  --text-primary: #f0f0f8;
+  --text-secondary: #8888a8;
+  --text-tertiary: #44445a;
+
+  /* Accent — ONE accent color, used sparingly */
+  --accent: #6c63ff;        /* electric indigo */
+  --accent-dim: rgba(108,99,255,0.12);
+  --accent-border: rgba(108,99,255,0.3);
+
+  /* Semantic */
+  --green: #3ecf8e;
+  --amber: #f59e0b;
+  --red: #f43f5e;
+
+  /* PM mode accent (used in PM-specific sections) */
+  --pm-accent: #06b6d4;     /* cyan — distinct from engineering purple */
+  --pm-dim: rgba(6,182,212,0.1);
+
+  /* Dynamic Accent for the nav context transition */
+  --dynamic-accent: var(--accent);
+}
+
+body {
+  color: var(--text-primary);
+  background-color: var(--bg-base);
+  font-family: var(--font-inter), sans-serif;
+  overflow-x: hidden;
+}
+
+/* Base Headings */
+h1, h2, h3, h4, h5, h6 {
+  font-family: var(--font-fragment-mono), monospace;
+  font-weight: 500;
+}
+
+/* Custom Selection */
+::selection {
+  background: var(--accent-dim);
+  color: var(--text-primary);
+}
+
+/* Scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+::-webkit-scrollbar-track {
+  background: var(--bg-base);
+}
+::-webkit-scrollbar-thumb {
+  background: var(--bg-elevated);
+  border-radius: 4px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: var(--border-default);
+}
+
+/* Utility classes for backgrounds */
+.bg-base { background-color: var(--bg-base); }
+.bg-surface { background-color: var(--bg-surface); }
+.bg-elevated { background-color: var(--bg-elevated); }
+.bg-overlay { background-color: var(--bg-overlay); }
+
+.border-subtle { border-color: var(--border-subtle); }
+.border-default { border-color: var(--border-default); }
+.border-strong { border-color: var(--border-strong); }
+
+.text-primary { color: var(--text-primary); }
+.text-secondary { color: var(--text-secondary); }
+.text-tertiary { color: var(--text-tertiary); }
+.text-accent { color: var(--accent); }
+.text-pm-accent { color: var(--pm-accent); }
+
+/* Animated Scanline for MemeForge */
+@keyframes scanline {
+  0% { transform: translateY(-100%); }
+  100% { transform: translateY(200%); }
+}
+
+.scanline-hover:hover .scanline-effect {
+  animation: scanline 2s linear infinite;
+  display: block;
+}
+
+.scanline-effect {
+  display: none;
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 40%;
+  background: linear-gradient(transparent, rgba(108,99,255,0.08), transparent);
+  pointer-events: none;
+}
+
+/* Cursor custom styles */
+.cursor-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--accent);
+  position: fixed;
+  pointer-events: none;
+  z-index: 9999;
+  transition: transform 0.15s ease;
+  transform: translate(-50%, -50%);
+}
+
+.cursor-ring {
+  width: 28px;
+  height: 28px;
+  border: 1px solid rgba(108,99,255,0.5);
+  border-radius: 50%;
+  position: fixed;
+  pointer-events: none;
+  z-index: 9998;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 10px;
+  color: var(--accent);
+  letter-spacing: 0.05em;
+  font-family: var(--font-fragment-mono), monospace;
+  transform: translate(-50%, -50%);
+  transition: width 0.3s ease, height 0.3s ease, background 0.3s ease, border-color 0.3s ease;
+}
+
+.cursor-ring span {
+  opacity: 0;
+  transition: opacity 0.2s ease;
+}
+
+/* Marquee animation */
+@keyframes marquee {
+  from { transform: translateX(0); }
+  to { transform: translateX(-50%); }
+}
+
+.animate-marquee {
+  animation: marquee 20s linear infinite;
+}
+.animate-marquee:hover {
+  animation-play-state: paused;
+}
+
+/* Hide default cursor globally on desktop if using custom cursor */
+@media (min-width: 1024px) {
+  body.has-custom-cursor, body.has-custom-cursor * {
+    cursor: none !important;
+  }
+}

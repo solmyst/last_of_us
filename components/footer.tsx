@@ -1,4 +1,6 @@
 "use client";
+import { GitBranch } from "lucide-react";
+import { personal } from "@/lib/data";
 
 
 
@@ -9,13 +11,14 @@ export default function Footer() {
     <footer className="py-8 border-t border-border-subtle bg-bg-base">
       <div className="max-w-[1000px] mx-auto px-6 flex flex-col md:flex-row items-center justify-between gap-4 font-mono text-[11px] text-text-tertiary">
         <div className="flex flex-col md:flex-row items-center gap-2 md:gap-6">
-          <span>built by sol in Jaipur</span>
-          <span className="hidden md:inline">•</span>
+          <a href={personal.github} target="_blank" className="flex items-center gap-2 hover:text-accent transition-colors group">
+            <GitBranch className="w-3.5 h-3.5 group-hover:rotate-12 transition-transform" />
+            <span>solmyst / portfolio</span>
+          </a>
+          <span className="hidden md:inline text-border-default">|</span>
+          <span>Jaipur, RJ</span>
+          <span className="hidden md:inline text-border-default">|</span>
           <span>next.js 14</span>
-          <span className="hidden md:inline">•</span>
-          <span>framer motion</span>
-          <span className="hidden md:inline">•</span>
-          <span>deployed on vercel</span>
         </div>
         
         <div className="flex items-center gap-4">

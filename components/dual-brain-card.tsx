@@ -100,7 +100,7 @@ export default function DualBrainCard() {
     >
       {/* Code Side */}
       <motion.div
-        className="w-full sm:w-1/2 p-5 border-b sm:border-b-0 sm:border-r border-border-default bg-[#0a0a10]"
+        className="w-full sm:w-1/2 p-5 border-b sm:border-b-0 sm:border-r border-border-default bg-gray-50 dark:bg-[#0a0a10]"
         variants={{
           rest: { x: 0 },
           hover: { x: -3, transition: { type: "spring", stiffness: 400, damping: 30 } }
@@ -113,14 +113,14 @@ export default function DualBrainCard() {
           <span className="ml-2 font-mono text-[10px] text-text-secondary uppercase">engineer_mode</span>
         </div>
         
-        <div className="font-mono text-[11px] md:text-xs leading-[1.6] text-[#a9b1d6]">
+        <div className="font-mono text-[11px] md:text-xs leading-[1.6] text-gray-800 dark:text-[#a9b1d6]">
           {CODE_LINES.map((line, i) => (
             <div key={i} className="min-h-[1.6em]">
               <span className={
-                line.type === "comment" ? "text-[#565f89] italic" :
-                line.type === "import" ? "text-[#bb9af7]" :
-                line.type === "code" && line.text.includes("generateMeme") ? "text-[#7aa2f7]" :
-                line.type === "code" && line.text.includes("Ollama") ? "text-[#e0af68]" :
+                line.type === "comment" ? "text-gray-500 dark:text-[#565f89] italic" :
+                line.type === "import" ? "text-purple-600 dark:text-[#bb9af7]" :
+                line.type === "code" && line.text.includes("generateMeme") ? "text-blue-600 dark:text-[#7aa2f7]" :
+                line.type === "code" && line.text.includes("Ollama") ? "text-orange-600 dark:text-[#e0af68]" :
                 ""
               }>
                 {typedLines[i]}
@@ -149,7 +149,7 @@ export default function DualBrainCard() {
 
       {/* Product Side */}
       <motion.div
-        className="w-full sm:w-1/2 p-5 bg-[#0b0e14]"
+        className="w-full sm:w-1/2 p-5 bg-white dark:bg-[#0b0e14]"
         variants={{
           rest: { x: 0 },
           hover: { x: 3, transition: { type: "spring", stiffness: 400, damping: 30 } }

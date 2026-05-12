@@ -2,6 +2,7 @@
 
 import { personal } from "@/lib/data";
 import { motion } from "framer-motion";
+import { GitBranch } from "lucide-react";
 
 export default function Contact() {
   return (
@@ -12,7 +13,14 @@ export default function Contact() {
         viewport={{ once: true }}
         transition={{ duration: 0.6 }}
       >
-        <h2 className="text-3xl md:text-4xl font-mono text-text-primary mb-8 tracking-tight">LET&apos;S TALK</h2>
+        <div className="mb-16 md:mb-20">
+          <div className="flex items-center justify-center gap-4 mb-4 relative max-w-xs mx-auto">
+            <span className="font-mono text-sm tracking-widest text-accent uppercase">05. REACH</span>
+            <div className="h-[1px] w-12 bg-border-subtle" />
+            <span className="font-mono text-[10px] text-text-tertiary absolute -top-4 opacity-40">--ping --t 500ms</span>
+          </div>
+          <h2 className="text-2xl md:text-4xl font-bold text-text-primary uppercase tracking-tight">Let&apos;s build something.</h2>
+        </div>
         
         <p className="text-lg text-text-secondary max-w-2xl mx-auto leading-relaxed mb-12">
           If you&apos;re building something hard and need someone who
@@ -30,7 +38,7 @@ export default function Contact() {
 
         <div className="flex flex-wrap justify-center items-center gap-6 md:gap-10 font-mono text-[13px] text-text-secondary uppercase tracking-wider">
           <a href={personal.github} target="_blank" data-cursor="link" className="hover:text-text-primary transition-colors flex items-center gap-2">
-            GitHub ↗
+            <GitBranch className="w-4 h-4" /> GITHUB ↗
           </a>
           <a href={personal.linkedin} target="_blank" data-cursor="link" className="hover:text-text-primary transition-colors flex items-center gap-2">
             LinkedIn ↗

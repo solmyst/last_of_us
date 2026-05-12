@@ -1,13 +1,15 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { motion } from "framer-motion";
-import { Menu, X } from "lucide-react";
+import { motion, AnimatePresence } from "framer-motion";
+import { Menu, X, GitBranch, ExternalLink } from "lucide-react";
+import { ThemeToggle } from "./theme-toggle";
+import { personal } from "@/lib/data";
 
 const NAV_LINKS = [
   { label: "work", href: "#work" },
-  { label: "thinking", href: "#thinking" },
-  { label: "decisions", href: "#decisions" },
+  { label: "tech", href: "#tech" },
+  { label: "about", href: "#about" },
   { label: "contact", href: "#contact" },
 ];
 
@@ -39,114 +41,132 @@ export default function Nav() {
   const activeId = useScrollSpy(NAV_LINKS.map((l) => l.href.substring(1)));
 
   useEffect(() => {
-    const handleScroll = () => setScrolled(window.scrollY > 80);
+    const handleScroll = () => setScrolled(window.scrollY > 20);
     window.addEventListener("scroll", handleScroll);
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
   return (
     <>
-      <header
-        className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
-          scrolled ? "bg-bg-base/80 backdrop-blur-md border-b border-border-subtle" : "bg-transparent border-b border-transparent"
-        }`}
-      >
-        <div className="max-w-7xl mx-auto px-6 h-16 flex items-center justify-between">
-          <a href="#" className="font-mono text-text-primary text-sm font-medium" data-cursor="link">
-            sol.dev
+      <div className="fixed top-4 left-0 right-0 z-50 px-6 flex justify-center">
+        <motion.header
+          initial={{ y: -20, opacity: 0 }}
+          animate={{ y: 0, opacity: 1 }}
+          className={`
+            w-full max-w-3xl h-11 rounded-full flex items-center justify-between px-5 md:px-7
+            transition-all duration-300 border
+            ${scrolled
+              ? "bg-bg-base/70 backdrop-blur-xl border-border-subtle shadow-2xl scale-[1.01]"
+              : "bg-bg-surface/30 backdrop-blur-md border-border-subtle/40"
+            }
+          `}
+        >
+          {/* Logo */}
+          <a href="#" className="font-bold text-text-primary text-[13px] tracking-tight hover:opacity-80 transition-opacity">
+            {personal.name}
           </a>
 
-          {/* Desktop Nav */}
-          <nav className="hidden md:flex items-center space-x-8">
+          {/* Desktop Nav Links */}
+          <nav className="hidden md:flex items-center gap-6">
             {NAV_LINKS.map((link) => (
               <a
                 key={link.href}
                 href={link.href}
-                data-cursor="link"
-                className={`text-[13px] uppercase tracking-wider relative group transition-colors ${
-                  activeId === link.href.substring(1) ? "text-text-primary" : "text-text-secondary hover:text-text-primary"
-                }`}
+                className={`text-[12px] font-medium transition-colors relative py-1 ${activeId === link.href.substring(1) ? "text-text-primary" : "text-text-tertiary hover:text-text-primary"
+                  }`}
               >
                 {link.label}
-                <motion.span
-                  className="absolute -bottom-1 left-0 right-0 h-[1px] bg-[var(--dynamic-accent)]"
-                  initial={false}
-                  animate={{ scaleX: activeId === link.href.substring(1) ? 1 : 0 }}
-                  transition={{ duration: 0.25, ease: "easeOut" }}
-                  style={{ originX: 0 }}
-                />
-                <span className="absolute -bottom-1 left-0 right-0 h-[1px] bg-[var(--dynamic-accent)] scale-x-0 origin-left transition-transform duration-250 ease-out group-hover:scale-x-100" />
+                {activeId === link.href.substring(1) && (
+                  <motion.div
+                    layoutId="nav-active"
+                    className="absolute -bottom-0.5 left-0 right-0 h-[1px] bg-accent"
+                  />
+                )}
               </a>
             ))}
+          </nav>
+
+          {/* Action Buttons */}
+          <div className="flex items-center gap-1 md:gap-3">
+            <div className="hidden sm:flex items-center gap-1.5 pr-2 border-r border-border-subtle/30">
+              <ThemeToggle />
+              <a
+                href={personal.github}
+                target="_blank"
+                className="p-1.5 text-text-tertiary hover:text-accent transition-colors"
+                title="View Source"
+              >
+                <GitBranch className="w-3.5 h-3.5" />
+              </a>
+            </div>
+
             <a
               href="/resume.pdf"
               target="_blank"
-              data-cursor="link"
-              className="flex items-center space-x-2 px-4 py-1.5 border border-accent rounded-full text-[13px] text-accent uppercase tracking-wider hover:bg-accent/10 transition-colors"
+              className="flex items-center gap-1.5 bg-accent text-white px-3 py-1 rounded-full text-[12px] font-bold hover:bg-accent/90 transition-all shadow-lg shadow-accent/20 active:scale-95"
             >
-              <span className="w-1.5 h-1.5 rounded-full bg-green-400 animate-pulse" />
-              <span>→ resume</span>
+              Resume <ExternalLink className="w-2.5 h-2.5" />
             </a>
-          </nav>
 
-          {/* Mobile Toggle */}
-          <button
-            className="md:hidden text-text-primary p-2"
-            onClick={() => setMobileOpen(true)}
-          >
-            <Menu className="w-5 h-5" />
-          </button>
-        </div>
-      </header>
-
-      {/* Mobile Overlay */}
-      {mobileOpen && (
-        <motion.div
-          initial={{ opacity: 0, scale: 0.95 }}
-          animate={{ opacity: 1, scale: 1 }}
-          exit={{ opacity: 0, scale: 0.97 }}
-          transition={{ type: "spring", stiffness: 120, damping: 20 }}
-          className="fixed inset-0 z-[60] bg-bg-base/95 backdrop-blur-xl flex flex-col p-6"
-        >
-          <div className="flex justify-between items-center h-10 mb-12">
-            <span className="font-mono text-sm">sol.dev</span>
-            <button className="p-2 text-text-secondary" onClick={() => setMobileOpen(false)}>
-              <X className="w-6 h-6" />
+            {/* Mobile Menu Toggle */}
+            <button
+              className="md:hidden p-2 text-text-primary"
+              onClick={() => setMobileOpen(true)}
+            >
+              <Menu className="w-5 h-5" />
             </button>
           </div>
-          <nav className="flex flex-col space-y-6 flex-1">
-            {NAV_LINKS.map((link, i) => (
-              <motion.a
-                key={link.href}
-                href={link.href}
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: 0.1 + i * 0.05, ease: "easeOut" }}
-                onClick={() => setMobileOpen(false)}
-                className="text-2xl font-mono uppercase text-text-secondary hover:text-text-primary transition-colors"
-              >
-                {link.label}
-              </motion.a>
-            ))}
-          </nav>
+        </motion.header>
+      </div>
+
+      {/* Mobile Menu Overlay */}
+      <AnimatePresence>
+        {mobileOpen && (
           <motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
-            transition={{ delay: 0.4 }}
-            className="pb-10"
+            exit={{ opacity: 0 }}
+            className="fixed inset-0 z-[60] bg-bg-base/95 backdrop-blur-2xl flex items-center justify-center p-6"
           >
-            <a
-              href="/resume.pdf"
-              target="_blank"
+            <button
+              className="absolute top-8 right-8 p-2 text-text-secondary"
               onClick={() => setMobileOpen(false)}
-              className="flex items-center justify-center space-x-3 w-full py-4 border border-accent rounded-full text-accent uppercase tracking-wider"
             >
-              <span className="w-2 h-2 rounded-full bg-green-400 animate-pulse" />
-              <span>resume</span>
-            </a>
+              <X className="w-6 h-6" />
+            </button>
+
+            <nav className="flex flex-col items-center gap-8">
+              {NAV_LINKS.map((link, i) => (
+                <motion.a
+                  key={link.href}
+                  href={link.href}
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: i * 0.05 }}
+                  onClick={() => setMobileOpen(false)}
+                  className="text-3xl font-bold text-text-secondary hover:text-accent transition-colors"
+                >
+                  {link.label}
+                </motion.a>
+              ))}
+
+              <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.25 }}
+                className="flex flex-col items-center gap-6 mt-8 pt-8 border-t border-border-subtle w-full"
+              >
+                <div className="flex items-center gap-8">
+                  <ThemeToggle />
+                  <a href={personal.github} target="_blank" className="text-text-tertiary hover:text-accent">
+                    <GitBranch className="w-6 h-6" />
+                  </a>
+                </div>
+              </motion.div>
+            </nav>
           </motion.div>
-        </motion.div>
-      )}
+        )}
+      </AnimatePresence>
     </>
   );
 }

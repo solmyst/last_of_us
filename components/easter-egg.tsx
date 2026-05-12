@@ -10,16 +10,21 @@ const KONAMI = [
 ];
 
 const easterEggMessage = [
-  "$ you found it.",
-  "$ running diagnostic...",
-  "$ checking if sol is hire-worthy...",
-  "$ analyzing: ships fast ✓",
-  "$ analyzing: thinks in systems ✓",
-  "$ analyzing: documents decisions ✓",
-  "$ analyzing: anime taste ✓",
-  "$ result: probably hire him",
-  "$ source code: github.com/solmyst",
-  "$ now stop snooping and send an email.",
+  "$ system.init()",
+  "$ loading_profile: solmyst",
+  "$ status: building_the_future",
+  "$ diagnostic: checking_core_vitals...",
+  "$ ----------------------------------",
+  "$ engineering: [####################] 100%",
+  "$ product_sense: [##################--] 90%",
+  "$ aesthetic: [####################] 100%",
+  "$ caffeination: [####################] 100%",
+  "$ ----------------------------------",
+  "$ recommendation: hire_immediately",
+  "$ follow_link: github.com/solmyst",
+  "$ contact_established: anushgupta105@gmail.com",
+  "$ system: mission_accomplished.",
+  "$ press ESC to return to reality",
 ];
 
 export default function EasterEgg() {
@@ -35,20 +40,32 @@ export default function EasterEgg() {
         return;
       }
 
+      // Track Konami Code
       if (e.key === KONAMI[konamiIndex]) {
         konamiIndex++;
         if (konamiIndex === KONAMI.length) {
           setActive(true);
           setVisibleLines(0);
           konamiIndex = 0;
+          return;
         }
       } else {
         konamiIndex = 0;
       }
     };
 
+    const handleCustomTrigger = () => {
+      setActive(true);
+      setVisibleLines(0);
+    };
+
     document.addEventListener("keydown", handleKeyDown);
-    return () => document.removeEventListener("keydown", handleKeyDown);
+    window.addEventListener("activate-easter-egg", handleCustomTrigger);
+    
+    return () => {
+      document.removeEventListener("keydown", handleKeyDown);
+      window.removeEventListener("activate-easter-egg", handleCustomTrigger);
+    };
   }, [active]);
 
   useEffect(() => {

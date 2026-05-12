@@ -1,61 +1,45 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useState } from "react";
+import { motion, useMotionValue, useSpring, AnimatePresence } from "framer-motion";
 import { ArrowRight, ChevronDown } from "lucide-react";
 
-type CursorState = "default" | "link" | "project" | "code" | "expand";
+type CursorState = "default" | "link" | "project" | "code" | "expand" | "collapse";
 
 export default function Cursor() {
-  const dotRef = useRef<HTMLDivElement>(null);
-  const ringRef = useRef<HTMLDivElement>(null);
-  
   const [cursorState, setCursorState] = useState<CursorState>("default");
-  const [isTouchDevice, setIsTouchDevice] = useState(false);
-  const [isVisible, setIsVisible] = useState(false);
+  const [isTouchDevice, setIsTouchDevice] = useState(true); // Default true to prevent SSR hydration mismatch
+
+  // Motion values for exact mouse position
+  const mouseX = useMotionValue(-100);
+  const mouseY = useMotionValue(-100);
+
+  // Smooth springs for the trailing ring
+  const springConfig = { damping: 28, stiffness: 300, mass: 0.5 };
+  const ringX = useSpring(mouseX, springConfig);
+  const ringY = useSpring(mouseY, springConfig);
+
+  // Faster springs for the core dot
+  const dotX = useSpring(mouseX, { damping: 40, stiffness: 800, mass: 0.1 });
+  const dotY = useSpring(mouseY, { damping: 40, stiffness: 800, mass: 0.1 });
 
   useEffect(() => {
-    // Check if it's a touch device
-    if ('ontouchstart' in window || navigator.maxTouchPoints > 0) {
-      setIsTouchDevice(true);
-      return;
+    // Enable cursor only on non-touch devices
+    if (!('ontouchstart' in window) && navigator.maxTouchPoints === 0) {
+      setIsTouchDevice(false);
+      document.body.classList.add("has-custom-cursor");
     }
 
-    setIsVisible(true);
-    document.body.classList.add("has-custom-cursor");
-
-    let mouseX = window.innerWidth / 2;
-    let mouseY = window.innerHeight / 2;
-    let ringX = mouseX;
-    let ringY = mouseY;
-    const LERP_FACTOR = 0.12;
-
     const onMouseMove = (e: MouseEvent) => {
-      mouseX = e.clientX;
-      mouseY = e.clientY;
-      if (dotRef.current) {
-        dotRef.current.style.transform = `translate(${mouseX}px, ${mouseY}px) translate(-50%, -50%)`;
-      }
-    };
-
-    let animationFrameId: number;
-    const animateRing = () => {
-      ringX += (mouseX - ringX) * LERP_FACTOR;
-      ringY += (mouseY - ringY) * LERP_FACTOR;
-      
-      if (ringRef.current) {
-        ringRef.current.style.transform = `translate(${ringX}px, ${ringY}px) translate(-50%, -50%)`;
-      }
-      animationFrameId = requestAnimationFrame(animateRing);
+      mouseX.set(e.clientX);
+      mouseY.set(e.clientY);
     };
 
     window.addEventListener("mousemove", onMouseMove);
-    animationFrameId = requestAnimationFrame(animateRing);
 
-    // Interactive element detection
+    // Contextual interaction detection
     const handleMouseOver = (e: MouseEvent) => {
       const target = e.target as HTMLElement;
-      
-      // Look up the tree for data-cursor attribute
       let cursorType: string | null = null;
       let el: HTMLElement | null = target;
       
@@ -64,17 +48,14 @@ export default function Cursor() {
           cursorType = el.getAttribute('data-cursor');
           break;
         }
-        
-        // Auto-detect a tags and buttons if no specific cursor is set
         if (!cursorType && (el.tagName === 'A' || el.tagName === 'BUTTON')) {
           cursorType = "link";
           break;
         }
-        
         el = el.parentElement;
       }
 
-      if (cursorType && ["link", "project", "code", "expand"].includes(cursorType)) {
+      if (cursorType && ["link", "project", "code", "expand", "collapse"].includes(cursorType)) {
         setCursorState(cursorType as CursorState);
       } else {
         setCursorState("default");
@@ -82,8 +63,6 @@ export default function Cursor() {
     };
 
     document.addEventListener("mouseover", handleMouseOver);
-
-    // Also handle case where an element might be removed while hovered
     const handleMouseLeave = () => setCursorState("default");
     document.addEventListener("mouseleave", handleMouseLeave);
 
@@ -91,60 +70,133 @@ export default function Cursor() {
       window.removeEventListener("mousemove", onMouseMove);
       document.removeEventListener("mouseover", handleMouseOver);
       document.removeEventListener("mouseleave", handleMouseLeave);
-      cancelAnimationFrame(animationFrameId);
       document.body.classList.remove("has-custom-cursor");
     };
-  }, []);
+  }, [mouseX, mouseY]);
 
-  if (isTouchDevice || !isVisible) return null;
+  if (isTouchDevice) return null;
 
-  // Determine styles based on state
-  let ringStyle = {};
-  let dotStyle = {};
-  
-  switch (cursorState) {
-    case "link":
-      dotStyle = { transform: "translate(-50%, -50%) scale(0)" };
-      ringStyle = { width: 48, height: 48, background: "var(--accent-dim)", borderColor: "var(--accent)" };
-      break;
-    case "project":
-      dotStyle = { transform: "translate(-50%, -50%) scale(0)" };
-      ringStyle = { width: 64, height: 64, background: "var(--accent-dim)", borderColor: "var(--accent)" };
-      break;
-    case "code":
-      dotStyle = { transform: "translate(-50%, -50%) scale(0)" };
-      ringStyle = { 
-        width: 4, 
-        height: 24, 
-        borderRadius: 2,
-        background: "var(--accent)", 
-        borderColor: "transparent",
-        animation: "pulse 1s infinite" 
-      };
-      break;
-    case "expand":
-      dotStyle = { transform: "translate(-50%, -50%) scale(0)" };
-      ringStyle = { width: 48, height: 48, background: "var(--bg-elevated)", borderColor: "var(--border-strong)" };
-      break;
-    default:
-      // default state uses CSS defaults
-      break;
-  }
+  const ringVariants = {
+    default: {
+      width: 32,
+      height: 32,
+      backgroundColor: "rgba(108, 99, 255, 0)",
+      borderColor: "rgba(108, 99, 255, 0.3)",
+      borderRadius: "50%",
+    },
+    link: {
+      width: 52,
+      height: 52,
+      backgroundColor: "rgba(108, 99, 255, 0.12)",
+      borderColor: "var(--accent)",
+      borderRadius: "50%",
+    },
+    project: {
+      width: 72,
+      height: 72,
+      backgroundColor: "rgba(108, 99, 255, 0.12)",
+      borderColor: "var(--accent)",
+      borderRadius: "50%",
+    },
+    expand: {
+      width: 48,
+      height: 48,
+      backgroundColor: "var(--bg-elevated)",
+      borderColor: "var(--border-strong)",
+      borderRadius: "50%",
+    },
+    collapse: {
+      width: 72,
+      height: 72,
+      backgroundColor: "rgba(108, 99, 255, 0.12)",
+      borderColor: "var(--accent)",
+      borderRadius: "50%",
+    },
+    code: {
+      width: 4,
+      height: 24,
+      backgroundColor: "var(--accent)",
+      borderColor: "transparent",
+      borderRadius: 2,
+    }
+  };
+
+  const dotVariants = {
+    default: { scale: 1, opacity: 1 },
+    link: { scale: 0, opacity: 0 },
+    project: { scale: 0, opacity: 0 },
+    expand: { scale: 0, opacity: 0 },
+    collapse: { scale: 0, opacity: 0 },
+    code: { scale: 0, opacity: 0 }
+  };
 
   return (
     <>
-      <div ref={dotRef} className="cursor-dot" style={dotStyle} />
-      <div ref={ringRef} className="cursor-ring" style={ringStyle}>
-        <span style={{ opacity: cursorState === "link" ? 1 : 0, position: 'absolute' }}>
-          <ArrowRight className="w-4 h-4" />
-        </span>
-        <span style={{ opacity: cursorState === "project" ? 1 : 0, position: 'absolute' }}>
-          view
-        </span>
-        <span style={{ opacity: cursorState === "expand" ? 1 : 0, position: 'absolute', color: "var(--text-secondary)" }}>
-          <ChevronDown className="w-4 h-4" />
-        </span>
-      </div>
+      {/* Core Dot */}
+      <motion.div 
+        className="fixed top-0 left-0 w-[6px] h-[6px] rounded-full bg-accent pointer-events-none z-[9999]"
+        style={{ x: dotX, y: dotY, translateX: "-50%", translateY: "-50%" }}
+        variants={dotVariants}
+        animate={cursorState}
+        transition={{ duration: 0.2 }}
+      />
+
+      <motion.div 
+        className="fixed top-0 left-0 pointer-events-none z-[9998] flex items-center justify-center font-mono text-[11px] tracking-wider text-accent border border-accent overflow-hidden"
+        style={{ x: ringX, y: ringY, translateX: "-50%", translateY: "-50%" }}
+        variants={ringVariants}
+        animate={cursorState}
+        transition={{ type: "spring", stiffness: 400, damping: 28 }}
+      >
+        <AnimatePresence mode="wait">
+          {cursorState === "link" && (
+            <motion.div 
+              key="link" 
+              initial={{ opacity: 0, scale: 0.5 }} 
+              animate={{ opacity: 1, scale: 1 }} 
+              exit={{ opacity: 0, scale: 0.5 }}
+              transition={{ duration: 0.15 }}
+            >
+              <ArrowRight className="w-5 h-5 text-accent" />
+            </motion.div>
+          )}
+          {cursorState === "project" && (
+            <motion.div 
+              key="project" 
+              initial={{ opacity: 0, y: 10 }} 
+              animate={{ opacity: 1, y: 0 }} 
+              exit={{ opacity: 0, y: -10 }}
+              transition={{ duration: 0.2 }}
+              className="text-accent font-medium uppercase"
+            >
+              view
+            </motion.div>
+          )}
+          {cursorState === "collapse" && (
+            <motion.div 
+              key="collapse" 
+              initial={{ opacity: 0, scale: 0.8 }} 
+              animate={{ opacity: 1, scale: 1 }} 
+              exit={{ opacity: 0, scale: 0.8 }}
+              transition={{ duration: 0.2 }}
+              className="text-accent font-medium uppercase text-[10px]"
+            >
+              close
+            </motion.div>
+          )}
+          {cursorState === "expand" && (
+            <motion.div 
+              key="expand" 
+              initial={{ opacity: 0, scale: 0.5 }} 
+              animate={{ opacity: 1, scale: 1 }} 
+              exit={{ opacity: 0, scale: 0.5 }} 
+              transition={{ duration: 0.15 }}
+            >
+              <ChevronDown className="w-4 h-4 text-text-secondary" />
+            </motion.div>
+          )}
+        </AnimatePresence>
+      </motion.div>
     </>
   );
 }

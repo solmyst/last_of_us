@@ -202,11 +202,23 @@ export default function Decisions() {
   const lineHeight = useTransform(scrollYProgress, [0, 0.8], ["0%", "100%"]);
 
   return (
-    <section id="decisions" ref={sectionRef} className="py-24 max-w-[1000px] mx-auto px-6">
-      <div className="mb-20">
-        <h2 className="text-2xl md:text-3xl font-mono mb-4 text-text-primary uppercase">Decisions Log</h2>
-        <p className="text-text-secondary max-w-xl">
-          Technical and product decisions — with reasoning.
+    <section id="decisions" ref={sectionRef} className="py-24 max-w-7xl mx-auto px-6">
+      <div className="mb-16 md:mb-20">
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          className="flex flex-col"
+        >
+          <div className="flex items-center gap-4 mb-4 relative">
+            <span className="font-mono text-sm tracking-widest text-accent uppercase">03. LOG</span>
+            <div className="h-[1px] w-24 bg-border-subtle" />
+            <span className="font-mono text-[10px] text-text-tertiary absolute -top-4 right-0 opacity-40">/* tradeoff_analysis.log */</span>
+          </div>
+          <h2 className="text-2xl md:text-4xl font-bold text-text-primary uppercase tracking-tight">Decisions Log</h2>
+        </motion.div>
+        <p className="text-text-secondary mt-6 max-w-2xl">
+          Technical and product decisions — with reasoning. 
           No right answers, just honest tradeoffs.
         </p>
       </div>

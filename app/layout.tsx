@@ -3,6 +3,8 @@ import { Inter, JetBrains_Mono } from "next/font/google";
 
 import "./globals.css";
 import Cursor from "@/components/cursor";
+import AmbientBackground from "@/components/ambient-background";
+import { ThemeProvider } from "@/components/theme-provider";
 
 const inter = Inter({ 
   subsets: ["latin"], 
@@ -54,10 +56,13 @@ export default function RootLayout({
   return (
     <html lang="en" className="scroll-smooth">
       <body
-        className={`${inter.variable} ${jetbrainsMono.variable} ${fragmentMono.variable} antialiased text-text-primary bg-bg-base overflow-x-hidden`}
+        className={`${inter.variable} ${jetbrainsMono.variable} ${fragmentMono.variable} antialiased text-text-primary bg-bg-base overflow-x-hidden transition-colors duration-300`}
       >
-        {children}
-        <Cursor />
+        <ThemeProvider attribute="class" defaultTheme="dark" enableSystem={false}>
+          <AmbientBackground />
+          {children}
+          <Cursor />
+        </ThemeProvider>
       </body>
     </html>
   );

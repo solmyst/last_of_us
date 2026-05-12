@@ -3,38 +3,67 @@
 @tailwind utilities;
 
 :root {
-  /* Background layers — dark theme only, no toggle */
-  --bg-base: #080810;       /* deepest — page background */
-  --bg-surface: #0e0e1a;    /* cards, panels */
-  --bg-elevated: #14141f;   /* hover states, code blocks */
-  --bg-overlay: #1c1c2e;    /* modals, tooltips */
+  /* Light Mode (Default) */
+  --bg-base: #f8f9fa;
+  --bg-surface: #ffffff;
+  --bg-elevated: #f3f4f6;
+  --bg-overlay: #ffffff;
 
-  /* Borders */
+  --border-subtle: rgba(0,0,0,0.05);
+  --border-default: rgba(0,0,0,0.1);
+  --border-strong: rgba(0,0,0,0.15);
+
+  --text-primary: #111827;
+  --text-secondary: #4b5563;
+  --text-tertiary: #9ca3af;
+
+  --accent: #5a52e6;
+  --accent-dim: rgba(90,82,230,0.1);
+  --accent-border: rgba(90,82,230,0.3);
+
+  --green: #10b981;
+  --amber: #f59e0b;
+  --red: #ef4444;
+
+  --pm-accent: #0891b2;
+  --pm-dim: rgba(8,145,178,0.1);
+
+  --dynamic-accent: var(--accent);
+  
+  --dot-color: rgba(0,0,0,0.15);
+  --vignette-color: rgba(248,249,250,0.7);
+}
+
+.dark {
+  /* Dark Mode */
+  --bg-base: #080810;
+  --bg-surface: #0e0e1a;
+  --bg-elevated: #14141f;
+  --bg-overlay: #1c1c2e;
+
   --border-subtle: rgba(255,255,255,0.05);
   --border-default: rgba(255,255,255,0.09);
   --border-strong: rgba(255,255,255,0.16);
 
-  /* Text */
   --text-primary: #f0f0f8;
   --text-secondary: #8888a8;
   --text-tertiary: #44445a;
 
-  /* Accent — ONE accent color, used sparingly */
-  --accent: #6c63ff;        /* electric indigo */
+  --accent: #6c63ff;
   --accent-dim: rgba(108,99,255,0.12);
   --accent-border: rgba(108,99,255,0.3);
 
-  /* Semantic */
   --green: #3ecf8e;
   --amber: #f59e0b;
   --red: #f43f5e;
 
-  /* PM mode accent (used in PM-specific sections) */
-  --pm-accent: #06b6d4;     /* cyan — distinct from engineering purple */
+  --pm-accent: #06b6d4;
   --pm-dim: rgba(6,182,212,0.1);
 
-  /* Dynamic Accent for the nav context transition */
   --dynamic-accent: var(--accent);
+  
+  --dot-color: rgba(255,255,255,0.15);
+  --vignette-color: rgba(8,8,16,0.8);
 }
 
 body {
@@ -110,42 +139,7 @@ h1, h2, h3, h4, h5, h6 {
   pointer-events: none;
 }
 
-/* Cursor custom styles */
-.cursor-dot {
-  width: 8px;
-  height: 8px;
-  border-radius: 50%;
-  background: var(--accent);
-  position: fixed;
-  pointer-events: none;
-  z-index: 9999;
-  transition: transform 0.15s ease;
-  transform: translate(-50%, -50%);
-}
 
-.cursor-ring {
-  width: 28px;
-  height: 28px;
-  border: 1px solid rgba(108,99,255,0.5);
-  border-radius: 50%;
-  position: fixed;
-  pointer-events: none;
-  z-index: 9998;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 10px;
-  color: var(--accent);
-  letter-spacing: 0.05em;
-  font-family: var(--font-fragment-mono), monospace;
-  transform: translate(-50%, -50%);
-  transition: width 0.3s ease, height 0.3s ease, background 0.3s ease, border-color 0.3s ease;
-}
-
-.cursor-ring span {
-  opacity: 0;
-  transition: opacity 0.2s ease;
-}
 
 /* Marquee animation */
 @keyframes marquee {

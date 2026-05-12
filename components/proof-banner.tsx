@@ -3,6 +3,7 @@
 import { useRef, useEffect } from "react";
 import { motion, useInView, useMotionValue, useTransform, animate } from "framer-motion";
 import { proofStats } from "@/lib/data";
+import { GitBranch } from "lucide-react";
 
 function AnimatedNumber({ value }: { value: string }) {
   const numMatch = value.match(/^(\d+)(.*)$/);
@@ -43,7 +44,10 @@ export default function ProofBanner() {
             <span className="text-text-primary mr-2">
               <AnimatedNumber value={stat.value} />
             </span>
-            <span>{stat.label}</span>
+            <span className="flex items-center gap-1.5">
+              {stat.label.toLowerCase().includes("github") && <GitBranch className="w-3.5 h-3.5" />}
+              {stat.label}
+            </span>
             {i !== proofStats.length - 1 && (
               <span className="text-border-strong ml-6">|</span>
             )}
@@ -57,7 +61,10 @@ export default function ProofBanner() {
           {[...proofStats, ...proofStats].map((stat, i) => (
             <div key={i} className="flex items-center shrink-0">
               <span className="text-text-primary mr-2">{stat.value}</span>
-              <span>{stat.label}</span>
+              <span className="flex items-center gap-1.5">
+                {stat.label.toLowerCase().includes("github") && <GitBranch className="w-3 h-3" />}
+                {stat.label}
+              </span>
               <span className="text-border-strong ml-8">|</span>
             </div>
           ))}

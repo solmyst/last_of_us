@@ -18,16 +18,16 @@ export default function Footer() {
           <span className="hidden md:inline text-border-default">|</span>
           <span>Jaipur, RJ</span>
           <span className="hidden md:inline text-border-default">|</span>
-          <span>next.js 14</span>
+          <span>SHINE</span>
         </div>
-        
+
         <div className="flex items-center gap-4">
           <span className="px-2 py-1 bg-bg-elevated rounded border border-border-default">
             build: {buildTime}
           </span>
           <span className="px-2 py-1 bg-green/10 text-green rounded border border-green/30 flex items-center gap-1.5" title="Lighthouse Performance Score">
             <span className="w-1.5 h-1.5 rounded-full bg-green animate-pulse" />
-            96
+            20.08
           </span>
         </div>
       </div>

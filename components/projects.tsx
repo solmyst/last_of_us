@@ -159,24 +159,27 @@ function ProjectEntry({
       {/* Front Body: Image + Description */}
       <motion.div layout="position" className="flex flex-col xl:flex-row gap-8 relative z-10">
         {/* Left Image / Placeholder */}
-        <div className={`relative w-full aspect-video rounded-2xl overflow-hidden bg-bg-elevated shrink-0 border border-border-subtle transition-all duration-500 group-hover:border-accent/30 ${isExpanded ? "xl:w-[55%]" : "xl:w-[45%]"}`}>
+        <div className={`relative w-full aspect-video rounded-2xl overflow-hidden bg-bg-elevated shrink-0 border border-border-subtle transition-all duration-500 group-hover:border-accent/30 group-hover:shadow-2xl group-hover:shadow-accent/10 ${isExpanded ? "xl:w-[55%]" : "xl:w-[45%]"}`}>
           {project.image ? (
-            <Image 
-              src={project.image}
-              alt={project.name}
-              fill
-              className="object-cover transition-transform duration-700 group-hover:scale-105 opacity-80 group-hover:opacity-100"
-            />
+            <>
+              <Image 
+                src={project.image}
+                alt={project.name}
+                fill
+                className="object-cover object-top transition-transform duration-700 group-hover:scale-110 opacity-90 group-hover:opacity-100"
+              />
+              <div className="absolute inset-0 bg-gradient-to-t from-bg-base/40 to-transparent opacity-60" />
+            </>
           ) : (
             <div className="w-full h-full flex flex-col items-center justify-center gap-4 bg-bg-elevated/50">
               <Code2 className="w-12 h-12 text-text-tertiary/20" />
               <span className="font-mono text-[10px] text-text-tertiary tracking-widest uppercase">system_preview.sh</span>
             </div>
           )}
-          <div className="absolute top-4 right-4 flex gap-2">
-            <div className="w-2 h-2 rounded-full bg-red-500/50" />
-            <div className="w-2 h-2 rounded-full bg-yellow-500/50" />
-            <div className="w-2 h-2 rounded-full bg-green-500/50" />
+          <div className="absolute top-4 right-4 flex gap-2 z-20">
+            <div className="w-2 h-2 rounded-full bg-red-500/30 backdrop-blur-md" />
+            <div className="w-2 h-2 rounded-full bg-yellow-500/30 backdrop-blur-md" />
+            <div className="w-2 h-2 rounded-full bg-green-500/30 backdrop-blur-md" />
           </div>
         </div>
         

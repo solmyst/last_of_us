@@ -13,11 +13,13 @@ import Contact from "@/components/contact";
 import Footer from "@/components/footer";
 import EasterEgg from "@/components/easter-egg";
 
+import Experience from "@/components/experience";
+import SandSimulator from "@/components/sand-simulator";
+
 export default function Home() {
   const { scrollYProgress } = useScroll();
 
   // Map scroll position to color for the context switch effect
-  // Between 0.3 (entering projects) and 0.6 (entering decisions)
   const dynamicAccent = useTransform(
     scrollYProgress,
     [0, 0.4, 0.6, 1],
@@ -38,11 +40,19 @@ export default function Home() {
         
         <div className="w-full h-px bg-border-subtle max-w-7xl mx-auto my-12" />
         
+        <Experience />
+        
+        <div className="w-full h-px bg-border-subtle max-w-7xl mx-auto my-12" />
+        
         <Projects />
         
         <div className="w-full h-px bg-border-subtle max-w-7xl mx-auto my-12" />
         
         <Decisions />
+        
+        <div className="w-full h-px bg-border-subtle max-w-7xl mx-auto my-12" />
+        
+        <SandSimulator />
         
         <div className="w-full h-px bg-border-subtle max-w-7xl mx-auto my-12" />
         

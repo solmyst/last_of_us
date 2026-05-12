@@ -18,7 +18,7 @@ export default function About() {
   return (
     <section id="about" ref={containerRef} className="py-24 max-w-6xl mx-auto px-6 border-t border-border-subtle overflow-hidden">
       <div className="flex flex-col gap-16">
-        
+
         {/* Header Section */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
@@ -35,18 +35,18 @@ export default function About() {
         </motion.div>
 
         <div className="grid lg:grid-cols-2 gap-12 lg:gap-24 items-start">
-          
+
           {/* Left: Waterfall Timeline Section */}
           <div className="relative pl-6 md:pl-12">
             {/* Waterfall Line Background */}
             <div className="absolute left-0 top-2 w-[2px] h-full bg-border-subtle/30 rounded-full" />
-            
+
             {/* Animated Flowing Line */}
-            <motion.div 
+            <motion.div
               style={{ scaleY: pathLength }}
               className="absolute left-0 top-2 w-[2px] h-full bg-gradient-to-b from-accent via-pm-accent to-transparent origin-top rounded-full shadow-[0_0_15px_rgba(108,99,255,0.5)] z-10"
             />
-            
+
             <div className="flex flex-col gap-16">
               {timeline.map((item, i) => (
                 <TimelineItem key={i} item={item} index={i} progress={scrollYProgress} />
@@ -60,24 +60,49 @@ export default function About() {
           </div>
         </div>
 
-        {/* Footer: Outside Code */}
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.6, delay: 0.4 }}
-          className="max-w-4xl pt-12"
-        >
-          <div className="flex items-start gap-4 p-6 bg-bg-surface/30 border border-border-subtle rounded-2xl relative overflow-hidden">
-             <div className="absolute top-0 right-0 p-2 opacity-10">
-               <GitBranch className="w-12 h-12" />
-             </div>
-             <div className="w-1 h-12 bg-accent/40 rounded-full shrink-0" />
-             <p className="text-text-tertiary text-[15px] leading-relaxed font-mono italic relative z-10">
-              Outside code: <span className="text-text-secondary not-italic font-sans">{personal.outsideCode}</span>
-            </p>
-          </div>
-        </motion.div>
+        {/* Footer: Outside Code & Certs */}
+        <div className="grid md:grid-cols-[1.5fr_1fr] gap-8 items-start">
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.6, delay: 0.4 }}
+            className="w-full pt-12"
+          >
+            <div className="flex items-start gap-4 p-6 bg-bg-surface/30 border border-border-subtle rounded-2xl relative overflow-hidden h-full">
+              <div className="absolute top-0 right-0 p-2 opacity-10">
+                <GitBranch className="w-12 h-12" />
+              </div>
+              <div className="w-1 h-12 bg-accent/40 rounded-full shrink-0" />
+              <p className="text-text-tertiary text-[15px] leading-relaxed font-mono italic relative z-10">
+                Outside code: <span className="text-text-secondary not-italic font-sans">{personal.outsideCode}</span>
+              </p>
+            </div>
+          </motion.div>
+
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.6, delay: 0.5 }}
+            className="pt-12"
+          >
+            <div className="p-6 border border-border-subtle rounded-2xl bg-bg-surface/10 h-full">
+              <h4 className="text-xs font-mono tracking-widest text-accent uppercase mb-4 flex items-center gap-2">
+                <span className="w-2 h-2 rounded-full bg-accent animate-pulse" />
+                Certifications
+              </h4>
+              <ul className="flex flex-col gap-2">
+                {(personal as any).certifications?.slice(0, 4).map((cert: string, i: number) => (
+                  <li key={i} className="text-[13px] text-text-secondary flex items-center gap-2 group cursor-default">
+                    <span className="text-accent opacity-50 group-hover:opacity-100 transition-opacity">→</span>
+                    <span className="truncate">{cert}</span>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          </motion.div>
+        </div>
 
       </div>
     </section>
@@ -96,7 +121,7 @@ function TimelineItem({ item, index, progress }: { item: any, index: number, pro
     >
       {/* Waterfall Splash/Point */}
       <div className="absolute -left-[28px] md:-left-[52px] top-1.5 w-4 h-4 rounded-full border-2 border-accent bg-bg-base z-20 group-hover:scale-125 group-hover:bg-accent transition-all duration-300 shadow-[0_0:10px_rgba(108,99,255,0.3)]" />
-      
+
       <span className="block font-mono text-xs text-accent mb-2 tracking-widest font-bold">{item.year}</span>
       <h3 className="text-xl md:text-2xl font-bold text-text-primary mb-3 group-hover:translate-x-2 transition-transform duration-300">{item.title}</h3>
       <p className="text-[15px] text-text-tertiary leading-relaxed max-w-md font-sans">
@@ -110,20 +135,19 @@ function TerminalWindow() {
   const [text, setText] = useState("");
   const [inputBuffer, setInputBuffer] = useState("");
   const [isFocused, setIsFocused] = useState(false);
-  
+
   const fullText = `// profile initialization
 const sol: Profile = {
-  role: "SDE" | "PM",
+  role: "Product Intern" | "Full Stack",
   status: "Shipping Obsessed",
-  university: "JECRC, Jaipur",
-  year: 4,
-  stack: ["Next.js", "Ollama", "Spring Boot"],
-  learning: ["System Design", "DevOps"],
+  university: "JECRC (AI-ML XEBIA)",
+  year: 2,
+  stack: ["Next.js", "Spring Boot", "Growth Hacking"],
+  learning: ["LLM Agents", "System Design"],
   openTo: "internships + full-time"
 };
 
 // result: optimized for impact.
-// hint: try 'init' in the console.
 console.log("Ready to build.");`;
 
   useEffect(() => {
@@ -188,7 +212,7 @@ console.log("Ready to build.");`;
           <span className="text-accent">~</span>
           <span className="text-text-primary">cat anush.profile.ts</span>
         </div>
-        
+
         <pre className="whitespace-pre-wrap text-text-secondary mb-6">
           {text}
         </pre>
@@ -200,7 +224,7 @@ console.log("Ready to build.");`;
             <span className="text-accent">~</span>
             <div className="flex items-center gap-2">
               <span className="text-text-primary">{inputBuffer}</span>
-              <motion.span 
+              <motion.span
                 animate={{ opacity: [0, 1, 0] }}
                 transition={{ repeat: Infinity, duration: 0.8 }}
                 className="w-2 h-4 bg-accent inline-block"
@@ -208,9 +232,9 @@ console.log("Ready to build.");`;
             </div>
           </div>
           {!isFocused && (
-             <p className="text-[10px] text-text-tertiary mt-2 italic opacity-50 animate-pulse">
-               [ Click to interact ]
-             </p>
+            <p className="text-[10px] text-text-tertiary mt-2 italic opacity-50 animate-pulse">
+              [ Click to interact ]
+            </p>
           )}
         </div>
 

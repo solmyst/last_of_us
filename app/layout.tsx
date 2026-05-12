@@ -5,6 +5,7 @@ import "./globals.css";
 import Cursor from "@/components/cursor";
 import AmbientBackground from "@/components/ambient-background";
 import { ThemeProvider } from "@/components/theme-provider";
+import LoadingScreen from "@/components/loading-screen";
 
 const inter = Inter({ 
   subsets: ["latin"], 
@@ -34,7 +35,7 @@ export const metadata: Metadata = {
   openGraph: {
     title: "Anush Gupta — sol.dev",
     description: "Full Stack Engineer & Product Manager",
-    url: "https://solmyst.dev",
+    url: "https://anushgupta.tech",
     siteName: "Anush Gupta Portfolio",
     images: [
       {
@@ -59,6 +60,7 @@ export default function RootLayout({
         className={`${inter.variable} ${jetbrainsMono.variable} ${fragmentMono.variable} antialiased text-text-primary bg-bg-base overflow-x-hidden transition-colors duration-300`}
       >
         <ThemeProvider attribute="class" defaultTheme="dark" enableSystem={false}>
+          <LoadingScreen />
           <AmbientBackground />
           {children}
           <Cursor />

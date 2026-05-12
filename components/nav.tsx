@@ -7,10 +7,10 @@ import { ThemeToggle } from "./theme-toggle";
 import { personal } from "@/lib/data";
 
 const NAV_LINKS = [
-  { label: "work", href: "#work" },
-  { label: "tech", href: "#tech" },
-  { label: "about", href: "#about" },
-  { label: "contact", href: "#contact" },
+  { label: "Work", href: "#work" },
+  { label: "Tech", href: "#tech" },
+  { label: "About", href: "#about" },
+  { label: "Contact", href: "#contact" },
 ];
 
 function useScrollSpy(sectionIds: string[]) {
@@ -53,7 +53,7 @@ export default function Nav() {
           initial={{ y: -20, opacity: 0 }}
           animate={{ y: 0, opacity: 1 }}
           className={`
-            w-full max-w-3xl h-11 rounded-full flex items-center justify-between px-5 md:px-7
+            w-full max-w-4xl h-14 rounded-full flex items-center justify-between px-6 md:px-8
             transition-all duration-300 border
             ${scrolled
               ? "bg-bg-base/70 backdrop-blur-xl border-border-subtle shadow-2xl scale-[1.01]"
@@ -101,7 +101,7 @@ export default function Nav() {
             </div>
 
             <a
-              href="/resume.pdf"
+              href={personal.resume}
               target="_blank"
               className="flex items-center gap-1.5 bg-accent text-white px-3 py-1 rounded-full text-[12px] font-bold hover:bg-accent/90 transition-all shadow-lg shadow-accent/20 active:scale-95"
             >

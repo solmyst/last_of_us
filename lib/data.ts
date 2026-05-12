@@ -46,6 +46,17 @@ export interface SkillGroup {
   }>;
 }
 
+export interface Experience {
+  id: string;
+  role: string;
+  company: string;
+  period: string;
+  location: string;
+  description: string;
+  achievements: string[];
+  tech: string[];
+}
+
 // ─── PROJECTS ───────────────────────────────────────────────────────────────
 
 export const projects: Project[] = [
@@ -267,6 +278,46 @@ export const decisionsLog: Decision[] = [
   projects[1].decisions[0], // Resume: Python vs Node
   projects[2].decisions[0], // MemeForge: local vs cloud
   projects[3].decisions[0], // F1: Electron vs Web
+  {
+    id: "global-state-management",
+    date: "Feb 2025",
+    context: "architecture",
+    statement: "Context API vs. Zustand for Global State",
+    optionA: { label: "React Context API", why: "No extra dependencies, built-in to React core." },
+    optionB: { label: "Zustand", why: "Minimal boilerplate, optimized re-renders out of the box." },
+    chose: "B",
+    because: "For complex apps like the AI Interview Coach, managing state transitions (listening, processing, speaking) with Context led to unnecessary re-renders of the entire UI. Zustand's selector-based approach kept the 60FPS requirement intact.",
+    wouldDoDifferently: "Use a more structured state machine (like XState) for the interview flow to handle edge cases in voice interruption better."
+  },
+  {
+    id: "ui-styling-strategy",
+    date: "Jan 2025",
+    context: "build",
+    statement: "Tailwind CSS vs. Styled Components",
+    optionA: { label: "Tailwind CSS", why: "Rapid prototyping, zero runtime overhead, consistent design tokens." },
+    optionB: { label: "Styled Components", why: "True CSS-in-JS, better for component-specific logic." },
+    chose: "A",
+    because: "Iterative design is key for my projects. Tailwind allowed me to tweak high-fidelity Bento layouts in real-time without context-switching to CSS files. The production bundle size wins were also significant.",
+    wouldDoDifferently: "Establish a more rigid set of design tokens earlier to avoid 'utility bloat' in the JSX."
+  }
+];
+
+export const experiences: Experience[] = [
+  {
+    id: "park-plus-product",
+    role: "Product Intern",
+    company: "Park+",
+    period: "June 2025 - August 2025",
+    location: "Gurugram, India",
+    description: "Scaled Motor Insurance product from early stage to rapid expansion, driving significant user growth and engagement through data-driven product optimization.",
+    achievements: [
+      "Achieved 180% user growth in 8 weeks by scaling Motor Insurance from early stage to rapid expansion",
+      "Increased DAUs by enhancing UI/UX and driving engagement through WhatsApp-based user journeys",
+      "Improved conversion funnel (Quotes → Proposals → Purchase), significantly boosting purchase rates",
+      "Designed a sales dashboard and integrated new product features to enhance scalability and operational efficiency"
+    ],
+    tech: ["Product Strategy", "Growth Hacking", "WhatsApp API", "Data Analytics", "Sales Dashboards"]
+  }
 ];
 
 // ─── SKILLS ──────────────────────────────────────────────────────────────────
@@ -325,10 +376,14 @@ export const skillGroups: SkillGroup[] = [
     label: "Product & Process",
     mode: "product",
     skills: [
+      { name: "Product Strategy", level: "primary" },
+      { name: "User Research", level: "production" },
+      { name: "Growth Hacking", level: "primary" },
+      { name: "Funnel Optimization", level: "production" },
+      { name: "Go-to-Market Planning", level: "production" },
       { name: "Technical PRDs", level: "production" },
       { name: "Marketplace Dynamics", level: "production" },
       { name: "User Journey Mapping", level: "production" },
-      { name: "Rapid Prototyping", level: "primary" },
       { name: "System Architecture", level: "production" },
     ],
   },
@@ -358,35 +413,46 @@ export const currently = {
 export const personal = {
   name: "Anush Gupta",
   handle: "sol / solmyst",
-  university: "JECRC University, Jaipur",
-  year: "B.Tech CSE — 4th year",
-  graduating: "2026",
+  university: "JECRC University (AI-ML XEBIA)",
+  year: "B.Tech CSE — 2nd year",
+  graduating: "2027",
   email: "anushgupta105@gmail.com",
   github: "https://github.com/solmyst",
   linkedin: "https://linkedin.com/in/anushgupta105",
-  twitter: "https://twitter.com/solmyst_",
-  resume: "/resume.pdf",
+  twitter: "https://twitter.com/@GuptaAnush105",
+  resume: "https://drive.google.com/file/d/18zozP6xXi940m8i99zVl4RNjaY051mlD/view?usp=drive_link",
   openTo: "internships + full-time roles",
-  outsideCode: "I'm a guitarist, video editor, and a massive F1 fan. I love the intersection of high-performance engineering and premium design. I build things that I want to use every day."
+  outsideCode: "I'm a guitarist, video editor, and a massive F1 fan. I love the intersection of high-performance engineering and premium design. I build things that I want to use every day.",
+  certifications: [
+    "Gen AI Academy (Google)",
+    "Gemini & Imagen (Google)",
+    "GenAI Apps - Gemini & Streamlit",
+    "Gemini API in Vertex AI",
+    "Career Essentials - Microsoft & LinkedIn",
+    "Business Leaders - LinkedIn",
+    "Gemini Multimodality & RAG"
+  ]
 };
 
 export const timeline = [
   {
-    description: "Local-first LLM app — proving offline AI is viable for everyday tools"
+    year: "2026",
+    title: "AI + Product",
+    description: "learning new things : LLM Agents , System Design , AI + Product"
+  },
+  {
+    year: "2025",
+    title: "Product Intern @ Park+",
+    description: "Achieved 180% user growth by scaling Motor Insurance and optimizing conversion funnels."
   },
   {
     year: "2024",
-    title: "B.Tech Minor Project",
-    description: "Team lead on Medical Reminder App — full system design to deployment"
+    title: "Hackathon Runner-up",
+    description: "Secured 2nd position among 200+ teams; 2nd prize for startup pitch at XEBIA conclave."
   },
   {
     year: "2023",
-    title: "Hackathon mode activated",
-    description: "Multiple hackathons, multiple builds — KapdaCraft, route optimizer"
-  },
-  {
-    year: "2022",
-    title: "B.Tech CSE @ JECRC University",
-    description: "Started with C++, DSA grind, first Spring Boot project"
+    title: "B.Tech CSE (AI-ML)",
+    description: "Started journey at JECRC University."
   }
 ];

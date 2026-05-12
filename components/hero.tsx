@@ -1,5 +1,6 @@
 "use client";
 
+import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import { staggerContainer } from "@/lib/animations";
 import DualBrainCard from "@/components/dual-brain-card";
@@ -7,6 +8,20 @@ import { GitBranch } from "lucide-react";
 
 export default function Hero() {
   const nameChars = "Anush Gupta".split("");
+  const [shouldAnimate, setShouldAnimate] = useState(false);
+
+  useEffect(() => {
+    const hasVisited = sessionStorage.getItem("anush_portfolio_visited");
+    if (hasVisited) {
+      setShouldAnimate(true);
+    } else {
+      // Delay hero animation to match the 5s loader + name reveal
+      const timer = setTimeout(() => setShouldAnimate(true), 6700);
+      return () => clearTimeout(timer);
+    }
+  }, []);
+
+  const animationState = shouldAnimate ? "visible" : "hidden";
 
   return (
     <section className="relative min-h-[100svh] flex items-center pt-16 overflow-hidden">
@@ -15,7 +30,7 @@ export default function Hero() {
         <motion.div
           variants={staggerContainer}
           initial="hidden"
-          animate="visible"
+          animate={animationState}
           className="pt-12 lg:pt-0"
         >
           <motion.div
@@ -28,52 +43,38 @@ export default function Hero() {
             FULL STACK ENGINEER × PRODUCT MANAGER
           </motion.div>
 
-          <h1 className="text-4xl sm:text-5xl lg:text-[4rem] font-medium leading-[1.1] mb-6">
-            <div className="flex overflow-hidden pb-2">
-              {nameChars.map((char, i) => (
-                <span key={i} className="inline-block overflow-hidden">
-                  <motion.span
-                    className="inline-block"
-                    variants={{
-                      hidden: { y: "110%", opacity: 0 },
-                      visible: {
-                        y: 0,
-                        opacity: 1,
-                        transition: { delay: 0.35 + i * 0.035, duration: 0.5, ease: [0.16, 1, 0.3, 1] },
-                      },
-                    }}
-                  >
-                    {char === " " ? "\u00A0" : char}
-                  </motion.span>
-                </span>
-              ))}
-            </div>
-            
-            <div className="flex flex-col gap-1 mt-1 text-text-secondary">
-              <span className="overflow-hidden">
-                <motion.span
-                  className="inline-block"
-                  variants={{
-                    hidden: { y: "100%" },
-                    visible: { y: 0, transition: { delay: 0.8, duration: 0.5, ease: "easeOut" } }
-                  }}
-                >
-                  builds systems.
-                </motion.span>
-              </span>
-              <span className="overflow-hidden">
-                <motion.span
-                  className="inline-block"
-                  variants={{
-                    hidden: { y: "100%" },
-                    visible: { y: 0, transition: { delay: 0.88, duration: 0.5, ease: "easeOut" } }
-                  }}
-                >
-                  ships products.
-                </motion.span>
-              </span>
-            </div>
-          </h1>
+          <motion.h1
+            layoutId="hero-name"
+            className="text-4xl sm:text-5xl lg:text-[4rem] font-black tracking-tighter leading-[1.1] mb-6 flex gap-x-3 text-text-primary"
+          >
+            <span>Anush</span>
+            <span>Gupta</span>
+          </motion.h1>
+
+          <div className="flex flex-col gap-1 mt-1 text-text-secondary">
+            <span className="overflow-hidden">
+              <motion.span
+                className="inline-block"
+                variants={{
+                  hidden: { y: "100%" },
+                  visible: { y: 0, transition: { delay: 0.8, duration: 0.5, ease: "easeOut" } }
+                }}
+              >
+                builds systems.
+              </motion.span>
+            </span>
+            <span className="overflow-hidden">
+              <motion.span
+                className="inline-block"
+                variants={{
+                  hidden: { y: "100%" },
+                  visible: { y: 0, transition: { delay: 0.88, duration: 0.5, ease: "easeOut" } }
+                }}
+              >
+                ships products.
+              </motion.span>
+            </span>
+          </div>
 
           <motion.p
             variants={{
@@ -102,6 +103,9 @@ export default function Hero() {
             </a>
             <a href="https://linkedin.com/in/anushgupta105" target="_blank" data-cursor="link" className="text-text-secondary hover:text-text-primary transition-colors">
               ↗ linkedin
+            </a>
+            <a href="https://leetcode.com/u/anushgupta105/" target="_blank" data-cursor="link" className="text-text-secondary hover:text-text-primary transition-colors">
+              ↗ leetcode
             </a>
           </motion.div>
         </motion.div>

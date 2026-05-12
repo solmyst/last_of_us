@@ -4,6 +4,18 @@ import { motion } from "framer-motion";
 import { skillGroups } from "@/lib/data";
 import { Star, Zap, Circle, Activity } from "lucide-react";
 
+interface Skill {
+  name: string;
+  level: string;
+  note?: string;
+}
+
+interface SkillGroup {
+  label: string;
+  mode: string;
+  skills: Skill[];
+}
+
 function LevelIndicator({ level }: { level: string }) {
   switch (level) {
     case "primary":
@@ -37,14 +49,14 @@ export default function Skills() {
         <div className="flex items-center gap-4 mb-4 relative">
           <span className="font-mono text-sm tracking-widest text-accent uppercase">03. TECH</span>
           <div className="h-[1px] w-24 bg-border-subtle" />
-          <span className="font-mono text-[10px] text-text-tertiary absolute -top-4 right-0 opacity-40">/* runtime_inventory.ts */</span>
+          <span className="font-mono text-[10px] text-text-tertiary absolute -top-4 right-0 opacity-40">{"/* runtime_inventory.ts */"}</span>
         </div>
         <h2 className="text-2xl md:text-4xl font-bold text-text-primary uppercase tracking-tight">Tech Inventory</h2>
         <p className="text-text-secondary mt-2 font-mono text-xs uppercase opacity-60">Filtered by proficiency & application</p>
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6">
-        {skillGroups.map((group: any, groupIdx: number) => (
+        {skillGroups.map((group: SkillGroup, groupIdx: number) => (
           <motion.div
             key={group.label}
             initial={{ opacity: 0, y: 20 }}
@@ -69,7 +81,7 @@ export default function Skills() {
                    style={{ 
                      "--mouse-x": "50%", 
                      "--mouse-y": "50%" 
-                   } as any}
+                   } as React.CSSProperties}
               />
             </div>
 
@@ -82,7 +94,7 @@ export default function Skills() {
             </h3>
 
             <div className={`grid gap-x-8 gap-y-4 ${groupIdx === 0 ? "sm:grid-cols-2" : "grid-cols-1"}`}>
-              {group.skills.map((skill: any, i: number) => (
+              {group.skills.map((skill: Skill) => (
                 <div
                   key={skill.name}
                   className="flex items-center gap-3 py-2 group/skill cursor-default relative"

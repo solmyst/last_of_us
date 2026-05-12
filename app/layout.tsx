@@ -30,6 +30,7 @@ const fragmentMono = {
 };
 
 export const metadata: Metadata = {
+  metadataBase: new URL('https://anushgupta.tech'),
   title: "Anush Gupta — Full Stack Engineer & Product Manager",
   description: "B.Tech CSE student building full-stack systems and thinking in user flows. Spring Boot, Next.js, LLMs. Open to SDE internships and full-time roles.",
   openGraph: {

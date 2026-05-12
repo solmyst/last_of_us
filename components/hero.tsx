@@ -7,7 +7,6 @@ import DualBrainCard from "@/components/dual-brain-card";
 import { GitBranch } from "lucide-react";
 
 export default function Hero() {
-  const nameChars = "Anush Gupta".split("");
   const [shouldAnimate, setShouldAnimate] = useState(false);
 
   useEffect(() => {

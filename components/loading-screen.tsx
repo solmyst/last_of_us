@@ -147,7 +147,15 @@ export default function LoadingScreen() {
   );
 }
 
-function TerminalLine({ line, isVisible }: { line: any, isVisible: boolean }) {
+interface Line {
+  type?: string;
+  prefix?: string;
+  text?: string;
+  cls?: string;
+  tag?: string;
+}
+
+function TerminalLine({ line, isVisible }: { line: Line, isVisible: boolean }) {
   if (line.type === 'spacer') return <div className="h-4" />;
   return (
     <div className={`flex items-center gap-4 text-[12px] leading-relaxed transition-opacity duration-300 ${isVisible ? 'opacity-100' : 'opacity-0'}`}>

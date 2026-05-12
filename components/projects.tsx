@@ -21,7 +21,7 @@ export default function Projects() {
           <span className="font-mono text-sm tracking-widest text-accent uppercase">02. WORK</span>
           <div className="h-[1px] w-24 bg-border-subtle" />
           <span className="font-mono text-[10px] text-text-tertiary absolute -top-4 right-0 opacity-40 select-none">
-            // hint: try typing 'init' in the terminal_
+            {`// hint: try typing 'init' in the terminal_`}
           </span>
         </div>
         <h2 className="text-2xl md:text-4xl font-bold text-text-primary uppercase tracking-tight">SHIPPED WORK</h2>
@@ -123,7 +123,7 @@ function ProjectEntry({
                 {project.name}
               </h3>
               <span className="font-mono text-[10px] text-text-tertiary opacity-60 mt-1 select-none">
-                // {project.id}.config.ts
+                {"//"} {project.id}.config.ts
               </span>
             </div>
           </div>
@@ -252,7 +252,7 @@ function ProjectEntry({
                 <div className="md:col-span-2 bg-accent/5 border border-accent/10 rounded-2xl p-6 md:p-8">
                    <h5 className="font-mono text-[10px] text-accent font-bold uppercase tracking-[0.2em] mb-4">Architectural Decision Log</h5>
                    <p className="text-[14px] leading-relaxed text-text-primary/80 italic font-medium">
-                     "{project.decisions[0].statement}"
+                     &quot;{project.decisions[0].statement}&quot;
                    </p>
                    <p className="text-[13px] leading-relaxed text-text-secondary mt-4">
                      {project.decisions[0].because}

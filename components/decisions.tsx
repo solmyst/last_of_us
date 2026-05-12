@@ -213,7 +213,7 @@ export default function Decisions() {
           <div className="flex items-center gap-4 mb-4 relative">
             <span className="font-mono text-sm tracking-widest text-accent uppercase">03. LOG</span>
             <div className="h-[1px] w-24 bg-border-subtle" />
-            <span className="font-mono text-[10px] text-text-tertiary absolute -top-4 right-0 opacity-40">/* tradeoff_analysis.log */</span>
+            <span className="font-mono text-[10px] text-text-tertiary absolute -top-4 right-0 opacity-40">{"/* tradeoff_analysis.log */"}</span>
           </div>
           <h2 className="text-2xl md:text-4xl font-bold text-text-primary uppercase tracking-tight">Decisions Log</h2>
         </motion.div>

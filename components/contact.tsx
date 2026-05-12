@@ -46,7 +46,7 @@ export default function Contact() {
           <a href={personal.twitter} target="_blank" data-cursor="link" className="hover:text-text-primary transition-colors flex items-center gap-2">
             Twitter ↗
           </a>
-          <a href={(personal as any).leetcode} target="_blank" data-cursor="link" className="hover:text-text-primary transition-colors flex items-center gap-2">
+          <a href={(personal as { leetcode?: string }).leetcode} target="_blank" data-cursor="link" className="hover:text-text-primary transition-colors flex items-center gap-2">
             LeetCode ↗
           </a>
           <a href={personal.resume} target="_blank" data-cursor="link" className="hover:text-text-primary transition-colors flex items-center gap-2">

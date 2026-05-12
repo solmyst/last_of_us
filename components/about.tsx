@@ -1,6 +1,6 @@
 "use client";
 
-import { motion, useScroll, useTransform, useSpring } from "framer-motion";
+import { motion, useScroll, useTransform, useSpring, MotionValue } from "framer-motion";
 import { useRef, useEffect, useState } from "react";
 import { timeline, personal } from "@/lib/data";
 import { GitBranch } from "lucide-react";
@@ -93,7 +93,7 @@ export default function About() {
                 Certifications
               </h4>
               <ul className="flex flex-col gap-2">
-                {(personal as any).certifications?.slice(0, 4).map((cert: string, i: number) => (
+                {(personal as { certifications?: string[] }).certifications?.slice(0, 4).map((cert, i) => (
                   <li key={i} className="text-[13px] text-text-secondary flex items-center gap-2 group cursor-default">
                     <span className="text-accent opacity-50 group-hover:opacity-100 transition-opacity">→</span>
                     <span className="truncate">{cert}</span>
@@ -109,7 +109,7 @@ export default function About() {
   );
 }
 
-function TimelineItem({ item, index, progress }: { item: any, index: number, progress: any }) {
+function TimelineItem({ item, index, progress }: { item: { year: string, title: string, description: string }, index: number, progress: MotionValue<number> }) {
   // Each item lights up based on scroll progress
   const opacity = useTransform(progress, [index * 0.2, index * 0.2 + 0.1], [0.3, 1]);
   const scale = useTransform(progress, [index * 0.2, index * 0.2 + 0.1], [0.95, 1]);
@@ -158,7 +158,7 @@ console.log("Ready to build.");`;
       if (i > fullText.length) clearInterval(interval);
     }, 20);
     return () => clearInterval(interval);
-  }, []);
+  }, [fullText]);
 
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {

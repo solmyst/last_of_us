@@ -27,9 +27,9 @@ export default function About() {
           className="flex flex-col"
         >
           <div className="flex items-center gap-4 mb-4 relative">
-            <span className="font-mono text-sm tracking-widest text-accent uppercase">04. CONTEXT</span>
-            <div className="h-[1px] w-24 bg-border-subtle" />
-            <span className="font-mono text-[10px] text-text-tertiary absolute -top-4 right-0 opacity-40">--read_only --human</span>
+            <span className="font-mono text-sm tracking-widest text-accent uppercase">06. CONTEXT</span>
+            <div className="h-[1px] w-24 bg-border-strong" />
+            <span className="font-mono text-[10px] text-text-secondary absolute -top-4 right-0 opacity-60">--read_only --human</span>
           </div>
           <h2 className="text-2xl md:text-4xl font-bold text-text-primary uppercase tracking-tight">The story so far</h2>
         </motion.div>
@@ -198,8 +198,8 @@ console.log("Ready to build.");`;
           <div className="w-3 h-3 rounded-full bg-[#27c93f]" />
         </div>
         <div className="flex items-center gap-2 opacity-50">
-          <GitBranch className="w-3 h-3" />
-          <span className="text-[10px] text-text-tertiary uppercase tracking-widest">
+          <GitBranch className="w-3 h-3 text-[#9ca3af]" />
+          <span className="text-[10px] text-[#9ca3af] uppercase tracking-widest">
             {isFocused ? "interactive_session" : "bash — 80x24"}
           </span>
         </div>
@@ -210,20 +210,20 @@ console.log("Ready to build.");`;
         <div className="flex gap-3 mb-2">
           <span className="text-green">➜</span>
           <span className="text-accent">~</span>
-          <span className="text-text-primary">cat anush.profile.ts</span>
+          <span className="text-gray-100">cat anush.profile.ts</span>
         </div>
 
-        <pre className="whitespace-pre-wrap text-text-secondary mb-6">
+        <pre className="whitespace-pre-wrap text-gray-400 mb-6">
           {text}
         </pre>
 
         {/* Interactive Prompt */}
-        <div className="mt-4 pt-4 border-t border-border-subtle/30">
+        <div className="mt-4 pt-4 border-t border-white/5">
           <div className="flex gap-3 items-center">
             <span className="text-green">➜</span>
             <span className="text-accent">~</span>
             <div className="flex items-center gap-2">
-              <span className="text-text-primary">{inputBuffer}</span>
+              <span className="text-gray-100">{inputBuffer}</span>
               <motion.span
                 animate={{ opacity: [0, 1, 0] }}
                 transition={{ repeat: Infinity, duration: 0.8 }}
@@ -232,7 +232,7 @@ console.log("Ready to build.");`;
             </div>
           </div>
           {!isFocused && (
-            <p className="text-[10px] text-text-tertiary mt-2 italic opacity-50 animate-pulse">
+            <p className="text-[10px] text-gray-500 mt-2 italic opacity-50 animate-pulse">
               [ Click to interact ]
             </p>
           )}

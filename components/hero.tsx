@@ -23,7 +23,7 @@ export default function Hero() {
   const animationState = shouldAnimate ? "visible" : "hidden";
 
   return (
-    <section className="relative min-h-[100svh] flex items-center pt-16 overflow-hidden">
+    <section id="hero" className="relative min-h-[100svh] flex items-center pt-16 overflow-hidden">
       <div className="max-w-7xl mx-auto px-6 w-full relative z-10 grid grid-cols-1 lg:grid-cols-[1.2fr_1fr] gap-12 lg:gap-8 items-center">
         {/* Left Column */}
         <motion.div
@@ -94,17 +94,18 @@ export default function Hero() {
             }}
             className="flex flex-wrap items-center gap-6 text-sm font-mono"
           >
-            <a href="#work" data-cursor="link" className="text-text-primary hover:text-accent transition-colors flex items-center gap-2 group">
-              → <span className="underline decoration-border-strong underline-offset-4 group-hover:decoration-accent transition-colors">see my work</span>
+            <a href="#projects" data-cursor="link" className="text-text-primary hover:text-accent transition-colors flex items-center gap-3 group relative">
+              <div className="w-2 h-2 rounded-full bg-[#0ea5e9] shadow-[0_0_15px_#0ea5e9] opacity-0 group-hover:opacity-100 scale-0 group-hover:scale-100 transition-all duration-300 shrink-0 animate-pulse" />
+              <span className="underline decoration-border-strong underline-offset-4 group-hover:decoration-accent transition-colors">see my work</span>
             </a>
-            <a href="https://github.com/solmyst" target="_blank" data-cursor="link" className="text-text-secondary hover:text-text-primary transition-colors flex items-center gap-1.5 group">
+            <a href="https://github.com/solmyst" target="_blank" data-cursor="external" className="text-text-secondary hover:text-text-primary transition-colors flex items-center gap-1.5 group">
               <GitBranch className="w-3.5 h-3.5 group-hover:rotate-12 transition-transform" /> GITHUB
             </a>
-            <a href="https://linkedin.com/in/anushgupta105" target="_blank" data-cursor="link" className="text-text-secondary hover:text-text-primary transition-colors">
-              ↗ linkedin
+            <a href="https://linkedin.com/in/anushgupta105" target="_blank" data-cursor="external" className="text-text-secondary hover:text-text-primary transition-colors flex items-center gap-2 group">
+              linkedin <div className="w-1.5 h-1.5 rounded-full bg-[#0ea5e9] shadow-[0_0_12px_#0ea5e9] opacity-0 group-hover:opacity-100 scale-0 group-hover:scale-100 transition-all duration-300 shrink-0 animate-pulse" />
             </a>
-            <a href="https://leetcode.com/u/anushgupta105/" target="_blank" data-cursor="link" className="text-text-secondary hover:text-text-primary transition-colors">
-              ↗ leetcode
+            <a href="https://leetcode.com/u/anushgupta105/" target="_blank" data-cursor="external" className="text-text-secondary hover:text-text-primary transition-colors flex items-center gap-2 group">
+              leetcode <div className="w-1.5 h-1.5 rounded-full bg-[#0ea5e9] shadow-[0_0_12px_#0ea5e9] opacity-0 group-hover:opacity-100 scale-0 group-hover:scale-100 transition-all duration-300 shrink-0 animate-pulse" />
             </a>
           </motion.div>
         </motion.div>

@@ -10,7 +10,7 @@ export default function Projects() {
   const [expandedId, setExpandedId] = useState<string | null>(null);
 
   return (
-    <section id="work" className="py-24 max-w-7xl mx-auto px-6">
+    <section id="projects" className="py-24 max-w-7xl mx-auto px-6">
       <motion.div 
         className="mb-16 md:mb-20"
         initial={{ opacity: 0, y: 20 }}

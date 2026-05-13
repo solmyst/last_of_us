@@ -4,7 +4,7 @@ import { useEffect, useState } from "react";
 import { motion, useMotionValue, useSpring, AnimatePresence } from "framer-motion";
 import { ArrowRight, ChevronDown } from "lucide-react";
 
-type CursorState = "default" | "link" | "project" | "code" | "expand" | "collapse";
+type CursorState = "default" | "link" | "external" | "project" | "code" | "expand" | "collapse" | "theme";
 
 export default function Cursor() {
   const [cursorState, setCursorState] = useState<CursorState>("default");
@@ -55,7 +55,7 @@ export default function Cursor() {
         el = el.parentElement;
       }
 
-      if (cursorType && ["link", "project", "code", "expand", "collapse"].includes(cursorType)) {
+      if (cursorType && ["link", "external", "project", "code", "expand", "collapse", "theme"].includes(cursorType)) {
         setCursorState(cursorType as CursorState);
       } else {
         setCursorState("default");
@@ -81,12 +81,26 @@ export default function Cursor() {
       width: 32,
       height: 32,
       backgroundColor: "rgba(108, 99, 255, 0)",
-      borderColor: "rgba(108, 99, 255, 0.3)",
+      borderColor: "var(--accent-border)",
       borderRadius: "50%",
     },
     link: {
       width: 52,
       height: 52,
+      backgroundColor: "rgba(108, 99, 255, 0.12)",
+      borderColor: "var(--accent)",
+      borderRadius: "50%",
+    },
+    external: {
+      width: 52,
+      height: 52,
+      backgroundColor: "rgba(108, 99, 255, 0.12)",
+      borderColor: "var(--accent)",
+      borderRadius: "50%",
+    },
+    theme: {
+      width: 80,
+      height: 80,
       backgroundColor: "rgba(108, 99, 255, 0.12)",
       borderColor: "var(--accent)",
       borderRadius: "50%",
@@ -124,6 +138,8 @@ export default function Cursor() {
   const dotVariants = {
     default: { scale: 1, opacity: 1 },
     link: { scale: 0, opacity: 0 },
+    external: { scale: 0, opacity: 0 },
+    theme: { scale: 0, opacity: 0 },
     project: { scale: 0, opacity: 0 },
     expand: { scale: 0, opacity: 0 },
     collapse: { scale: 0, opacity: 0 },
@@ -158,6 +174,30 @@ export default function Cursor() {
               transition={{ duration: 0.15 }}
             >
               <ArrowRight className="w-5 h-5 text-accent" />
+            </motion.div>
+          )}
+          {cursorState === "external" && (
+            <motion.div 
+              key="external" 
+              initial={{ opacity: 0, scale: 0.5 }} 
+              animate={{ opacity: 1, scale: 1 }} 
+              exit={{ opacity: 0, scale: 0.5 }}
+              transition={{ duration: 0.15 }}
+              className="text-2xl text-accent font-bold"
+            >
+              ↗
+            </motion.div>
+          )}
+          {cursorState === "theme" && (
+            <motion.div 
+              key="theme" 
+              initial={{ opacity: 0, scale: 0.8 }} 
+              animate={{ opacity: 1, scale: 1 }} 
+              exit={{ opacity: 0, scale: 0.8 }}
+              transition={{ duration: 0.15 }}
+              className="text-[10px] text-accent font-bold uppercase text-center px-2 leading-tight"
+            >
+              change it
             </motion.div>
           )}
           {cursorState === "project" && (

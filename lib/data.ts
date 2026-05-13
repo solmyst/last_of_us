@@ -392,11 +392,11 @@ export const skillGroups: SkillGroup[] = [
 // ─── PROOF BANNER ─────────────────────────────────────────────────────────────
 
 export const proofStats = [
-  { value: "7+", label: "projects shipped" },
-  { value: "500+", label: "GitHub commits" },
-  { value: "750+", label: "DSA problems solved" },
-  { value: "JECRC", label: "University, Jaipur" },
-  { value: "2026", label: "graduating" },
+  { value: "7+", label: "Projects" },
+  { value: "500+", label: "Commits" },
+  { value: "500+", label: "DSA Problems Solved" },
+  { value: "JECRC University", label: "B.Tech CSE (AI-ML XEBIA)" },
+  { value: "2027", label: "Graduating" },
 ];
 
 // ─── CURRENTLY BLOCK ─────────────────────────────────────────────────────────

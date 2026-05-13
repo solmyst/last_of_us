@@ -123,7 +123,7 @@ export default function EasterEgg() {
               <div className="w-3 h-3 rounded-full bg-[#ff5f56]" />
               <div className="w-3 h-3 rounded-full bg-[#ffbd2e]" />
               <div className="w-3 h-3 rounded-full bg-[#27c93f]" />
-              <span className="ml-2 text-text-tertiary text-xs">diagnostic_terminal</span>
+              <span className="ml-2 text-[#9ca3af] text-xs">diagnostic_terminal</span>
             </div>
             <div className="p-6 h-[300px] overflow-y-auto flex flex-col gap-2">
               {easterEggMessage.slice(0, visibleLines).map((line, i) => (
@@ -131,19 +131,20 @@ export default function EasterEgg() {
                   key={i}
                   initial={{ opacity: 0, x: -10 }}
                   animate={{ opacity: 1, x: 0 }}
+                  className="text-[#3ecf8e]"
                 >
                   {line}
                 </motion.div>
               ))}
               {visibleLines < easterEggMessage.length && (
                 <motion.div 
-                  className="w-2 h-4 bg-green"
+                  className="w-2 h-4 bg-[#3ecf8e]"
                   animate={{ opacity: [1, 0] }}
                   transition={{ repeat: Infinity, duration: 0.8 }}
                 />
               )}
             </div>
-            <div className="px-6 py-4 bg-[#111] border-t border-[#333] text-xs text-text-tertiary flex justify-between">
+            <div className="px-6 py-4 bg-[#111] border-t border-[#333] text-xs text-[#6b7280] flex justify-between">
               <span>[Click anywhere to dismiss]</span>
               <span>[ESC to exit]</span>
             </div>

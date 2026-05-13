@@ -80,57 +80,57 @@ export default function Cursor() {
     default: {
       width: 32,
       height: 32,
-      backgroundColor: "rgba(108, 99, 255, 0)",
-      borderColor: "var(--accent-border)",
+      backgroundColor: "rgba(255, 255, 255, 0.06)",
+      borderColor: "rgba(255, 255, 255, 0.95)",
       borderRadius: "50%",
     },
     link: {
       width: 52,
       height: 52,
-      backgroundColor: "rgba(108, 99, 255, 0.12)",
-      borderColor: "var(--accent)",
+      backgroundColor: "rgba(255, 255, 255, 0.14)",
+      borderColor: "rgba(255, 255, 255, 0.98)",
       borderRadius: "50%",
     },
     external: {
       width: 52,
       height: 52,
-      backgroundColor: "rgba(108, 99, 255, 0.12)",
-      borderColor: "var(--accent)",
+      backgroundColor: "rgba(255, 255, 255, 0.14)",
+      borderColor: "rgba(255, 255, 255, 0.98)",
       borderRadius: "50%",
     },
     theme: {
       width: 80,
       height: 80,
-      backgroundColor: "rgba(108, 99, 255, 0.12)",
-      borderColor: "var(--accent)",
+      backgroundColor: "rgba(255, 255, 255, 0.16)",
+      borderColor: "rgba(255, 255, 255, 0.98)",
       borderRadius: "50%",
     },
     project: {
       width: 72,
       height: 72,
-      backgroundColor: "rgba(108, 99, 255, 0.12)",
-      borderColor: "var(--accent)",
+      backgroundColor: "rgba(255, 255, 255, 0.16)",
+      borderColor: "rgba(255, 255, 255, 0.98)",
       borderRadius: "50%",
     },
     expand: {
       width: 48,
       height: 48,
-      backgroundColor: "var(--bg-elevated)",
-      borderColor: "var(--border-strong)",
+      backgroundColor: "rgba(255, 255, 255, 0.9)",
+      borderColor: "rgba(10, 10, 18, 0.9)",
       borderRadius: "50%",
     },
     collapse: {
       width: 72,
       height: 72,
-      backgroundColor: "rgba(108, 99, 255, 0.12)",
-      borderColor: "var(--accent)",
+      backgroundColor: "rgba(255, 255, 255, 0.16)",
+      borderColor: "rgba(255, 255, 255, 0.98)",
       borderRadius: "50%",
     },
     code: {
       width: 4,
       height: 24,
-      backgroundColor: "var(--accent)",
-      borderColor: "transparent",
+      backgroundColor: "rgba(255, 255, 255, 0.98)",
+      borderColor: "rgba(10, 10, 18, 0.9)",
       borderRadius: 2,
     }
   };
@@ -150,7 +150,7 @@ export default function Cursor() {
     <>
       {/* Core Dot */}
       <motion.div 
-        className="fixed top-0 left-0 w-[6px] h-[6px] rounded-full bg-accent pointer-events-none z-[9999]"
+        className="fixed top-0 left-0 w-[8px] h-[8px] rounded-full bg-white pointer-events-none z-[9999] border border-black/80 shadow-[0_0_0_2px_rgba(255,255,255,0.38),0_0_16px_rgba(108,99,255,0.7)]"
         style={{ x: dotX, y: dotY, translateX: "-50%", translateY: "-50%" }}
         variants={dotVariants}
         animate={cursorState}
@@ -158,7 +158,7 @@ export default function Cursor() {
       />
 
       <motion.div 
-        className="fixed top-0 left-0 pointer-events-none z-[9998] flex items-center justify-center font-mono text-[11px] tracking-wider text-accent border border-accent overflow-hidden"
+        className="fixed top-0 left-0 pointer-events-none z-[9998] flex items-center justify-center font-mono text-[11px] tracking-wider text-white border-2 overflow-hidden shadow-[0_0_0_1px_rgba(10,10,18,0.7),0_0_24px_rgba(108,99,255,0.45)] backdrop-blur-[2px]"
         style={{ x: ringX, y: ringY, translateX: "-50%", translateY: "-50%" }}
         variants={ringVariants}
         animate={cursorState}
@@ -173,7 +173,7 @@ export default function Cursor() {
               exit={{ opacity: 0, scale: 0.5 }}
               transition={{ duration: 0.15 }}
             >
-              <ArrowRight className="w-5 h-5 text-accent" />
+              <ArrowRight className="w-5 h-5 text-white drop-shadow-[0_1px_2px_rgba(0,0,0,0.9)]" />
             </motion.div>
           )}
           {cursorState === "external" && (
@@ -183,7 +183,7 @@ export default function Cursor() {
               animate={{ opacity: 1, scale: 1 }} 
               exit={{ opacity: 0, scale: 0.5 }}
               transition={{ duration: 0.15 }}
-              className="text-2xl text-accent font-bold"
+              className="text-2xl text-white font-bold drop-shadow-[0_1px_2px_rgba(0,0,0,0.9)]"
             >
               ↗
             </motion.div>
@@ -195,7 +195,7 @@ export default function Cursor() {
               animate={{ opacity: 1, scale: 1 }} 
               exit={{ opacity: 0, scale: 0.8 }}
               transition={{ duration: 0.15 }}
-              className="text-[10px] text-accent font-bold uppercase text-center px-2 leading-tight"
+              className="text-[10px] text-white font-bold uppercase text-center px-2 leading-tight drop-shadow-[0_1px_2px_rgba(0,0,0,0.9)]"
             >
               change it
             </motion.div>
@@ -207,7 +207,7 @@ export default function Cursor() {
               animate={{ opacity: 1, y: 0 }} 
               exit={{ opacity: 0, y: -10 }}
               transition={{ duration: 0.2 }}
-              className="text-accent font-medium uppercase"
+              className="text-white font-medium uppercase drop-shadow-[0_1px_2px_rgba(0,0,0,0.9)]"
             >
               view
             </motion.div>
@@ -219,7 +219,7 @@ export default function Cursor() {
               animate={{ opacity: 1, scale: 1 }} 
               exit={{ opacity: 0, scale: 0.8 }}
               transition={{ duration: 0.2 }}
-              className="text-accent font-medium uppercase text-[10px]"
+              className="text-white font-medium uppercase text-[10px] drop-shadow-[0_1px_2px_rgba(0,0,0,0.9)]"
             >
               close
             </motion.div>
@@ -232,7 +232,7 @@ export default function Cursor() {
               exit={{ opacity: 0, scale: 0.5 }} 
               transition={{ duration: 0.15 }}
             >
-              <ChevronDown className="w-4 h-4 text-text-secondary" />
+              <ChevronDown className="w-4 h-4 text-[#0a0a12]" />
             </motion.div>
           )}
         </AnimatePresence>

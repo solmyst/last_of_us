@@ -55,8 +55,8 @@ export default function Nav() {
           animate={{ y: 0, opacity: 1 }}
           className={`
             w-full max-w-4xl h-16 rounded-full flex items-center justify-between px-8
-            transition-all duration-500 border border-border-default
-            bg-bg-surface/40 backdrop-blur-2xl shadow-[0_8px_32px_0_rgba(0,0,0,0.08)]
+            transition-all duration-500 border ${scrolled ? "border-border-strong bg-bg-surface/60" : "border-border-default bg-bg-surface/40"}
+            backdrop-blur-2xl shadow-[0_8px_32px_0_rgba(0,0,0,0.08)]
             dark:shadow-[0_8px_32px_0_rgba(0,0,0,0.8)]
             relative overflow-hidden
           `}

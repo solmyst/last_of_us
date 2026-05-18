@@ -33,9 +33,12 @@ export const metadata: Metadata = {
   metadataBase: new URL('https://anushgupta.tech'),
   title: "Anush Gupta — Full Stack Engineer & Product Manager",
   description: "B.Tech CSE student building full-stack systems and thinking in user flows. Spring Boot, Next.js, LLMs. Open to SDE internships and full-time roles.",
+  alternates: {
+    canonical: 'https://anushgupta.tech',
+  },
   openGraph: {
-    title: "Anush Gupta — sol.dev",
-    description: "Full Stack Engineer & Product Manager",
+    title: "Anush Gupta — Full Stack Engineer & Product Manager",
+    description: "B.Tech CSE student building full-stack systems and thinking in user flows. Spring Boot, Next.js, LLMs. Open to SDE internships and full-time roles.",
     url: "https://anushgupta.tech",
     siteName: "Anush Gupta Portfolio",
     images: [
@@ -47,6 +50,12 @@ export const metadata: Metadata = {
     ],
     locale: "en_US",
     type: "website",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Anush Gupta — Full Stack Engineer & Product Manager",
+    description: "B.Tech CSE student building full-stack systems and thinking in user flows. Spring Boot, Next.js, LLMs. Open to SDE internships and full-time roles.",
+    images: ["/og-image.png"],
   },
 };
 

@@ -419,8 +419,8 @@ export const personal = {
   email: "anushgupta105@gmail.com",
   github: "https://github.com/solmyst",
   linkedin: "https://linkedin.com/in/anushgupta105",
-  twitter: "https://twitter.com/@GuptaAnush105",
-  resume: "https://drive.google.com/file/d/18zozP6xXi940m8i99zVl4RNjaY051mlD/view?usp=drive_link",
+  twitter: "https://twitter.com/GuptaAnush105",
+  resume: "/resume.pdf",
   openTo: "internships + full-time roles",
   outsideCode: "I’m a guitarist, video editor, gamer, and F1 fan who loves the blend of high-performance engineering and premium design. I enjoy building products and experiences that I’d genuinely want to use every day.",
   certifications: [
@@ -438,7 +438,7 @@ export const timeline = [
   {
     year: "2026",
     title: "AI + Product",
-    description: "learning new things : LLM Agents , System Design , AI + Product"
+    description: "Building LLM-powered tools, deepening system design at scale, and exploring the AI + Product intersection. Currently shipping this portfolio and hunting for the next high-leverage role."
   },
   {
     year: "2025",

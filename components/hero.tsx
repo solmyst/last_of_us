@@ -102,10 +102,10 @@ export default function Hero() {
               <GitBranch className="w-3.5 h-3.5 group-hover:rotate-12 transition-transform" /> GITHUB
             </a>
             <a href="https://linkedin.com/in/anushgupta105" target="_blank" data-cursor="external" className="text-text-secondary hover:text-text-primary transition-colors flex items-center gap-2 group">
-              linkedin <div className="w-1.5 h-1.5 rounded-full bg-[#0ea5e9] shadow-[0_0_12px_#0ea5e9] opacity-0 group-hover:opacity-100 scale-0 group-hover:scale-100 transition-all duration-300 shrink-0 animate-pulse" />
+              LINKEDIN <div className="w-1.5 h-1.5 rounded-full bg-[#0ea5e9] shadow-[0_0_12px_#0ea5e9] opacity-0 group-hover:opacity-100 scale-0 group-hover:scale-100 transition-all duration-300 shrink-0 animate-pulse" />
             </a>
             <a href="https://leetcode.com/u/anushgupta105/" target="_blank" data-cursor="external" className="text-text-secondary hover:text-text-primary transition-colors flex items-center gap-2 group">
-              leetcode <div className="w-1.5 h-1.5 rounded-full bg-[#0ea5e9] shadow-[0_0_12px_#0ea5e9] opacity-0 group-hover:opacity-100 scale-0 group-hover:scale-100 transition-all duration-300 shrink-0 animate-pulse" />
+              LEETCODE <div className="w-1.5 h-1.5 rounded-full bg-[#0ea5e9] shadow-[0_0_12px_#0ea5e9] opacity-0 group-hover:opacity-100 scale-0 group-hover:scale-100 transition-all duration-300 shrink-0 animate-pulse" />
             </a>
           </motion.div>
         </motion.div>

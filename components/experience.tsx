@@ -14,7 +14,7 @@ export default function Experience() {
         viewport={{ once: true }}
       >
         <div className="flex items-center gap-4 mb-4 relative">
-          <span className="font-mono text-sm tracking-widest text-accent uppercase">04. CAREER</span>
+          <span className="font-mono text-sm tracking-widest text-accent uppercase">01. CAREER</span>
           <div className="h-[1px] w-24 bg-border-subtle" />
         </div>
         <h2 className="text-2xl md:text-4xl font-bold text-text-primary uppercase tracking-tight">Professional Experience</h2>

@@ -5,7 +5,7 @@ import { personal } from "@/lib/data";
 
 
 export default function Footer() {
-  const buildTime = process.env.NEXT_PUBLIC_BUILD_TIME || "development";
+  const buildTime = process.env.NEXT_PUBLIC_BUILD_TIME || "production";
 
   return (
     <footer className="py-8 border-t border-border-subtle bg-bg-base">

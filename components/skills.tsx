@@ -47,7 +47,7 @@ export default function Skills() {
     <section id="tech" className="py-24 max-w-7xl mx-auto px-6 relative">
       <div className="mb-16">
         <div className="flex items-center gap-4 mb-4 relative">
-          <span className="font-mono text-sm tracking-widest text-accent uppercase">03. TECH</span>
+          <span className="font-mono text-sm tracking-widest text-accent uppercase">05. TECH</span>
           <div className="h-[1px] w-24 bg-border-subtle" />
           <span className="font-mono text-[10px] text-text-tertiary absolute -top-4 right-0 opacity-40">{"/* runtime_inventory.ts */"}</span>
         </div>

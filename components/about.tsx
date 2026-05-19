@@ -27,7 +27,7 @@ export default function About() {
           className="flex flex-col"
         >
           <div className="flex items-center gap-4 mb-4 relative">
-            <span className="font-mono text-sm tracking-widest text-accent uppercase">06. CONTEXT</span>
+            <span className="font-mono text-sm tracking-widest text-accent uppercase">06. ABOUT</span>
             <div className="h-[1px] w-24 bg-border-strong" />
             <span className="font-mono text-[10px] text-text-secondary absolute -top-4 right-0 opacity-60">--read_only --human</span>
           </div>

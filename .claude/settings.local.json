@@ -1,0 +1,8 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(git -C \"C:\\\\Users\\\\Anush Gupta\\\\Documents\\\\GitHub\\\\Portfolio - last of us\" rev-parse --show-toplevel)",
+      "Bash(cd \"C:/Users/Anush Gupta/Documents/GitHub/Portfolio - last of us\" && find . -type f -name \"package.json\" -o -name \"*.config.*\" -o -name \".env*\" | head -20)"
+    ]
+  }
+}

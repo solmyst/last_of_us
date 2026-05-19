@@ -132,11 +132,7 @@ function TimelineItem({ item, index, progress }: { item: { year: string, title: 
 }
 
 function TerminalWindow() {
-  const [text, setText] = useState("");
-  const [inputBuffer, setInputBuffer] = useState("");
-  const [isFocused, setIsFocused] = useState(false);
-
-  const fullText = `// profile initialization
+  const text = `// profile initialization
 const sol: Profile = {
   role: "Product Intern" | "Full Stack",
   status: "Shipping Obsessed",
@@ -150,45 +146,12 @@ const sol: Profile = {
 // result: optimized for impact.
 console.log("Ready to build.");`;
 
-  useEffect(() => {
-    let i = 0;
-    const interval = setInterval(() => {
-      setText(fullText.slice(0, i));
-      i++;
-      if (i > fullText.length) clearInterval(interval);
-    }, 20);
-    return () => clearInterval(interval);
-  }, [fullText]);
-
-  useEffect(() => {
-    const handleKeyDown = (e: KeyboardEvent) => {
-      // Only listen if the terminal is "focused" or we want it to be responsive
-      // For a portfolio, global listener when in view is often better UX
-      if (!isFocused) return;
-
-      if (e.key === "Enter") {
-        if (inputBuffer.toLowerCase() === "init") {
-          window.dispatchEvent(new CustomEvent("activate-easter-egg"));
-        }
-        setInputBuffer("");
-      } else if (e.key === "Backspace") {
-        setInputBuffer(prev => prev.slice(0, -1));
-      } else if (e.key.length === 1) {
-        setInputBuffer(prev => prev + e.key);
-      }
-    };
-
-    window.addEventListener("keydown", handleKeyDown);
-    return () => window.removeEventListener("keydown", handleKeyDown);
-  }, [inputBuffer, isFocused]);
-
   return (
     <motion.div
       initial={{ opacity: 0, scale: 0.95 }}
       whileInView={{ opacity: 1, scale: 1 }}
       viewport={{ once: true }}
-      className={`bg-[#0d1117] border rounded-xl overflow-hidden shadow-2xl font-mono transition-colors duration-300 ${isFocused ? "border-accent ring-1 ring-accent/20" : "border-border-subtle"}`}
-      onClick={() => setIsFocused(true)}
+      className={`bg-[#0d1117] border rounded-xl overflow-hidden shadow-2xl font-mono transition-colors duration-300 border-border-subtle`}
     >
       {/* Terminal Header */}
       <div className="bg-[#161b22] px-4 py-2 flex items-center justify-between border-b border-border-subtle">
@@ -199,9 +162,7 @@ console.log("Ready to build.");`;
         </div>
         <div className="flex items-center gap-2 opacity-50">
           <GitBranch className="w-3 h-3 text-[#9ca3af]" />
-          <span className="text-[10px] text-[#9ca3af] uppercase tracking-widest">
-            {isFocused ? "interactive_session" : "bash — 80x24"}
-          </span>
+            bash — 80x24
         </div>
       </div>
 
@@ -217,13 +178,12 @@ console.log("Ready to build.");`;
           {text}
         </pre>
 
-        {/* Interactive Prompt */}
+        {/* Static Prompt */}
         <div className="mt-4 pt-4 border-t border-white/5">
           <div className="flex gap-3 items-center">
             <span className="text-green">➜</span>
             <span className="text-accent">~</span>
             <div className="flex items-center gap-2">
-              <span className="text-gray-100">{inputBuffer}</span>
               <motion.span
                 animate={{ opacity: [0, 1, 0] }}
                 transition={{ repeat: Infinity, duration: 0.8 }}
@@ -231,11 +191,6 @@ console.log("Ready to build.");`;
               />
             </div>
           </div>
-          {!isFocused && (
-            <p className="text-[10px] text-gray-500 mt-2 italic opacity-50 animate-pulse">
-              [ Click to interact ]
-            </p>
-          )}
         </div>
 
         {/* Ambient Terminal Glow */}

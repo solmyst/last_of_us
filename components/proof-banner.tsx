@@ -13,11 +13,12 @@ function AnimatedNumber({ value }: { value: string }) {
   
   const ref = useRef(null);
   const isInView = useInView(ref, { once: true, margin: "-50px" });
-  const count = useMotionValue(0);
+  const count = useMotionValue(target);
   const rounded = useTransform(count, Math.round);
 
   useEffect(() => {
     if (isInView && isNumber) {
+      count.set(0);
       animate(count, target, { duration: 1.5, ease: [0.16, 1, 0.3, 1] });
     }
   }, [isInView, count, target, isNumber]);

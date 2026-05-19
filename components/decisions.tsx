@@ -25,7 +25,7 @@ function TypewriterText({ text, startDelay = 0 }: { text: string; startDelay?: n
 
   useEffect(() => {
     if (!started) return;
-    
+
     let i = 0;
     const interval = setInterval(() => {
       if (i <= text.length) {
@@ -35,7 +35,7 @@ function TypewriterText({ text, startDelay = 0 }: { text: string; startDelay?: n
         clearInterval(interval);
       }
     }, 25);
-    
+
     return () => clearInterval(interval);
   }, [text, started]);
 
@@ -52,7 +52,7 @@ function DecisionAccordion({ decision }: { decision: Decision }) {
   const color = CONTEXT_COLORS[decision.context];
 
   return (
-    <div 
+    <div
       className="relative pl-10 md:pl-12 group"
       data-cursor="expand"
     >
@@ -81,7 +81,7 @@ function DecisionAccordion({ decision }: { decision: Decision }) {
             <span className="font-mono text-[10px] uppercase tracking-wider text-text-tertiary">{decision.context}</span>
           </div>
         </div>
-        
+
         <div className="flex-1 text-lg md:text-xl font-medium text-text-primary pr-8 relative">
           {decision.statement}
           <motion.div
@@ -218,7 +218,7 @@ export default function Decisions() {
           <h2 className="text-2xl md:text-4xl font-bold text-text-primary uppercase tracking-tight">Decisions Log</h2>
         </motion.div>
         <p className="text-text-secondary mt-6 max-w-2xl">
-          Technical and product decisions — with reasoning. 
+          Technical and product decisions — with reasoning.
           No right answers, just honest tradeoffs.
         </p>
       </div>
@@ -226,9 +226,9 @@ export default function Decisions() {
       <div className="relative">
         {/* The background static line */}
         <div className="absolute left-0 top-0 bottom-0 w-[2px] bg-border-subtle" />
-        
+
         {/* The animated filled line */}
-        <motion.div 
+        <motion.div
           className="absolute left-0 top-0 w-[2px] bg-border-strong origin-top"
           style={{ height: lineHeight }}
         />

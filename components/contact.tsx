@@ -21,13 +21,13 @@ export default function Contact() {
           </div>
           <h2 className="text-2xl md:text-4xl font-bold text-text-primary uppercase tracking-tight">Let&apos;s build something.</h2>
         </div>
-        
+
         <p className="text-lg text-text-secondary max-w-2xl mx-auto leading-relaxed mb-12">
           If you&apos;re building something hard and need someone who
           can write the PRD <em className="text-text-primary not-italic">&amp;</em> the API — I&apos;m interested.
         </p>
 
-        <a 
+        <a
           href={`mailto:${personal.email}`}
           data-cursor="link"
           className="inline-block text-2xl md:text-3xl font-mono text-accent hover:text-text-primary transition-colors mb-20 relative group"
@@ -46,7 +46,7 @@ export default function Contact() {
           <a href={personal.twitter} target="_blank" data-cursor="external" className="hover:text-text-primary transition-colors flex items-center gap-2 group">
             Twitter <div className="w-1.5 h-1.5 rounded-full bg-[#0ea5e9] shadow-[0_0_12px_#0ea5e9] opacity-0 group-hover:opacity-100 scale-0 group-hover:scale-100 transition-all duration-300 shrink-0 animate-pulse" />
           </a>
-          <a href={(personal as { leetcode?: string }).leetcode} target="_blank" data-cursor="external" className="hover:text-text-primary transition-colors flex items-center gap-2 group">
+          <a href={personal.leetcode} target="_blank" data-cursor="external" className="hover:text-text-primary transition-colors flex items-center gap-2 group">
             LeetCode <div className="w-1.5 h-1.5 rounded-full bg-[#0ea5e9] shadow-[0_0_12px_#0ea5e9] opacity-0 group-hover:opacity-100 scale-0 group-hover:scale-100 transition-all duration-300 shrink-0 animate-pulse" />
           </a>
           <a href={personal.resume} target="_blank" data-cursor="external" className="hover:text-text-primary transition-colors flex items-center gap-2 group">

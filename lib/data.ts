@@ -418,13 +418,10 @@ export const personal = {
   graduating: "2027",
   email: "anushgupta105@gmail.com",
   github: "https://github.com/solmyst",
+  leetcode: "https://leetcode.com/anushgupta105/",
   linkedin: "https://linkedin.com/in/anushgupta105",
   twitter: "https://twitter.com/GuptaAnush105",
-<<<<<<< HEAD
-  resume: "https://drive.google.com/file/d/18zozP6xXi940m8i99zVl4RNjaY051mlD/view?usp=drive_link",
-=======
-  resume: "/resume.pdf",
->>>>>>> aea58512f19088175f54d292683a62ebff142fcb
+resume: "https://drive.google.com/file/d/18zozP6xXi940m8i99zVl4RNjaY051mlD/view?usp=drive_link",
   openTo: "internships + full-time roles",
   outsideCode: "I’m a guitarist, video editor, gamer, and F1 fan who loves the blend of high-performance engineering and premium design. I enjoy building products and experiences that I’d genuinely want to use every day.",
   certifications: [

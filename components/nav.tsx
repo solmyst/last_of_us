@@ -97,7 +97,6 @@ export default function Nav() {
                 <GitBranch className="w-4 h-4" />
               </a>
             </div>
-
             <a
               href={personal.resume}
               target="_blank"
@@ -109,8 +108,11 @@ export default function Nav() {
 
             {/* Mobile Menu Toggle */}
             <button
+              type="button"
               className="md:hidden p-2 text-text-secondary hover:text-text-primary"
               onClick={() => setMobileOpen(true)}
+              title="Open menu"
+              aria-label="Open navigation menu"
             >
               <Menu className="w-6 h-6" />
             </button>
@@ -128,8 +130,11 @@ export default function Nav() {
             className="fixed inset-0 z-[60] bg-bg-base/95 backdrop-blur-3xl flex items-center justify-center p-6"
           >
             <button
+              type="button"
               className="absolute top-8 right-8 p-2 text-text-secondary hover:text-text-primary"
               onClick={() => setMobileOpen(false)}
+              title="Close menu"
+              aria-label="Close navigation menu"
             >
               <X className="w-8 h-8" />
             </button>

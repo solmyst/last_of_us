@@ -98,13 +98,13 @@ export default function Hero() {
               <div className="w-2 h-2 rounded-full bg-[#0ea5e9] shadow-[0_0_15px_#0ea5e9] opacity-0 group-hover:opacity-100 scale-0 group-hover:scale-100 transition-all duration-300 shrink-0 animate-pulse" />
               <span className="underline decoration-border-strong underline-offset-4 group-hover:decoration-accent transition-colors">see my work</span>
             </a>
-            <a href="https://github.com/solmyst" target="_blank" data-cursor="external" className="text-text-secondary hover:text-text-primary transition-colors flex items-center gap-1.5 group">
+            <a href="https://github.com/solmyst" target="_blank" rel="noopener noreferrer" data-cursor="external" className="text-text-secondary hover:text-text-primary transition-colors flex items-center gap-1.5 group">
               <GitBranch className="w-3.5 h-3.5 group-hover:rotate-12 transition-transform" /> GITHUB
             </a>
-            <a href="https://linkedin.com/in/anushgupta105" target="_blank" data-cursor="external" className="text-text-secondary hover:text-text-primary transition-colors flex items-center gap-2 group">
+            <a href="https://linkedin.com/in/anushgupta105" target="_blank" rel="noopener noreferrer" data-cursor="external" className="text-text-secondary hover:text-text-primary transition-colors flex items-center gap-2 group">
               LINKEDIN <div className="w-1.5 h-1.5 rounded-full bg-[#0ea5e9] shadow-[0_0_12px_#0ea5e9] opacity-0 group-hover:opacity-100 scale-0 group-hover:scale-100 transition-all duration-300 shrink-0 animate-pulse" />
             </a>
-            <a href="https://leetcode.com/u/anushgupta105/" target="_blank" data-cursor="external" className="text-text-secondary hover:text-text-primary transition-colors flex items-center gap-2 group">
+            <a href="https://leetcode.com/u/anushgupta105/" target="_blank" rel="noopener noreferrer" data-cursor="external" className="text-text-secondary hover:text-text-primary transition-colors flex items-center gap-2 group">
               LEETCODE <div className="w-1.5 h-1.5 rounded-full bg-[#0ea5e9] shadow-[0_0_12px_#0ea5e9] opacity-0 group-hover:opacity-100 scale-0 group-hover:scale-100 transition-all duration-300 shrink-0 animate-pulse" />
             </a>
           </motion.div>

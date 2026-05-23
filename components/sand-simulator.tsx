@@ -14,8 +14,13 @@ export default function SandSimulator() {
   const gridRef = useRef<number[][]>(Array(GRID_SIZE).fill(0).map(() => Array(GRID_SIZE).fill(0)));
   const nextGridRef = useRef<number[][]>(Array(GRID_SIZE).fill(0).map(() => Array(GRID_SIZE).fill(0)));
   const [hue, setHue] = useState(200);
+  const hueRef = useRef(hue);
   const [isMouseDown, setIsMouseDown] = useState(false);
   const [isInView, setIsInView] = useState(false);
+
+  useEffect(() => {
+    hueRef.current = hue;
+  }, [hue]);
 
   useEffect(() => {
     const observer = new IntersectionObserver(
@@ -131,7 +136,7 @@ export default function SandSimulator() {
             const nj = gridX + dj;
             if (ni >= 0 && ni < GRID_SIZE && nj >= 0 && nj < GRID_SIZE) {
               if (currentGrid[ni][nj] === 0) {
-                currentGrid[ni][nj] = hue + (Math.random() * 20 - 10);
+                currentGrid[ni][nj] = hueRef.current + (Math.random() * 20 - 10);
               }
             }
           }
@@ -247,7 +252,12 @@ export default function SandSimulator() {
                 key={h}
                 className={`w-8 h-8 rounded-full border-2 transition-all ${hue === h ? "border-white scale-110 shadow-lg shadow-white/20" : "border-transparent opacity-50 hover:opacity-100"}`}
                 style={{ backgroundColor: `hsl(${h}, 80%, 60%)` }}
-                onClick={() => setHue(h)}
+                onClick={() => {
+                  setHue(h);
+                  hueRef.current = h;
+                }}
+                title={`Select hue ${h}`}
+                aria-label={`Select hue ${h}`}
               />
             ))}
           </div>

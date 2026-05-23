@@ -1,7 +1,7 @@
 "use client";
 
-import { motion, useScroll, useTransform, useSpring, MotionValue } from "framer-motion";
-import { useRef, useEffect, useState } from "react";
+import { motion, useInView, useScroll, useSpring } from "framer-motion";
+import { useRef } from "react";
 import { timeline, personal } from "@/lib/data";
 import { GitBranch } from "lucide-react";
 
@@ -9,7 +9,7 @@ export default function About() {
   const containerRef = useRef<HTMLElement>(null);
   const { scrollYProgress } = useScroll({
     target: containerRef,
-    offset: ["start end", "end 0.2"]
+    offset: ["start end", "end 0.85"]
   });
 
   // Waterfall line spring for smoothness
@@ -39,17 +39,49 @@ export default function About() {
           {/* Left: Waterfall Timeline Section */}
           <div className="relative pl-6 md:pl-12">
             {/* Waterfall Line Background */}
-            <div className="absolute left-0 top-2 w-[2px] h-full bg-border-subtle/30 rounded-full" />
+            <div className="absolute left-[-20px] md:left-[-44px] top-2 w-[2px] h-full bg-border-subtle/30 rounded-full" />
 
             {/* Animated Flowing Line */}
-            <motion.div
-              style={{ scaleY: pathLength }}
-              className="absolute left-0 top-2 w-[2px] h-full bg-gradient-to-b from-accent via-pm-accent to-transparent origin-top rounded-full shadow-[0_0_15px_rgba(108,99,255,0.5)] z-10"
-            />
+            <div className="absolute left-[-20px] md:left-[-44px] top-2 h-full z-10">
+              {/* Core stream */}
+              <motion.div
+                style={{ scaleY: pathLength }}
+                className="absolute left-0 top-0 w-[2px] h-full bg-gradient-to-b from-accent via-pm-accent to-transparent origin-top rounded-full shadow-[0_0_15px_rgba(108,99,255,0.5)]"
+              />
+
+              {/* Shimmering surface */}
+              <motion.div
+                style={{
+                  scaleY: pathLength,
+                  backgroundImage: "linear-gradient(180deg, rgba(108,99,255,0) 0%, rgba(108,99,255,0.6) 30%, rgba(108,99,255,0.15) 60%, rgba(108,99,255,0) 100%)",
+                  backgroundSize: "100% 60%"
+                }}
+                animate={{ backgroundPosition: ["0% 0%", "0% 100%"] }}
+                transition={{ duration: 2.8, repeat: Infinity, ease: "linear" }}
+                className="absolute left-[-1px] top-0 w-[4px] h-full origin-top rounded-full opacity-70"
+              />
+
+              {/* Misty glow */}
+              <motion.div
+                style={{ scaleY: pathLength }}
+                className="absolute left-[-6px] top-0 w-[14px] h-full origin-top rounded-full bg-accent/10 blur-[10px]"
+              />
+
+              {/* Droplets */}
+              {[0.2, 0.5, 0.75].map((pos, i) => (
+                <motion.span
+                  key={i}
+                  style={{ top: `${pos * 100}%` }}
+                  animate={{ y: [0, 10, 0], opacity: [0.2, 0.7, 0.2] }}
+                  transition={{ duration: 2 + i, repeat: Infinity, ease: "easeInOut" }}
+                  className="absolute -left-[5px] w-2 h-2 rounded-full bg-accent/50 blur-[1px]"
+                />
+              ))}
+            </div>
 
             <div className="flex flex-col gap-16">
               {timeline.map((item, i) => (
-                <TimelineItem key={i} item={item} index={i} progress={scrollYProgress} />
+                <TimelineItem key={i} item={item} />
               ))}
             </div>
           </div>
@@ -109,14 +141,20 @@ export default function About() {
   );
 }
 
-function TimelineItem({ item, index, progress }: { item: { year: string, title: string, description: string }, index: number, progress: MotionValue<number> }) {
-  // Each item lights up based on scroll progress
-  const opacity = useTransform(progress, [index * 0.2, index * 0.2 + 0.1], [0.3, 1]);
-  const scale = useTransform(progress, [index * 0.2, index * 0.2 + 0.1], [0.95, 1]);
+function TimelineItem({ item }: { item: { year: string, title: string, description: string } }) {
+  const itemRef = useRef<HTMLDivElement>(null);
+  const isInView = useInView(itemRef, {
+    margin: "0px 0px -20% 0px",
+    amount: 0.4,
+    once: false
+  });
 
   return (
     <motion.div
-      style={{ opacity, scale }}
+      ref={itemRef}
+      initial={{ opacity: 0.2, scale: 0.95 }}
+      animate={isInView ? { opacity: 1, scale: 1 } : { opacity: 0.2, scale: 0.95 }}
+      transition={{ duration: 0.4, ease: "easeOut" }}
       className="relative group"
     >
       {/* Waterfall Splash/Point */}

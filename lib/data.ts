@@ -311,10 +311,10 @@ export const experiences: Experience[] = [
     location: "Gurugram, India",
     description: "Scaled Motor Insurance product from early stage to rapid expansion, driving significant user growth and engagement through data-driven product optimization.",
     achievements: [
-      "Achieved 180% user growth in 8 weeks by scaling Motor Insurance from early stage to rapid expansion",
-      "Increased DAUs by enhancing UI/UX and driving engagement through WhatsApp-based user journeys",
-      "Improved conversion funnel (Quotes → Proposals → Purchase), significantly boosting purchase rates",
-      "Designed a sales dashboard and integrated new product features to enhance scalability and operational efficiency"
+      "Joined the Motor Insurance team during the soft-launch phase, conducting 60–80 customer feedback calls daily (1,000+ total interactions) to identify friction points across the insurance purchase journey.",
+      "Translated user insights into PRDs, user flows, and wireframes, redesigning key parts of the funnel including vehicle verification, quote discovery, policy comparison, and pricing presentation before the full-scale launch.",
+      "Pitched and launched a WhatsApp re-engagement channel, segmenting users based on policy-expiry behavior and delivering 49K+ targeted messages that generated 3K+ app opens (~6% open rate) and reactivated high-intent users.",
+      "Part of the core team that scaled the Motor Insurance vertical from 2,000 to 14,000 DAU (7x) and daily policy sales from 5 to 60 (12x) within 8 weeks, while building internal tooling and workflow automations that drove 15+ additional policy conversions per day."
     ],
     tech: ["Product Strategy", "Growth Hacking", "WhatsApp API", "Data Analytics", "Sales Dashboards"]
   }

@@ -44,7 +44,7 @@ export default function Contact() {
             LinkedIn <div className="w-1.5 h-1.5 rounded-full bg-[#0ea5e9] shadow-[0_0_12px_#0ea5e9] opacity-0 group-hover:opacity-100 scale-0 group-hover:scale-100 transition-all duration-300 shrink-0 animate-pulse" />
           </a>
           <a href={personal.twitter} target="_blank" data-cursor="external" className="hover:text-text-primary transition-colors flex items-center gap-2 group">
-            Twitter <div className="w-1.5 h-1.5 rounded-full bg-[#0ea5e9] shadow-[0_0_12px_#0ea5e9] opacity-0 group-hover:opacity-100 scale-0 group-hover:scale-100 transition-all duration-300 shrink-0 animate-pulse" />
+            X <div className="w-1.5 h-1.5 rounded-full bg-[#0ea5e9] shadow-[0_0_12px_#0ea5e9] opacity-0 group-hover:opacity-100 scale-0 group-hover:scale-100 transition-all duration-300 shrink-0 animate-pulse" />
           </a>
           <a href={personal.leetcode} target="_blank" data-cursor="external" className="hover:text-text-primary transition-colors flex items-center gap-2 group">
             LeetCode <div className="w-1.5 h-1.5 rounded-full bg-[#0ea5e9] shadow-[0_0_12px_#0ea5e9] opacity-0 group-hover:opacity-100 scale-0 group-hover:scale-100 transition-all duration-300 shrink-0 animate-pulse" />

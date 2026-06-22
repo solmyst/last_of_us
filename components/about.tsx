@@ -125,7 +125,7 @@ export default function About() {
                 Certifications
               </h4>
               <ul className="flex flex-col gap-2">
-                {(personal as { certifications?: string[] }).certifications?.slice(0, 4).map((cert, i) => (
+                {(personal as { certifications?: string[] }).certifications?.map((cert, i) => (
                   <li key={i} className="text-[13px] text-text-secondary flex items-center gap-2 group cursor-default">
                     <span className="text-accent opacity-50 group-hover:opacity-100 transition-opacity">→</span>
                     <span className="truncate">{cert}</span>
@@ -175,7 +175,7 @@ const sol: Profile = {
   role: "Product Intern" | "Full Stack",
   status: "Shipping Obsessed",
   university: "JECRC (AI-ML XEBIA)",
-  year: 2,
+  year: ${personal.year.match(/\d+/)?.[0] || '4'},
   stack: ["Next.js", "Spring Boot", "Growth Hacking"],
   learning: ["LLM Agents", "System Design"],
   openTo: "internships + full-time"

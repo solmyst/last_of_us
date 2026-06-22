@@ -50,7 +50,7 @@ export default function ProofBanner() {
               {stat.label}
             </span>
             {i !== proofStats.length - 1 && (
-              <span className="text-border-strong ml-6">|</span>
+              <span className="text-border-strong mx-4"> | </span>
             )}
           </div>
         ))}
@@ -66,7 +66,7 @@ export default function ProofBanner() {
                 {stat.label.toLowerCase().includes("github") && <GitBranch className="w-3 h-3" />}
                 {stat.label}
               </span>
-              <span className="text-border-strong ml-8">|</span>
+              <span className="text-border-strong mx-6"> | </span>
             </div>
           ))}
         </div>

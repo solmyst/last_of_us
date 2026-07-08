@@ -3,8 +3,11 @@
 import { motion } from "framer-motion";
 import { ArrowLeftRight } from "lucide-react";
 import { fadeUp } from "@/lib/animations";
+import { dualIdentityData } from "@/lib/data";
 
 export default function DualIdentity() {
+  const { title, subtitle, engineer, product } = dualIdentityData;
+
   return (
     <section id="thinking" className="py-24 max-w-7xl mx-auto px-6 relative z-10">
       <motion.div
@@ -14,8 +17,8 @@ export default function DualIdentity() {
         viewport={{ once: true, margin: "-10%" }}
         className="text-center mb-16"
       >
-        <h2 className="text-sm font-mono text-text-tertiary uppercase tracking-widest mb-4">What I Am</h2>
-        <p className="text-2xl md:text-3xl text-text-secondary">Two mindsets. One builder.</p>
+        <h2 className="text-sm font-mono text-text-tertiary uppercase tracking-widest mb-4">{title}</h2>
+        <p className="text-2xl md:text-3xl text-text-secondary">{subtitle}</p>
       </motion.div>
 
       <div className="flex flex-col md:flex-row items-stretch justify-center gap-6 max-w-5xl mx-auto relative">
@@ -32,22 +35,21 @@ export default function DualIdentity() {
           
           <div className="flex items-center gap-3 mb-8">
             <span className="text-accent text-xl">⬡</span>
-            <h3 className="font-mono text-sm tracking-widest text-text-primary uppercase">Engineer Mode</h3>
+            <h3 className="font-mono text-sm tracking-widest text-text-primary uppercase">{engineer.title}</h3>
           </div>
 
           <div className="space-y-6 text-[15px] leading-relaxed text-text-secondary mb-10">
-            <p>When I see a problem, I think:</p>
+            <p>{engineer.intro}</p>
             <ul className="space-y-2">
-              <li className="flex gap-3"><span className="text-accent">→</span> What&apos;s the data model?</li>
-              <li className="flex gap-3"><span className="text-accent">→</span> Where are the failure points?</li>
-              <li className="flex gap-3"><span className="text-accent">→</span> What&apos;s the O(n) here?</li>
-              <li className="flex gap-3"><span className="text-accent">→</span> Can this be stateless?</li>
+              {engineer.bullets.map((b, idx) => (
+                <li key={idx} className="flex gap-3"><span className="text-accent">→</span> {b}</li>
+              ))}
             </ul>
           </div>
 
           <div className="font-mono text-[13px] text-text-tertiary border-t border-border-subtle pt-6">
-            <p className="mb-2"><strong className="text-text-secondary font-medium">Stack:</strong> Java / Spring Boot / Next.js / Go / PostgreSQL / Docker / LLMs</p>
-            <p><strong className="text-text-secondary font-medium">Currently learning:</strong> system design at scale, distributed systems, LangChain agents</p>
+            <p className="mb-2"><strong className="text-text-secondary font-medium">Stack:</strong> {engineer.stack}</p>
+            <p><strong className="text-text-secondary font-medium">Currently learning:</strong> {engineer.learning}</p>
           </div>
         </motion.div>
 
@@ -72,22 +74,21 @@ export default function DualIdentity() {
           
           <div className="flex items-center gap-3 mb-8">
             <span className="text-pm-accent text-xl">◈</span>
-            <h3 className="font-mono text-sm tracking-widest text-text-primary uppercase">Product Mode</h3>
+            <h3 className="font-mono text-sm tracking-widest text-text-primary uppercase">{product.title}</h3>
           </div>
 
           <div className="space-y-6 text-[15px] leading-relaxed text-text-secondary mb-10">
-            <p>When I see a problem, I think:</p>
+            <p>{product.intro}</p>
             <ul className="space-y-2">
-              <li className="flex gap-3"><span className="text-pm-accent">→</span> Who is this actually for?</li>
-              <li className="flex gap-3"><span className="text-pm-accent">→</span> What does success look like in 90 days?</li>
-              <li className="flex gap-3"><span className="text-pm-accent">→</span> What&apos;s the riskiest assumption?</li>
-              <li className="flex gap-3"><span className="text-pm-accent">→</span> What&apos;s the MVP surface area?</li>
+              {product.bullets.map((b, idx) => (
+                <li key={idx} className="flex gap-3"><span className="text-pm-accent">→</span> {b}</li>
+              ))}
             </ul>
           </div>
 
           <div className="font-mono text-[13px] text-text-tertiary border-t border-border-subtle pt-6">
-            <p className="mb-2"><strong className="text-text-secondary font-medium">Tools:</strong> user story mapping, PRD writing, north star metrics, A/B framing</p>
-            <p><strong className="text-text-secondary font-medium">Currently reading:</strong> Inspired (Cagan), shaped thinking, outcome-based roadmaps</p>
+            <p className="mb-2"><strong className="text-text-secondary font-medium">Tools:</strong> {product.tools}</p>
+            <p><strong className="text-text-secondary font-medium">Currently reading:</strong> {product.reading}</p>
           </div>
         </motion.div>
       </div>

@@ -2,35 +2,10 @@
 
 import { motion } from "framer-motion";
 import { useEffect, useState } from "react";
-
-const CODE_LINES = [
-  { text: "// memeforge — local inference", type: "comment" },
-  { text: "import { Ollama } from 'ollama'", type: "import" },
-  { text: "", type: "blank" },
-  { text: "const generateMeme = async (", type: "code" },
-  { text: "  image: File,", type: "code" },
-  { text: "  context: string", type: "code" },
-  { text: ") => {", type: "code" },
-  { text: "  const model = new Ollama()", type: "code" },
-  { text: "  // zero api cost. always.", type: "comment" },
-  { text: "  return model.vision({", type: "code" },
-  { text: "    model: 'llava',", type: "code" },
-  { text: "    image, context", type: "code" },
-  { text: "  })", type: "code" },
-  { text: "}", type: "code" },
-];
-
-const PM_ITEMS = [
-  { text: "User problem identified", done: true },
-  { text: "Riskiest assumption: GPU availability", done: true },
-  { text: "MVP scope locked", done: true },
-  { text: "Privacy req: local-only", done: true },
-  { text: "Success metric: zero API cost", done: true },
-  { text: "Ship. Iterate.", done: false, active: true },
-];
+import { dualBrainData } from "@/lib/data";
 
 export default function DualBrainCard() {
-  const [typedLines, setTypedLines] = useState<string[]>(Array(CODE_LINES.length).fill(""));
+  const [typedLines, setTypedLines] = useState<string[]>(Array(dualBrainData.codeLines.length).fill(""));
   const [currentLineIdx, setCurrentLineIdx] = useState(-1); // -1 means hasn't started
   const [currentCharIdx, setCurrentCharIdx] = useState(0);
   const [cursorVisible, setCursorVisible] = useState(false);
@@ -47,7 +22,7 @@ export default function DualBrainCard() {
     const pmStart = setTimeout(() => {
       const pmInterval = setInterval(() => {
         setPmItemsVisible(prev => {
-          if (prev >= PM_ITEMS.length) {
+          if (prev >= dualBrainData.pmItems.length) {
             clearInterval(pmInterval);
             return prev;
           }
@@ -65,8 +40,8 @@ export default function DualBrainCard() {
 
   // Code typing effect
   useEffect(() => {
-    if (currentLineIdx >= 0 && currentLineIdx < CODE_LINES.length) {
-      const fullText = CODE_LINES[currentLineIdx].text;
+    if (currentLineIdx >= 0 && currentLineIdx < dualBrainData.codeLines.length) {
+      const fullText = dualBrainData.codeLines[currentLineIdx].text;
       
       if (currentCharIdx < fullText.length) {
         const charTimer = setTimeout(() => {
@@ -86,7 +61,7 @@ export default function DualBrainCard() {
         }, 80);
         return () => clearTimeout(lineTimer);
       }
-    } else if (currentLineIdx === CODE_LINES.length) {
+    } else if (currentLineIdx === dualBrainData.codeLines.length) {
       // Done typing
       setCursorVisible(true);
     }
@@ -114,7 +89,7 @@ export default function DualBrainCard() {
         </div>
         
         <div className="font-mono text-[11px] md:text-xs leading-[1.6] text-gray-800 dark:text-[#a9b1d6]">
-          {CODE_LINES.map((line, i) => (
+          {dualBrainData.codeLines.map((line, i) => (
             <div key={i} className="min-h-[1.6em]">
               <span className={
                 line.type === "comment" ? "text-gray-500 dark:text-[#565f89] italic" :
@@ -161,7 +136,7 @@ export default function DualBrainCard() {
         </div>
 
         <div className="space-y-3 font-mono text-xs">
-          {PM_ITEMS.map((item, i) => (
+          {dualBrainData.pmItems.map((item, i) => (
             <div 
               key={i} 
               className={`flex items-start gap-3 transition-opacity duration-300 ${i < pmItemsVisible ? "opacity-100" : "opacity-0"}`}

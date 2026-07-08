@@ -170,15 +170,29 @@ function TimelineItem({ item }: { item: { year: string, title: string, descripti
 }
 
 function TerminalWindow() {
+  const profile = (personal as {
+    terminalProfile?: {
+      roles: string[];
+      status: string;
+      stack: string[];
+      learning: string[];
+    };
+  }).terminalProfile || {
+    roles: ["Product Intern", "Full Stack"],
+    status: "Shipping Obsessed",
+    stack: ["Next.js", "Spring Boot", "Growth Hacking"],
+    learning: ["LLM Agents", "System Design"]
+  };
+
   const text = `// profile initialization
 const sol: Profile = {
-  role: "Product Intern" | "Full Stack",
-  status: "Shipping Obsessed",
-  university: "JECRC (AI-ML XEBIA)",
+  role: "${profile.roles.join('" | "')}",
+  status: "${profile.status}",
+  university: "${personal.university.split(" (")[0]}",
   year: ${personal.year.match(/\d+/)?.[0] || '4'},
-  stack: ["Next.js", "Spring Boot", "Growth Hacking"],
-  learning: ["LLM Agents", "System Design"],
-  openTo: "internships + full-time"
+  stack: ${JSON.stringify(profile.stack)},
+  learning: ${JSON.stringify(profile.learning)},
+  openTo: "${personal.openTo.split(" roles")[0]}"
 };
 
 // result: optimized for impact.

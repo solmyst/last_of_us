@@ -1,11 +1,10 @@
 "use client";
 import { GitBranch } from "lucide-react";
-import { personal } from "@/lib/data";
-
-
+import { personal, footerData } from "@/lib/data";
 
 export default function Footer() {
   const buildTime = process.env.NEXT_PUBLIC_BUILD_TIME || "production";
+  const repoName = `${personal.handle.split(" / ")[1] || "solmyst"}/portfolio`;
 
   return (
     <footer className="py-8 border-t border-border-subtle bg-bg-base">
@@ -13,12 +12,12 @@ export default function Footer() {
         <div className="flex flex-col md:flex-row items-center gap-2 md:gap-6">
           <a href={personal.github} target="_blank" className="flex items-center gap-2 hover:text-accent transition-colors group">
             <GitBranch className="w-3.5 h-3.5 group-hover:rotate-12 transition-transform" />
-            <span>solmyst / portfolio</span>
+            <span>{repoName}</span>
           </a>
           <span className="hidden md:inline text-border-default">|</span>
-          <span>Jaipur, RJ</span>
+          <span>{footerData.location}</span>
           <span className="hidden md:inline text-border-default">|</span>
-          <span>SHINE</span>
+          <span>{footerData.status}</span>
         </div>
 
         <div className="flex items-center gap-4">
@@ -27,7 +26,7 @@ export default function Footer() {
           </span>
           <span className="px-2 py-1 bg-green/10 text-green rounded border border-green/30 flex items-center gap-1.5" title="Lighthouse Performance Score">
             <span className="w-1.5 h-1.5 rounded-full bg-green animate-pulse" />
-            20.08
+            {footerData.lighthouseScore}
           </span>
         </div>
       </div>

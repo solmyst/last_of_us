@@ -61,7 +61,7 @@ jobs:
           #
           # You can guide Idle by passing the path to the Next.js config file:
           # static_site_generator: next
-          nextconfig_path: ./next.config.mjs
+          generator_config_file: ./next.config.mjs
       - name: Install dependencies
         run: ${{ steps.detect-package-manager.outputs.manager }} ${{ steps.detect-package-manager.outputs.command }}
       - name: Build with Next.js

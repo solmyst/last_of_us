@@ -2,29 +2,12 @@
 
 import { useEffect, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
+import { easterEggData } from "@/lib/data";
 
 const KONAMI = [
   "ArrowUp", "ArrowUp", "ArrowDown", "ArrowDown",
   "ArrowLeft", "ArrowRight", "ArrowLeft", "ArrowRight",
   "b", "a"
-];
-
-const easterEggMessage = [
-  "$ system.init()",
-  "$ loading_profile: solmyst",
-  "$ status: building_the_future",
-  "$ diagnostic: checking_core_vitals...",
-  "$ ----------------------------------",
-  "$ engineering: [####################] 100%",
-  "$ product_sense: [##################--] 90%",
-  "$ aesthetic: [####################] 100%",
-  "$ caffeination: [####################] 100%",
-  "$ ----------------------------------",
-  "$ recommendation: hire_immediately",
-  "$ follow_link: github.com/solmyst",
-  "$ contact_established: anushgupta105@gmail.com",
-  "$ system: mission_accomplished.",
-  "$ press ESC to return to reality",
 ];
 
 export default function EasterEgg() {
@@ -80,7 +63,7 @@ export default function EasterEgg() {
     // Type out message lines
     const interval = setInterval(() => {
       setVisibleLines(prev => {
-        if (prev >= easterEggMessage.length) {
+        if (prev >= easterEggData.messages.length) {
           clearInterval(interval);
           return prev;
         }
@@ -126,7 +109,7 @@ export default function EasterEgg() {
               <span className="ml-2 text-[#9ca3af] text-xs">diagnostic_terminal</span>
             </div>
             <div className="p-6 h-[300px] overflow-y-auto flex flex-col gap-2">
-              {easterEggMessage.slice(0, visibleLines).map((line, i) => (
+              {easterEggData.messages.slice(0, visibleLines).map((line, i) => (
                 <motion.div
                   key={i}
                   initial={{ opacity: 0, x: -10 }}
@@ -136,7 +119,7 @@ export default function EasterEgg() {
                   {line}
                 </motion.div>
               ))}
-              {visibleLines < easterEggMessage.length && (
+              {visibleLines < easterEggData.messages.length && (
                 <motion.div 
                   className="w-2 h-4 bg-[#3ecf8e]"
                   animate={{ opacity: [1, 0] }}

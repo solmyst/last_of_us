@@ -2,29 +2,7 @@
 
 import { useEffect, useState, useRef } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-
-const LINES = [
-  { delay: 0,    dur: 0,    type: 'spacer' },
-  { delay: 100,  dur: 400,  prefix: 'SYS',   cls: 'text-white/20',    text: 'initializing runtime environment...' },
-  { delay: 560,  dur: 280,  prefix: 'OK',     cls: 'text-emerald-400',     text: 'node v20.11 · next 15.1 · typescript 5.4' },
-  { delay: 900,  dur: 0,    type: 'spacer' },
-  { delay: 950,  dur: 340,  prefix: 'LOAD',   cls: 'text-white/20',    text: 'reading subject profile...' },
-  { delay: 1340, dur: 220,  prefix: 'FIELD',  cls: 'text-white/50',    text: 'name           anush gupta' },
-  { delay: 1600, dur: 220,  prefix: 'FIELD',  cls: 'text-white/50',    text: 'alias          sol / solmyst' },
-  { delay: 1860, dur: 220,  prefix: 'FIELD',  cls: 'text-white/50',    text: 'degree         b.tech cse — graduating 2026' },
-  { delay: 2120, dur: 220,  prefix: 'FIELD',  cls: 'text-white/50',    text: 'location       india' },
-  { delay: 2380, dur: 0,    type: 'spacer' },
-  { delay: 2440, dur: 300,  prefix: 'SCAN',   cls: 'text-white/20',    text: 'detecting active modes...' },
-  { delay: 2780, dur: 160,  prefix: 'MODE',   cls: 'text-indigo-400', text: 'engineering    spring boot · next.js · llm pipelines', tag: 'ENG' },
-  { delay: 2980, dur: 160,  prefix: 'MODE',   cls: 'text-cyan-400',     text: 'product        prd writing · user flows · decisions',  tag: 'PM' },
-  { delay: 3180, dur: 0,    type: 'spacer' },
-  { delay: 3240, dur: 280,  prefix: 'CHECK',  cls: 'text-white/20',    text: 'verifying shipped work...' },
-  { delay: 3560, dur: 140,  prefix: 'OK',     cls: 'text-emerald-400',     text: '4 projects     live in production' },
-  { delay: 3740, dur: 140,  prefix: 'OK',     cls: 'text-emerald-400',     text: '2 hackathons   top finish' },
-  { delay: 3920, dur: 140,  prefix: 'WARN',   cls: 'text-amber-500',   text: 'internship     socket: open — accepting connections' },
-  { delay: 4100, dur: 0,    type: 'spacer' },
-  { delay: 4180, dur: 320,  prefix: 'BOOT',   cls: 'text-white/80',   text: 'all systems nominal. launching portfolio...' },
-];
+import { loadingScreenData, personal } from "@/lib/data";
 
 export default function LoadingScreen() {
   const [isVisible, setIsVisible] = useState(false);
@@ -43,7 +21,7 @@ export default function LoadingScreen() {
     const startTime = Date.now();
 
     // Terminal sequence
-    LINES.forEach((line, index) => {
+    loadingScreenData.lines.forEach((line, index) => {
       setTimeout(() => {
         setVisibleLines(prev => [...prev, index]);
       }, line.delay);
@@ -113,7 +91,7 @@ export default function LoadingScreen() {
             style={{ opacity: showName ? 0 : 1, transform: showName ? 'translateY(-12px)' : 'translateY(0)' }}
           >
             <div className="flex flex-col gap-0">
-              {LINES.map((line, i) => (
+              {loadingScreenData.lines.map((line, i) => (
                 <TerminalLine key={i} line={line} isVisible={visibleLines.includes(i)} />
               ))}
               {visibleLines.length > 18 && (
@@ -155,6 +133,11 @@ interface Line {
   tag?: string;
 }
 
+// Helper to split fullname safely
+const nameParts = personal.name.split(" ");
+const firstName = nameParts[0] || "Anush";
+const lastName = nameParts.slice(1).join(" ") || "Gupta";
+
 function TerminalLine({ line, isVisible }: { line: Line, isVisible: boolean }) {
   if (line.type === 'spacer') return <div className="h-4" />;
   return (
@@ -187,14 +170,14 @@ function NameReveal({ visible }: { visible: boolean }) {
           animate={{ opacity: visible ? 1 : 0, y: visible ? 0 : "100%" }}
           transition={{ duration: 0.7, ease: [0.16, 1, 0.3, 1], delay: 0.2 }}
         >
-          Anush
+          {firstName}
         </motion.span>
         <motion.span 
           initial={{ y: "100%", opacity: 0 }}
           animate={{ opacity: visible ? 1 : 0, y: visible ? 0 : "100%" }}
           transition={{ duration: 0.7, ease: [0.16, 1, 0.3, 1], delay: 0.28 }}
         >
-          Gupta
+          {lastName}
         </motion.span>
       </motion.h1>
       <motion.p

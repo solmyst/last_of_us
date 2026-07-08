@@ -61,8 +61,37 @@ export interface Experience {
 
 export const projects: Project[] = [
   {
-    id: "interview-ace",
+    id: "krate",
     number: "001",
+    status: "live",
+    name: "krate",
+    tagline: "A container runtime built from scratch in Go.",
+    userProblem: "Docker abstracts everything, but understanding containerization requires diving into Linux primitives. Developers need a clear, minimal implementation of namespaces, cgroups, and overlay FS to understand container runtimes without the bloat.",
+    outcome: "Successfully implemented process isolation (UTS/PID/NS/NET), resource limiting (cgroups v2), and copy-on-write filesystem (OverlayFS) with a Web Dashboard running at 60 FPS under a custom Go HTTP daemon.",
+    whatIBuilt: "Written in Go, utilizing raw system calls (clone, pivot_root, mount, unshare). Built a CLI with Cobra, a REST API with Gin, and a minimal Web UI dashboard for monitoring container memory and CPU usage in real-time.",
+    decisions: [
+      {
+        id: "krate-go-vs-rust",
+        date: "March 2025",
+        context: "architecture",
+        statement: "Go vs. Rust for container runtime from scratch",
+        optionA: { label: "Go", why: "Better compatibility with Kubernetes ecosystems, faster prototyping, and native support for system calls via standard library package `syscall`." },
+        optionB: { label: "Rust", why: "Superior safety guarantees and closer mapping to C system interfaces." },
+        chose: "A",
+        because: "Since standard runtimes like runc are built in Go, using Go allowed me to directly study and implement the same patterns (like the double-fork execution model) while keeping the code accessible to other backend engineers.",
+        wouldDoDifferently: "Implement a proper network bridge (veth pairs) rather than just local unshare to allow containers to talk to the host network."
+      }
+    ],
+    stack: ["Go", "Linux Namespaces", "cgroups v2", "OverlayFS", "Cobra", "Gin", "HTML5/JS"],
+    image: "/projects/krate.png",
+    links: {
+      github: "https://github.com/solmyst/krate",
+    },
+    featured: true,
+  },
+  {
+    id: "interview-ace",
+    number: "002",
     status: "live",
     name: "AI Interview Coach",
     tagline: "Local-first AI for anxiety-free interview prep.",
@@ -92,7 +121,7 @@ export const projects: Project[] = [
   },
   {
     id: "resume-tailor",
-    number: "002",
+    number: "003",
     status: "live",
     name: "AI Resume Tailor",
     tagline: "Beat the ATS with AI-optimized resumes.",
@@ -122,7 +151,7 @@ export const projects: Project[] = [
   },
   {
     id: "memeforge",
-    number: "003",
+    number: "004",
     status: "live",
     name: "MemeForge AI",
     tagline: "Local-first AI meme generation. Snap, Roast, Repeat.",
@@ -152,7 +181,7 @@ export const projects: Project[] = [
   },
   {
     id: "f1-dashboard",
-    number: "004",
+    number: "005",
     status: "live",
     name: "F1 Pit Wall Dashboard",
     tagline: "High-performance Electron telemetry widget with CSS3 animations.",
@@ -182,7 +211,7 @@ export const projects: Project[] = [
   },
   {
     id: "trip-helper",
-    number: "005",
+    number: "006",
     status: "shipped",
     name: "Trip Helper (Indian Roads)",
     tagline: "Road trip planning with accurate toll and fuel estimates.",
@@ -211,7 +240,7 @@ export const projects: Project[] = [
   },
   {
     id: "sand-art",
-    number: "006",
+    number: "007",
     status: "live",
     name: "Interactive Sand Simulator",
     tagline: "Physics-based particle art in your browser.",
@@ -241,7 +270,7 @@ export const projects: Project[] = [
   },
   {
     id: "ascii-camera",
-    number: "007",
+    number: "008",
     status: "live",
     name: "ASCII Video Filter",
     tagline: "The world through a developer's eyes.",
@@ -274,10 +303,11 @@ export const projects: Project[] = [
 // ─── STANDALONE DECISIONS LOG ─────────────────────────────────────────────────
 
 export const decisionsLog: Decision[] = [
-  projects[0].decisions[0], // Interview: local vs cloud
-  projects[1].decisions[0], // Resume: Python vs Node
-  projects[2].decisions[0], // MemeForge: local vs cloud
-  projects[3].decisions[0], // F1: Electron vs Web
+  projects[0].decisions[0], // krate: Go vs Rust
+  projects[1].decisions[0], // Interview: local vs cloud
+  projects[2].decisions[0], // Resume: Python vs Node
+  projects[3].decisions[0], // MemeForge: local vs cloud
+  projects[4].decisions[0], // F1: Electron vs Web
   {
     id: "global-state-management",
     date: "Feb 2025",
@@ -392,7 +422,7 @@ export const skillGroups: SkillGroup[] = [
 // ─── PROOF BANNER ─────────────────────────────────────────────────────────────
 
 export const proofStats = [
-  { value: "7+", label: "Projects" },
+  { value: "8+", label: "Projects" },
   { value: "500+", label: "Commits" },
   { value: "500+", label: "DSA Problems Solved" },
   { value: "JECRC University", label: "B.Tech CSE (AI-ML XEBIA)" },
@@ -432,7 +462,13 @@ export const personal = {
     "Career Essentials - Microsoft & LinkedIn",
     "Business Leaders - LinkedIn",
     "Gemini Multimodality & RAG"
-  ]
+  ],
+  terminalProfile: {
+    roles: ["Product Intern", "Full Stack"],
+    status: "Shipping Obsessed",
+    stack: ["Next.js", "Spring Boot", "Growth Hacking"],
+    learning: ["LLM Agents", "System Design"]
+  }
 };
 
 export const timeline = [
@@ -457,3 +493,119 @@ export const timeline = [
     description: "Started journey at JECRC University."
   }
 ];
+
+// ─── NEW CENTRALIZED DATA ───────────────────────────────────────────────────
+
+export const heroData = {
+  roles: ["FULL STACK ENGINEER", "PRODUCT MANAGER"],
+  tagline: "builds systems. ships products.",
+  description: "I think in user flows and implement in Spring Boot. Currently at JECRC University — looking for where both skill sets create maximum leverage.",
+};
+
+export const dualIdentityData = {
+  title: "What I Am",
+  subtitle: "Two mindsets. One builder.",
+  engineer: {
+    title: "Engineer Mode",
+    intro: "When I see a problem, I think:",
+    bullets: [
+      "What's the data model?",
+      "Where are the failure points?",
+      "What's the O(n) here?",
+      "Can this be stateless?",
+    ],
+    stack: "Java / Spring Boot / Next.js / Go / PostgreSQL / Docker / LLMs",
+    learning: "system design at scale, distributed systems, LangChain agents",
+  },
+  product: {
+    title: "Product Mode",
+    intro: "When I see a problem, I think:",
+    bullets: [
+      "Who is this actually for?",
+      "What does success look like in 90 days?",
+      "What's the riskiest assumption?",
+      "What's the MVP surface area?",
+    ],
+    tools: "user story mapping, PRD writing, north star metrics, A/B framing",
+    reading: "Inspired (Cagan), shaped thinking, outcome-based roadmaps",
+  },
+};
+
+export const dualBrainData = {
+  codeLines: [
+    { text: "// memeforge — local inference", type: "comment" },
+    { text: "import { Ollama } from 'ollama'", type: "import" },
+    { text: "", type: "blank" },
+    { text: "const generateMeme = async (", type: "code" },
+    { text: "  image: File,", type: "code" },
+    { text: "  context: string", type: "code" },
+    { text: ") => {", type: "code" },
+    { text: "  const model = new Ollama()", type: "code" },
+    { text: "  // zero api cost. always.", type: "comment" },
+    { text: "  return model.vision({", type: "code" },
+    { text: "    model: 'llava',", type: "code" },
+    { text: "    image, context", type: "code" },
+    { text: "  })", type: "code" },
+    { text: "}", type: "code" },
+  ],
+  pmItems: [
+    { text: "User problem identified", done: true },
+    { text: "Riskiest assumption: GPU availability", done: true },
+    { text: "MVP scope locked", done: true },
+    { text: "Privacy req: local-only", done: true },
+    { text: "Success metric: zero API cost", done: true },
+    { text: "Ship. Iterate.", done: false, active: true },
+  ],
+};
+
+export const loadingScreenData = {
+  lines: [
+    { delay: 0,    dur: 0,    type: 'spacer' },
+    { delay: 100,  dur: 400,  prefix: 'SYS',   cls: 'text-white/20',    text: 'initializing runtime environment...' },
+    { delay: 560,  dur: 280,  prefix: 'OK',     cls: 'text-emerald-400',     text: 'node v20.11 · next 15.1 · typescript 5.4' },
+    { delay: 900,  dur: 0,    type: 'spacer' },
+    { delay: 950,  dur: 340,  prefix: 'LOAD',   cls: 'text-white/20',    text: 'reading subject profile...' },
+    { delay: 1340, dur: 220,  prefix: 'FIELD',  cls: 'text-white/50',    text: `name           anush gupta` },
+    { delay: 1600, dur: 220,  prefix: 'FIELD',  cls: 'text-white/50',    text: `alias          sol / solmyst` },
+    { delay: 1860, dur: 220,  prefix: 'FIELD',  cls: 'text-white/50',    text: `degree         b.tech cse — graduating 2027` },
+    { delay: 2120, dur: 220,  prefix: 'FIELD',  cls: 'text-white/50',    text: 'location       india' },
+    { delay: 2380, dur: 0,    type: 'spacer' },
+    { delay: 2440, dur: 300,  prefix: 'SCAN',   cls: 'text-white/20',    text: 'detecting active modes...' },
+    { delay: 2780, dur: 160,  prefix: 'MODE',   cls: 'text-indigo-400', text: 'engineering    spring boot · next.js · llm pipelines', tag: 'ENG' },
+    { delay: 2980, dur: 160,  prefix: 'MODE',   cls: 'text-cyan-400',     text: 'product        prd writing · user flows · decisions',  tag: 'PM' },
+    { delay: 3180, dur: 0,    type: 'spacer' },
+    { delay: 3240, dur: 280,  prefix: 'CHECK',  cls: 'text-white/20',    text: 'verifying shipped work...' },
+    { delay: 3560, dur: 140,  prefix: 'OK',     cls: 'text-emerald-400',     text: '4 projects     live in production' },
+    { delay: 3740, dur: 140,  prefix: 'OK',     cls: 'text-emerald-400',     text: '2 hackathons   top finish' },
+    { delay: 3920, dur: 140,  prefix: 'WARN',   cls: 'text-amber-500',   text: 'internship     socket: open — accepting connections' },
+    { delay: 4100, dur: 0,    type: 'spacer' },
+    { delay: 4180, dur: 320,  prefix: 'BOOT',   cls: 'text-white/80',   text: 'all systems nominal. launching portfolio...' },
+  ]
+};
+
+export const easterEggData = {
+  messages: [
+    "$ system.init()",
+    `$ loading_profile: solmyst`,
+    "$ status: building_the_future",
+    "$ diagnostic: checking_core_vitals...",
+    "$ ----------------------------------",
+    "$ engineering: [####################] 100%",
+    "$ product_sense: [##################--] 90%",
+    "$ aesthetic: [####################] 100%",
+    "$ caffeination: [####################] 100%",
+    "$ ----------------------------------",
+    "$ recommendation: hire_immediately",
+    `$ follow_link: github.com/solmyst`,
+    `$ contact_established: anushgupta105@gmail.com`,
+    "$ system: mission_accomplished.",
+    "$ press ESC to return to reality",
+  ]
+};
+
+export const footerData = {
+  location: "Jaipur, RJ",
+  status: "SHINE",
+  lighthouseScore: "20.08"
+};
+

@@ -2,9 +2,14 @@
 
 import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { projects } from "@/lib/data";
+import { projects, featuredProjectIds } from "@/lib/data";
 import Image from "next/image";
 import { GitBranch, ExternalLink, Code2 } from "lucide-react";
+
+const orderedProjects = [
+  ...featuredProjectIds.flatMap(id => projects.filter(project => project.id === id)),
+  ...projects.filter(project => !featuredProjectIds.includes(project.id)),
+];
 
 export default function Projects() {
   const [expandedId, setExpandedId] = useState<string | null>(null);
@@ -33,7 +38,7 @@ export default function Projects() {
 
       {/* Dynamic Bento Grid */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 md:gap-8 items-start">
-        {projects.map((project, i) => (
+        {orderedProjects.map((project, i) => (
           <ProjectEntry 
             key={project.id} 
             project={project} 
@@ -86,7 +91,7 @@ function ProjectEntry({
         </motion.div>
         <motion.div layout="position" className="flex flex-col flex-1 min-w-0">
           <span className="text-[10px] font-mono text-text-tertiary mb-1 uppercase tracking-wider">
-            {project.number} — {project.status}
+            {String(index + 1).padStart(3, "0")} — {project.status}
           </span>
           <h3 className="text-sm font-medium text-text-primary truncate group-hover:text-accent transition-colors">
             {project.name}
@@ -115,7 +120,7 @@ function ProjectEntry({
         <div className="flex items-start justify-between mb-4 gap-4">
           <div className="flex items-start gap-4">
             <div className="w-10 h-10 shrink-0 rounded-xl bg-bg-elevated/80 border border-border-subtle flex items-center justify-center font-mono text-sm text-accent shadow-inner">
-              {project.number}
+              {String(index + 1).padStart(3, "0")}
             </div>
             
             <div className="flex flex-col">

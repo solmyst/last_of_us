@@ -57,28 +57,19 @@ export default function Hero() {
           </motion.h1>
 
           <div className="flex flex-col gap-1 mt-1 text-text-secondary">
-            <span className="overflow-hidden">
+            {taglineParts.map((part, index) => (
+            <span key={part} className="overflow-hidden">
               <motion.span
                 className="inline-block"
                 variants={{
                   hidden: { y: "100%" },
-                  visible: { y: 0, transition: { delay: 0.8, duration: 0.5, ease: "easeOut" } }
+                  visible: { y: 0, transition: { delay: 0.8 + index * 0.08, duration: 0.5, ease: "easeOut" } }
                 }}
               >
-                {taglineParts[0] ? `${taglineParts[0]}.` : ""}
+                {part.endsWith(".") ? part : `${part}.`}
               </motion.span>
             </span>
-            <span className="overflow-hidden">
-              <motion.span
-                className="inline-block"
-                variants={{
-                  hidden: { y: "100%" },
-                  visible: { y: 0, transition: { delay: 0.88, duration: 0.5, ease: "easeOut" } }
-                }}
-              >
-                {taglineParts[1] ? `${taglineParts[1]}` : ""}
-              </motion.span>
-            </span>
+            ))}
           </div>
 
           <motion.p

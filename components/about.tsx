@@ -34,7 +34,7 @@ export default function About() {
           <h2 className="text-2xl md:text-4xl font-bold text-text-primary uppercase tracking-tight">The story so far</h2>
         </motion.div>
 
-        <div className="grid lg:grid-cols-2 gap-12 lg:gap-24 items-start">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-24 items-start">
 
           {/* Left: Waterfall Timeline Section */}
           <div className="relative pl-6 md:pl-12">
@@ -126,9 +126,9 @@ export default function About() {
               </h4>
               <ul className="flex flex-col gap-2">
                 {(personal as { certifications?: string[] }).certifications?.map((cert, i) => (
-                  <li key={i} className="text-[13px] text-text-secondary flex items-center gap-2 group cursor-default">
+                  <li key={i} className="text-[13px] text-text-secondary flex items-start gap-2 group cursor-default">
                     <span className="text-accent opacity-50 group-hover:opacity-100 transition-opacity">→</span>
-                    <span className="truncate">{cert}</span>
+                    <span>{cert}</span>
                   </li>
                 ))}
               </ul>
@@ -189,7 +189,7 @@ const sol: Profile = {
   role: "${profile.roles.join('" | "')}",
   status: "${profile.status}",
   university: "${personal.university.split(" (")[0]}",
-  year: ${personal.year.match(/\d+/)?.[0] || '4'},
+  graduating: ${personal.graduating},
   stack: ${JSON.stringify(profile.stack)},
   learning: ${JSON.stringify(profile.learning)},
   openTo: "${personal.openTo.split(" roles")[0]}"
@@ -226,7 +226,7 @@ console.log("Ready to build.");`;
           <span className="text-gray-100">cat anush.profile.ts</span>
         </div>
 
-        <pre className="whitespace-pre-wrap text-gray-400 mb-6">
+        <pre className="whitespace-pre-wrap [overflow-wrap:anywhere] text-gray-400 mb-6">
           {text}
         </pre>
 

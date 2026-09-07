@@ -31,31 +31,23 @@ const fragmentMono = {
 
 export const metadata: Metadata = {
   metadataBase: new URL('https://anushgupta.tech'),
-  title: "Anush Gupta — Full Stack Engineer & Product Manager",
-  description: "B.Tech CSE student building full-stack systems and thinking in user flows. Spring Boot, Next.js, LLMs. Open to SDE internships and full-time roles.",
+  title: "Anush Gupta — Product Manager & Full-Stack Builder",
+  description: "Product manager with four Park+ internships and an engineering background. User research, funnel optimization, and AI products built end to end.",
   alternates: {
     canonical: 'https://anushgupta.tech',
   },
   openGraph: {
-    title: "Anush Gupta — Full Stack Engineer & Product Manager",
-    description: "B.Tech CSE student building full-stack systems and thinking in user flows. Spring Boot, Next.js, LLMs. Open to SDE internships and full-time roles.",
+    title: "Anush Gupta — Product Manager & Full-Stack Builder",
+    description: "Product manager with four Park+ internships and an engineering background. User research, funnel optimization, and AI products built end to end.",
     url: "https://anushgupta.tech",
     siteName: "Anush Gupta Portfolio",
-    images: [
-      {
-        url: "/og-image.png",
-        width: 1200,
-        height: 630,
-      },
-    ],
     locale: "en_US",
     type: "website",
   },
   twitter: {
-    card: "summary_large_image",
-    title: "Anush Gupta — Full Stack Engineer & Product Manager",
-    description: "B.Tech CSE student building full-stack systems and thinking in user flows. Spring Boot, Next.js, LLMs. Open to SDE internships and full-time roles.",
-    images: ["/og-image.png"],
+    card: "summary",
+    title: "Anush Gupta — Product Manager & Full-Stack Builder",
+    description: "Product manager with four Park+ internships and an engineering background. User research, funnel optimization, and AI products built end to end.",
   },
 };
 

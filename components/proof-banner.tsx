@@ -2,7 +2,7 @@
 
 import { useRef, useEffect } from "react";
 import { motion, useInView, useMotionValue, useTransform, animate } from "framer-motion";
-import { proofStats } from "@/lib/data";
+import { proofStats, proofAttribution } from "@/lib/data";
 import { GitBranch } from "lucide-react";
 
 function AnimatedNumber({ value }: { value: string }) {
@@ -39,7 +39,7 @@ export default function ProofBanner() {
   return (
     <div className="w-full border-y border-border-default bg-bg-base/50 relative overflow-hidden my-10 md:my-24 group">
       {/* Desktop view */}
-      <div className="hidden md:flex justify-center items-center py-4 px-6 gap-6 font-mono text-[13px] text-text-secondary tracking-wide">
+      <div className="hidden md:flex flex-wrap justify-center items-center py-4 px-6 gap-6 font-mono text-[13px] text-text-secondary tracking-wide">
         {proofStats.map((stat, i) => (
           <div key={i} className="flex items-center">
             <span className="text-text-primary mr-2">
@@ -71,6 +71,7 @@ export default function ProofBanner() {
           ))}
         </div>
       </div>
+      <p className="max-w-4xl mx-auto px-6 pb-4 text-center text-xs leading-relaxed text-text-secondary">{proofAttribution}</p>
     </div>
   );
 }

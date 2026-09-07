@@ -30,7 +30,7 @@ export default function Contact() {
         <a
           href={`mailto:${personal.email}`}
           data-cursor="link"
-          className="inline-block text-2xl md:text-3xl font-mono text-accent hover:text-text-primary transition-colors mb-20 relative group"
+          className="inline-block max-w-full [overflow-wrap:anywhere] text-lg sm:text-2xl md:text-3xl font-mono text-accent hover:text-text-primary transition-colors mb-20 relative group"
         >
           {personal.email}
           <span className="absolute -bottom-2 left-0 right-0 h-[1px] bg-accent group-hover:bg-text-primary transition-colors" />

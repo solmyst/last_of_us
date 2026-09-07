@@ -2,7 +2,7 @@
 
 import { motion } from "framer-motion";
 import { skillGroups } from "@/lib/data";
-import { Star, Zap, Circle, Activity } from "lucide-react";
+import { Circle } from "lucide-react";
 
 interface Skill {
   name: string;
@@ -17,29 +17,7 @@ interface SkillGroup {
 }
 
 function LevelIndicator({ level }: { level: string }) {
-  switch (level) {
-    case "primary":
-      return (
-        <Star className="w-3.5 h-3.5 text-accent fill-accent" />
-      );
-    case "production":
-      return (
-        <Zap className="w-3.5 h-3.5 text-green fill-green/20" />
-      );
-    case "learning":
-      return (
-        <div className="relative">
-          <div className="absolute inset-0 rounded-full bg-pm-accent animate-ping opacity-20" />
-          <Circle className="w-3.5 h-3.5 text-pm-accent relative z-10" />
-        </div>
-      );
-    case "exploring":
-      return (
-        <Activity className="w-3.5 h-3.5 text-text-tertiary" />
-      );
-    default:
-      return null;
-  }
+  return level === "listed" ? <Circle className="w-3.5 h-3.5 text-accent" /> : null;
 }
 
 export default function Skills() {
@@ -51,8 +29,8 @@ export default function Skills() {
           <div className="h-[1px] w-24 bg-border-subtle" />
           <span className="font-mono text-[10px] text-text-tertiary absolute -top-4 right-0 opacity-40">{"/* runtime_inventory.ts */"}</span>
         </div>
-        <h2 className="text-2xl md:text-4xl font-bold text-text-primary uppercase tracking-tight">Tech Inventory</h2>
-        <p className="text-text-secondary mt-2 font-mono text-xs uppercase opacity-60">Filtered by proficiency & application</p>
+        <h2 className="text-2xl md:text-4xl font-bold text-text-primary uppercase tracking-tight">Product & Engineering Skills</h2>
+        <p className="text-text-secondary mt-2 font-mono text-xs uppercase opacity-60">From discovery and analysis to design and implementation</p>
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6">
@@ -103,18 +81,12 @@ export default function Skills() {
                     <LevelIndicator level={skill.level} />
                   </div>
                   
-                  <div className="flex items-center gap-3 overflow-hidden">
-                    <span className="text-[15px] font-medium text-text-secondary group-hover/skill:text-accent transition-colors duration-150 whitespace-nowrap">
+                  <div className="min-w-0">
+                    <span className="text-[15px] font-medium text-text-secondary group-hover/skill:text-accent transition-colors duration-150">
                       {skill.name}
                     </span>
                     
-                    <span className={`
-                      text-[11px] font-mono uppercase tracking-widest transition-all duration-150 whitespace-nowrap
-                      opacity-0 -translate-x-3 group-hover/skill:opacity-100 group-hover/skill:translate-x-0
-                      ${skill.note ? "text-accent font-bold" : "text-text-tertiary"}
-                    `}>
-                      {skill.note || "Verified"}
-                    </span>
+
                   </div>
                 </div>
               ))}
@@ -123,20 +95,8 @@ export default function Skills() {
         ))}
       </div>
 
-      {/* Legend */}
-      <div className="mt-20 pt-10 border-t border-border-subtle grid grid-cols-2 md:flex md:justify-center gap-x-8 gap-y-6">
-        <div className="flex items-center gap-3 font-mono text-[10px] text-text-tertiary uppercase tracking-widest">
-          <LevelIndicator level="primary" /> Primary Tool
-        </div>
-        <div className="flex items-center gap-3 font-mono text-[10px] text-text-tertiary uppercase tracking-widest">
-          <LevelIndicator level="production" /> Production Experience
-        </div>
-        <div className="flex items-center gap-3 font-mono text-[10px] text-text-tertiary uppercase tracking-widest">
-          <LevelIndicator level="learning" /> Building Projects
-        </div>
-        <div className="flex items-center gap-3 font-mono text-[10px] text-text-tertiary uppercase tracking-widest">
-          <LevelIndicator level="exploring" /> In Exploration
-        </div>
+      <div className="mt-12 pt-8 border-t border-border-subtle flex justify-center gap-3 font-mono text-xs text-text-tertiary">
+        <LevelIndicator level="listed" /> Skills listed in my resume
       </div>
     </section>
   );

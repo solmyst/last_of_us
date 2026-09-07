@@ -41,7 +41,7 @@ export interface SkillGroup {
   mode: "engineering" | "product" | "both";
   skills: Array<{
     name: string;
-    level: "primary" | "production" | "learning" | "exploring";
+    level: "primary" | "production" | "learning" | "exploring" | "listed";
     note?: string;
   }>;
 }
@@ -83,7 +83,6 @@ export const projects: Project[] = [
       }
     ],
     stack: ["Go", "Linux Namespaces", "cgroups v2", "OverlayFS", "Cobra", "Gin", "HTML5/JS"],
-    image: "/projects/krate.png",
     links: {
       github: "https://github.com/solmyst/krate",
     },
@@ -96,8 +95,8 @@ export const projects: Project[] = [
     name: "AI Interview Coach",
     tagline: "Local-first AI for anxiety-free interview prep.",
     userProblem: "Interview prep is either passive (reading) or expensive (mock interviews). Users need a low-pressure way to practice real-time speech and get instant feedback without cloud latency or cost.",
-    outcome: "Achieved 100% local speech-to-text and AI analysis. Reduced feedback latency to <500ms by processing everything on-device via MediaPipe and Ollama.",
-    whatIBuilt: "Built a React + TypeScript frontend integrated with MediaPipe for facial expression analysis and the Web Speech API for transcription. Orchestrated local LLM calls via Ollama to generate context-aware follow-up questions.",
+    outcome: "Built a local-first mock interview tool with a complete recording, AI analysis, and critique flow. Chose local inference so personal recordings stay on the user's device.",
+    whatIBuilt: "Designed the end-to-end interview practice experience, from recording a response to reviewing AI-generated feedback, with Ollama powering local inference.",
     decisions: [
       {
         id: "ia-local-llm",
@@ -124,10 +123,10 @@ export const projects: Project[] = [
     number: "003",
     status: "live",
     name: "AI Resume Tailor",
-    tagline: "Beat the ATS with AI-optimized resumes.",
+    tagline: "Tailor a resume to the role, with context.",
     userProblem: "I noticed students spending hours manually tweaking resumes for different job descriptions. Instead of generic keyword stuffing, they needed a smart engine that understands semantic context and maps skills directly to JD requirements automatically.",
-    outcome: "Built a pipeline that generates fully tailored resumes in <15 seconds. Implemented a robust parsing engine that extracts skills and maps them to JD requirements with high accuracy.",
-    whatIBuilt: "Developed a Python Flask backend utilizing spaCy and BERT for semantic matching. Built a React 18 frontend with a smooth drag-and-drop upload interface and real-time tailoring progress tracking.",
+    outcome: "Built and launched a platform that improves ATS alignment through automated scoring, job-description-based optimization, and RAG-driven semantic matching.",
+    whatIBuilt: "Designed a resume-tailoring workflow that compares a candidate's experience with a job description, scores alignment, and uses retrieval-augmented generation to support relevant edits.",
     decisions: [
       {
         id: "rt-backend-choice",
@@ -332,21 +331,66 @@ export const decisionsLog: Decision[] = [
   }
 ];
 
+export const featuredProjectIds = ["interview-ace", "resume-tailor"];
+
+export const experienceIntro = "Four product internships at Park+, with increasing ownership across motor insurance, automotive discovery, and consumer trust.";
+
 export const experiences: Experience[] = [
   {
     id: "park-plus-product",
-    role: "Product Intern",
+    role: "Product Intern, Motor Insurance",
     company: "Park+",
     period: "June 2025 - August 2025",
     location: "Gurugram, India",
-    description: "Scaled Motor Insurance product from early stage to rapid expansion, driving significant user growth and engagement through data-driven product optimization.",
+    description: "Part of the core team that grew Motor Insurance from soft launch to 7× DAU and 12× daily policy sales in eight weeks.",
     achievements: [
       "Joined the Motor Insurance team during the soft-launch phase, conducting 60–80 customer feedback calls daily (1,000+ total interactions) to identify friction points across the insurance purchase journey.",
       "Translated user insights into PRDs, user flows, and wireframes, redesigning key parts of the funnel including vehicle verification, quote discovery, policy comparison, and pricing presentation before the full-scale launch.",
       "Pitched and launched a WhatsApp re-engagement channel, segmenting users based on policy-expiry behavior and delivering 49K+ targeted messages that generated 3K+ app opens (~6% open rate) and reactivated high-intent users.",
       "Part of the core team that scaled the Motor Insurance vertical from 2,000 to 14,000 DAU (7x) and daily policy sales from 5 to 60 (12x) within 8 weeks, while building internal tooling and workflow automations that drove 15+ additional policy conversions per day."
     ],
-    tech: ["Product Strategy", "Growth Hacking", "WhatsApp API", "Data Analytics", "Sales Dashboards"]
+    tech: ["User Research", "PRDs", "Funnel Optimization", "User Flows", "Re-engagement"]
+  },
+  {
+    id: "park-plus-growth",
+    role: "Product Intern, Execution & Growth",
+    company: "Park+",
+    period: "June 2024 - August 2024",
+    location: "Gurugram, India",
+    description: "Turned a trust barrier in the test-drive journey into Phonebook, a social-discovery feature built around people users already knew.",
+    achievements: [
+      "Identified that users lacked confidence in dealers and vehicle recommendations, limiting trust in the test-drive journey.",
+      "Proposed and launched Phonebook to surface trusted contacts who owned a car or had taken a test drive through Park+.",
+      "Scaled the feature to 4,000+ DAU by syncing and matching 1Cr+ user contacts against the Park+ network.",
+      "Built prototypes and collaborated on contact-sync infrastructure and matching logic to enable trust-based discovery."
+    ],
+    tech: ["Product Discovery", "Prototyping", "Social Discovery", "Feature Rollout"]
+  },
+  {
+    id: "park-plus-discovery",
+    role: "Product Intern, Automotive & Discovery",
+    company: "Park+",
+    period: "January 2024 - March 2024",
+    location: "Gurugram, India",
+    description: "Improved test-drive booking and helped build the dealer and vehicle review ecosystem with product, design, and engineering teams.",
+    achievements: [
+      "Analysed friction in test-drive booking and lead management, informing a funnel redesign that grew daily bookings from 50 to 100+ (2×).",
+      "Defined user flows and feature specifications for Dealer Review and Test Drive Review, generating 150+ reviews in the first week and scaling to 200+ dealer reviews and 250+ vehicle reviews daily."
+    ],
+    tech: ["Funnel Analysis", "User Flows", "Feature Specifications", "Stakeholder Management"]
+  },
+  {
+    id: "park-plus-foundations",
+    role: "Product Intern, Onboarding & Foundations",
+    company: "Park+",
+    period: "January 2024 - February 2024",
+    location: "Gurugram, India",
+    description: "Built a foundation in product management through product discovery, planning, and execution discussions.",
+    achievements: [
+      "Participated in product discovery, planning, and execution discussions to understand how ideas become features.",
+      "Developed technical understanding by collaborating closely with engineering teams during feature development."
+    ],
+    tech: ["Product Discovery", "Planning", "Engineering Collaboration"]
   }
 ];
 
@@ -354,80 +398,58 @@ export const experiences: Experience[] = [
 
 export const skillGroups: SkillGroup[] = [
   {
+    label: "Product",
+    mode: "product",
+    skills: ["PRDs", "Funnel Optimization", "A/B Thinking", "User Research", "GTM", "Feature Rollout", "Stakeholder Management"].map(name => ({ name, level: "listed" as const })),
+  },
+  {
+    label: "Data",
+    mode: "both",
+    skills: ["SQL", "Metabase", "Funnel Analysis", "Excel", "Google Sheets"].map(name => ({ name, level: "listed" as const })),
+  },
+  {
+    label: "Design",
+    mode: "product",
+    skills: ["Figma", "Visily", "Wireframing", "Prototyping", "User Flows"].map(name => ({ name, level: "listed" as const })),
+  },
+  {
     label: "Languages",
     mode: "engineering",
-    skills: [
-      { name: "C / C++", level: "primary", note: "DSA + competitive programming" },
-      { name: "Java", level: "production", note: "Spring Boot ecosystem" },
-      { name: "Python", level: "production", note: "NLP + Flask backends" },
-      { name: "Go", level: "production", note: "High-concurrency systems" },
-      { name: "TypeScript / JS", level: "production", note: "Fullstack core" },
-      { name: "Dart", level: "production", note: "Flutter mobile" },
-    ],
+    skills: ["C++", "Python", "JavaScript", "TypeScript"].map(name => ({ name, level: "listed" as const })),
   },
   {
-    label: "Backend & Systems",
+    label: "Frameworks",
     mode: "engineering",
-    skills: [
-      { name: "Spring Boot", level: "production" },
-      { name: "Flask", level: "production" },
-      { name: "Gin (Golang)", level: "production" },
-      { name: "PostgreSQL / MySQL", level: "production" },
-      { name: "JWT / OAuth2", level: "production" },
-      { name: "Docker", level: "production" },
-      { name: "REST API Design", level: "primary" },
-    ],
+    skills: ["React", "Next.js", "Node.js", "FastAPI", "Flask"].map(name => ({ name, level: "listed" as const })),
   },
   {
-    label: "Frontend & Mobile",
+    label: "Tools",
+    mode: "both",
+    skills: ["Git", "Docker", "GCP", "Firebase", "Vercel", "GitHub Actions", "Jira", "Notion", "Postman", "MoEngage"].map(name => ({ name, level: "listed" as const })),
+  },
+  {
+    label: "Databases",
     mode: "engineering",
-    skills: [
-      { name: "Next.js 14/15", level: "production" },
-      { name: "React 18/19", level: "production" },
-      { name: "Flutter", level: "production" },
-      { name: "Tailwind CSS", level: "production" },
-      { name: "Framer Motion", level: "production" },
-      { name: "PWA", level: "production" },
-      { name: "Electron", level: "production" },
-    ],
+    skills: ["PostgreSQL", "SQLite", "Redis", "ChromaDB"].map(name => ({ name, level: "listed" as const })),
   },
   {
-    label: "AI / ML Integration",
+    label: "Concepts",
     mode: "engineering",
-    skills: [
-      { name: "Ollama (Local LLMs)", level: "primary" },
-      { name: "MediaPipe", level: "production" },
-      { name: "spaCy / BERT", level: "production" },
-      { name: "Prompt Engineering", level: "primary" },
-      { name: "OpenAI API", level: "production" },
-    ],
-  },
-  {
-    label: "Product & Process",
-    mode: "product",
-    skills: [
-      { name: "Product Strategy", level: "primary" },
-      { name: "User Research", level: "production" },
-      { name: "Growth Hacking", level: "primary" },
-      { name: "Funnel Optimization", level: "production" },
-      { name: "Go-to-Market Planning", level: "production" },
-      { name: "Technical PRDs", level: "production" },
-      { name: "Marketplace Dynamics", level: "production" },
-      { name: "User Journey Mapping", level: "production" },
-      { name: "System Architecture", level: "production" },
-    ],
+    skills: ["DSA", "System Design", "LLM Integration", "RAG", "REST APIs", "CI/CD"].map(name => ({ name, level: "listed" as const })),
   },
 ];
 
 // ─── PROOF BANNER ─────────────────────────────────────────────────────────────
 
 export const proofStats = [
-  { value: "8+", label: "Projects" },
-  { value: "500+", label: "Commits" },
+  { value: "4", label: "Product Internships" },
+  { value: "7×", label: "Motor Insurance DAU" },
+  { value: "12×", label: "Daily Policy Sales" },
+  { value: "10+", label: "Projects Built" },
   { value: "500+", label: "DSA Problems Solved" },
-  { value: "JECRC University", label: "B.Tech CSE (AI-ML XEBIA)" },
-  { value: "2027", label: "Graduating" },
 ];
+
+export const proofAttribution = "Motor Insurance results achieved as part of the Park+ core team: 2K → 14K DAU and 5 → 60 daily policy sales in eight weeks.";
 
 // ─── CURRENTLY BLOCK ─────────────────────────────────────────────────────────
 
@@ -443,63 +465,60 @@ export const currently = {
 export const personal = {
   name: "Anush Gupta",
   handle: "sol / solmyst",
-  university: "JECRC University (AI-ML XEBIA)",
-  year: "B.Tech CSE — 4th year",
+  university: "JECRC University (CS, AI & ML — Xebia Specialization)",
+  year: "B.Tech CS (AI & ML) — Class of 2027",
+  educationPeriod: "August 2023 - April 2027",
   graduating: "2027",
   email: "anushgupta105@gmail.com",
   github: "https://github.com/solmyst",
   leetcode: "https://leetcode.com/anushgupta105/",
   linkedin: "https://linkedin.com/in/anushgupta105",
   twitter: "https://x.com/GuptaAnush105",
-  resume: "https://drive.google.com/file/d/18zozP6xXi940m8i99zVl4RNjaY051mlD/view?usp=drive_link",
-  openTo: "internships + full-time roles",
+  resume: "/Anush-Gupta-Product-Resume.pdf",
+  openTo: "product management internships + full-time roles",
   outsideCode: "I’m a guitarist, video editor, gamer, and F1 fan who loves the blend of high-performance engineering and premium design. I enjoy building products and experiences that I’d genuinely want to use every day.",
   certifications: [
-    "Gen AI Academy (Google)",
-    "Gemini & Imagen (Google)",
-    "GenAI Apps - Gemini & Streamlit",
-    "Gemini API in Vertex AI",
-    "Career Essentials - Microsoft & LinkedIn",
-    "Business Leaders - LinkedIn",
-    "Gemini Multimodality & RAG"
+    "Google Cloud — RAG; GenAI Apps with Gemini and Streamlit",
+    "JPMorgan Chase (Forage) — Software Engineering Job Simulation",
+    "Microsoft & LinkedIn — Career Essentials in Software Development"
   ],
   terminalProfile: {
-    roles: ["Product Intern", "Full Stack"],
-    status: "Shipping Obsessed",
-    stack: ["Next.js", "Spring Boot", "Growth Hacking"],
-    learning: ["LLM Agents", "System Design"]
+    roles: ["Product Manager", "Full-Stack Builder"],
+    status: "Thinks in funnels. Measures outcomes.",
+    stack: ["React", "Next.js", "Python", "SQL"],
+    learning: ["System Design", "LLM Integration", "RAG"]
   }
 };
 
 export const timeline = [
   {
-    year: "2026",
-    title: "AI + Product",
-    description: "Building LLM-powered tools, deepening system design at scale, and exploring the AI + Product intersection. Currently shipping this portfolio and hunting for the next high-leverage role."
+    year: "2025",
+    title: "AI products, built end to end",
+    description: "Built AI Interview Coach for local-first practice and AI Resume Tailor for ATS alignment, job-description-based optimization, and semantic matching."
   },
   {
     year: "2025",
-    title: "Product Intern @ Park+",
-    description: "Achieved 180% user growth by scaling Motor Insurance and optimizing conversion funnels."
+    title: "Motor Insurance @ Park+",
+    description: "Part of the core team that grew DAU from 2,000 to 14,000 and daily policy sales from 5 to 60 in eight weeks. Connected customer research, funnel improvements, and re-engagement."
   },
   {
     year: "2024",
-    title: "Hackathon Runner-up",
-    description: "Secured 2nd position among 200+ teams; 2nd prize for startup pitch at XEBIA conclave."
+    title: "Discovery, trust & growth @ Park+",
+    description: "Helped double daily test-drive bookings, built the review ecosystem with cross-functional teams, and launched Phonebook, scaling it to 4,000+ DAU."
   },
   {
-    year: "2023",
-    title: "B.Tech CSE (AI-ML)",
-    description: "Started journey at JECRC University."
+    year: "August 2023 - April 2027",
+    title: "B.Tech, CS (AI & ML)",
+    description: "JECRC University, Xebia Specialization. Building technical depth in data structures, system design, full-stack development, and AI integration."
   }
 ];
 
 // ─── NEW CENTRALIZED DATA ───────────────────────────────────────────────────
 
 export const heroData = {
-  roles: ["FULL STACK ENGINEER", "PRODUCT MANAGER"],
-  tagline: "builds systems. ships products.",
-  description: "I think in user flows and implement in Spring Boot. Currently at JECRC University — looking for where both skill sets create maximum leverage.",
+  roles: ["PRODUCT MANAGER", "FULL-STACK BUILDER"],
+  tagline: "Thinks in funnels. Builds in code. Measures in outcomes.",
+  description: "Four product internships at Park+. Increasing ownership across insurance, automotive discovery, and consumer trust. I connect user research and product decisions with the technical depth to build and ship.",
 };
 
 export const dualIdentityData = {
@@ -514,8 +533,8 @@ export const dualIdentityData = {
       "What's the O(n) here?",
       "Can this be stateless?",
     ],
-    stack: "Java / Spring Boot / Next.js / Go / PostgreSQL / Docker / LLMs",
-    learning: "system design at scale, distributed systems, LangChain agents",
+    stack: "C++ / Python / TypeScript / React / Next.js / PostgreSQL / Docker",
+    learning: "system design, LLM integration, retrieval-augmented generation",
   },
   product: {
     title: "Product Mode",
@@ -526,7 +545,7 @@ export const dualIdentityData = {
       "What's the riskiest assumption?",
       "What's the MVP surface area?",
     ],
-    tools: "user story mapping, PRD writing, north star metrics, A/B framing",
+    tools: "PRDs, funnel optimization, user research, GTM, feature rollout, stakeholder management",
     reading: "Inspired (Cagan), shaped thinking, outcome-based roadmaps",
   },
 };
@@ -562,7 +581,7 @@ export const loadingScreenData = {
   lines: [
     { delay: 0,    dur: 0,    type: 'spacer' },
     { delay: 100,  dur: 400,  prefix: 'SYS',   cls: 'text-white/20',    text: 'initializing runtime environment...' },
-    { delay: 560,  dur: 280,  prefix: 'OK',     cls: 'text-emerald-400',     text: 'node v20.11 · next 15.1 · typescript 5.4' },
+    { delay: 560,  dur: 280,  prefix: 'OK',     cls: 'text-emerald-400',     text: 'product thinking · engineering depth' },
     { delay: 900,  dur: 0,    type: 'spacer' },
     { delay: 950,  dur: 340,  prefix: 'LOAD',   cls: 'text-white/20',    text: 'reading subject profile...' },
     { delay: 1340, dur: 220,  prefix: 'FIELD',  cls: 'text-white/50',    text: `name           anush gupta` },
@@ -571,12 +590,12 @@ export const loadingScreenData = {
     { delay: 2120, dur: 220,  prefix: 'FIELD',  cls: 'text-white/50',    text: 'location       india' },
     { delay: 2380, dur: 0,    type: 'spacer' },
     { delay: 2440, dur: 300,  prefix: 'SCAN',   cls: 'text-white/20',    text: 'detecting active modes...' },
-    { delay: 2780, dur: 160,  prefix: 'MODE',   cls: 'text-indigo-400', text: 'engineering    spring boot · next.js · llm pipelines', tag: 'ENG' },
+    { delay: 2780, dur: 160,  prefix: 'MODE',   cls: 'text-indigo-400', text: 'engineering    python · next.js · llm integration', tag: 'ENG' },
     { delay: 2980, dur: 160,  prefix: 'MODE',   cls: 'text-cyan-400',     text: 'product        prd writing · user flows · decisions',  tag: 'PM' },
     { delay: 3180, dur: 0,    type: 'spacer' },
     { delay: 3240, dur: 280,  prefix: 'CHECK',  cls: 'text-white/20',    text: 'verifying shipped work...' },
-    { delay: 3560, dur: 140,  prefix: 'OK',     cls: 'text-emerald-400',     text: '4 projects     live in production' },
-    { delay: 3740, dur: 140,  prefix: 'OK',     cls: 'text-emerald-400',     text: '2 hackathons   top finish' },
+    { delay: 3560, dur: 140,  prefix: 'OK',     cls: 'text-emerald-400',     text: '4 internships  increasing product ownership' },
+    { delay: 3740, dur: 140,  prefix: 'OK',     cls: 'text-emerald-400',     text: '10+ projects   built end-to-end' },
     { delay: 3920, dur: 140,  prefix: 'WARN',   cls: 'text-amber-500',   text: 'internship     socket: open — accepting connections' },
     { delay: 4100, dur: 0,    type: 'spacer' },
     { delay: 4180, dur: 320,  prefix: 'BOOT',   cls: 'text-white/80',   text: 'all systems nominal. launching portfolio...' },
@@ -608,4 +627,3 @@ export const footerData = {
   status: "SHINE",
   lighthouseScore: "20.08"
 };
-

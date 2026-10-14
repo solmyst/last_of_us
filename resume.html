@@ -1,0 +1,709 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Anush Gupta — Resume</title>
+  <link rel="stylesheet"
+    href="_ds/fyscal-technologies-design-system-78a3e075-bba9-43b8-8e2a-39bb39d62751/colors_and_type.css">
+  <style>
+    *,
+    *::before,
+    *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    /* ── Exact colours from the image ── */
+    :root {
+      --c-navy: #1b2d5e;
+      /* name, headings, stat values */
+      --c-blue: #1f57b0;
+      /* section labels, skill category names */
+      --c-body: #3a3a3a;
+      /* body / bullet text */
+      --c-meta: #767676;
+      /* dates, locations */
+      --c-divider: #d6dae4;
+      /* horizontal rules */
+      --c-card-bg: #d3e2f2;
+      /* name card background */
+      --c-sidebar: #eaf0fa;
+      /* sidebar wash */
+      --c-hl-border: #c4d2e6;
+      /* highlight card border */
+      --c-hl-bg: #f5f8fc;
+      /* highlight card background */
+      --c-page: #e9eaed;
+      /* browser background */
+    }
+
+    body {
+      background: var(--c-page);
+      display: flex;
+      justify-content: center;
+      align-items: flex-start;
+      padding: 48px 24px;
+      min-height: 100vh;
+      font-family: var(--font-sans);
+      font-size: 13px;
+      color: var(--c-body);
+      -webkit-font-smoothing: antialiased;
+    }
+
+    .sidebar,
+    .name-card,
+    .hl-card {
+      -webkit-print-color-adjust: exact;
+      print-color-adjust: exact;
+    }
+
+    /* Screen: print-only wrappers are transparent */
+    .sheet,
+    .scaler {
+      display: contents;
+    }
+
+    /* Full-bleed: the resume fills the entire A4 page, no margins.
+       Print with "Margins: None" + "Background graphics" ON.
+       NOTE: the @media print block lives at the END of this stylesheet so its
+       rules always win the cascade over the base .resume rule below. */
+    @page {
+      size: A4 portrait;
+      margin: 0;
+    }
+
+    /* ════ Resume shell ════ */
+    .resume {
+      width: 860px;
+      min-height: 1180px;
+      background: white;
+      box-shadow: 0 8px 40px rgba(0, 0, 0, 0.14);
+      display: grid;
+      grid-template-columns: 280px 1fr;
+    }
+
+    /* ════════════════════════
+       LEFT SIDEBAR
+    ════════════════════════ */
+    .sidebar {
+      background: var(--c-sidebar);
+      padding: 16px 18px 18px;
+      display: flex;
+      flex-direction: column;
+    }
+
+    /* Name card */
+    .name-card {
+      background: var(--c-card-bg);
+      border-radius: 11px;
+      padding: 14px 16px;
+      margin-bottom: 10px;
+    }
+
+    .name-text {
+      font-family: var(--font-display);
+      font-weight: 900;
+      font-size: 2.05rem;
+      line-height: 0.95;
+      color: var(--c-navy);
+      letter-spacing: -0.015em;
+    }
+
+    /* Contact (below card) */
+    .contact-block {
+      display: flex;
+      flex-direction: column;
+      gap: 3px;
+      padding-bottom: 10px;
+    }
+
+    .contact-item {
+      font-size: 0.78rem;
+      color: var(--c-body);
+      line-height: 1.5;
+    }
+
+    .contact-links {
+      font-size: 0.78rem;
+      color: var(--c-blue);
+      line-height: 1.5;
+      margin-top: 2px;
+    }
+
+    .contact-links span {
+      color: var(--c-meta);
+      margin: 0 4px;
+    }
+
+    /* Divider */
+    hr.sb-div {
+      border: none;
+      border-top: 1px solid var(--c-divider);
+      margin: 0 0 9px;
+    }
+
+    /* Section */
+    .sb-section {
+      margin-bottom: 10px;
+    }
+
+    .sb-label {
+      font-family: var(--font-sans);
+      font-size: 0.67rem;
+      font-weight: 700;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--c-blue);
+      margin-bottom: 6px;
+    }
+
+    .sb-body {
+      font-size: 0.775rem;
+      line-height: 1.55;
+      color: var(--c-body);
+    }
+
+    /* Career Highlights 2×2 */
+    .hl-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 8px;
+    }
+
+    .hl-card {
+      background: var(--c-hl-bg);
+      border: 1px solid var(--c-hl-border);
+      border-radius: 5px;
+      padding: 10px 10px 9px;
+    }
+
+    .hl-value {
+      font-family: var(--font-display);
+      font-weight: 800;
+      font-size: 1.35rem;
+      line-height: 1;
+      color: var(--c-navy);
+      margin-bottom: 5px;
+    }
+
+    .hl-desc {
+      font-size: 0.65rem;
+      line-height: 1.35;
+      color: var(--c-body);
+    }
+
+    /* Skills */
+    .skill-list {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+
+    .skill-cat-name {
+      font-family: var(--font-sans);
+      font-size: 0.7rem;
+      font-weight: 700;
+      color: var(--c-blue);
+      margin-bottom: 2px;
+    }
+
+    .skill-cat-items {
+      font-size: 0.76rem;
+      line-height: 1.45;
+      color: var(--c-body);
+    }
+
+    /* Education / Certifications */
+    .edu-text {
+      font-size: 0.775rem;
+      line-height: 1.5;
+      color: var(--c-body);
+      font-weight: 700;
+      color: var(--c-navy);
+    }
+
+    .edu-meta {
+      font-size: 0.72rem;
+      color: var(--c-meta);
+      margin-top: 2px;
+    }
+
+    .edu-sub {
+      font-size: 0.745rem;
+      color: var(--c-body);
+      margin-top: 1px;
+    }
+
+    .cert-block {
+      margin-bottom: 9px;
+    }
+
+    .cert-block:last-child {
+      margin-bottom: 0;
+    }
+
+    .cert-issuer {
+      font-size: 0.72rem;
+      font-weight: 700;
+      color: var(--c-navy);
+      margin-bottom: 2px;
+    }
+
+    .cert-items {
+      font-size: 0.745rem;
+      line-height: 1.45;
+      color: var(--c-body);
+    }
+
+    /* ════════════════════════
+       RIGHT MAIN
+    ════════════════════════ */
+    .main {
+      padding: 16px 26px 18px;
+      border-left: 1px solid var(--c-divider);
+      display: flex;
+      flex-direction: column;
+    }
+
+    .main-heading {
+      font-family: var(--font-display);
+      font-weight: 800;
+      font-size: 1.2rem;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+      color: var(--c-navy);
+      margin-bottom: 14px;
+    }
+
+    .main-heading.spaced {
+      margin-top: 22px;
+    }
+
+    .main-summary {
+      font-size: 0.82rem;
+      line-height: 1.7;
+      color: var(--c-body);
+      margin-bottom: 20px;
+    }
+
+    .main-summary strong {
+      color: var(--c-navy);
+      font-weight: 700;
+    }
+
+    .exp-list {
+      display: flex;
+      flex-direction: column;
+      gap: 0;
+    }
+
+    .exp-entry {
+      padding-bottom: 15px;
+      margin-bottom: 15px;
+      border-bottom: 1px solid var(--c-divider);
+    }
+
+    .exp-entry:last-child {
+      border-bottom: none;
+      margin-bottom: 0;
+      padding-bottom: 0;
+    }
+
+    .exp-header-line {
+      font-family: var(--font-sans);
+      font-size: 0.82rem;
+      font-weight: 700;
+      color: var(--c-navy);
+      line-height: 1.35;
+      margin-bottom: 2px;
+    }
+
+    .exp-meta {
+      font-size: 0.72rem;
+      color: var(--c-meta);
+      margin-bottom: 7px;
+    }
+
+    /* Nested role within a single company */
+    .exp-company {
+      font-family: var(--font-sans);
+      font-size: 0.92rem;
+      font-weight: 700;
+      color: var(--c-navy);
+      line-height: 1.3;
+    }
+
+    .exp-company-meta {
+      font-size: 0.72rem;
+      color: var(--c-meta);
+      margin: 2px 0 13px;
+    }
+
+    .exp-role {
+      margin-bottom: 14px;
+    }
+
+    .exp-role:last-child {
+      margin-bottom: 0;
+    }
+
+    .exp-role-line {
+      font-family: var(--font-sans);
+      font-size: 0.78rem;
+      font-weight: 700;
+      color: var(--c-blue);
+      line-height: 1.3;
+    }
+
+    .exp-role-meta {
+      font-size: 0.7rem;
+      color: var(--c-meta);
+      margin: 2px 0 8px;
+    }
+
+    .exp-bullets {
+      list-style: disc;
+      padding-left: 16px;
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+
+    .exp-bullets li {
+      font-size: 0.8rem;
+      line-height: 1.6;
+      color: var(--c-body);
+      text-wrap: pretty;
+    }
+
+    .exp-bullets li::marker {
+      font-size: 0.65em;
+      color: var(--c-body);
+    }
+
+    .exp-bullets strong {
+      color: var(--c-navy);
+      font-weight: 700;
+    }
+
+    /* Projects */
+    .proj-entry {
+      padding-bottom: 13px;
+      margin-bottom: 13px;
+      border-bottom: 1px solid var(--c-divider);
+    }
+
+    .proj-entry:last-child {
+      border-bottom: none;
+      margin-bottom: 0;
+      padding-bottom: 0;
+    }
+
+    .proj-title {
+      font-size: 0.82rem;
+      font-weight: 700;
+      color: var(--c-navy);
+      margin-bottom: 1px;
+    }
+
+    .proj-title span {
+      color: var(--c-meta);
+      font-weight: 400;
+      font-size: 0.72rem;
+    }
+
+    .proj-desc {
+      font-size: 0.8rem;
+      line-height: 1.6;
+      color: var(--c-body);
+      margin-top: 5px;
+    }
+
+    /* ════════════════════════════════════════════════════════
+       PRINT  —  must be LAST so these rules win the cascade.
+       Full-bleed A4: the resume fills the whole page edge-to-edge.
+       Print with  Paper: A4 · Margins: None · Background graphics: ON
+    ════════════════════════════════════════════════════════ */
+    @media print {
+
+      html,
+      body {
+        background: #fff !important;
+        margin: 0 !important;
+        padding: 0 !important;
+      }
+
+      body {
+        display: block !important;
+      }
+
+      /* The sheet IS the full A4 page. */
+      .sheet {
+        display: block !important;
+        width: 210mm !important;
+        height: 297mm !important;
+        overflow: hidden !important;
+        background: #fff !important;
+      }
+
+      .scaler {
+        display: block !important;
+      }
+
+      /* Design is 1018px wide; scaling by 0.7796 maps it to exactly 210mm.
+         min-height 1440px * 0.7796 = 297mm, so it fills the full page height. */
+      .resume {
+        width: 1018px !important;
+        min-height: 1440px !important;
+        background: #fff !important;
+        box-shadow: none !important;
+        border-radius: 0 !important;
+        overflow: hidden !important;
+        transform: scale(0.7796);
+        transform-origin: top left;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <div class="sheet">
+    <div class="scaler">
+      <div class="resume">
+
+        <!-- ─── SIDEBAR ─── -->
+        <aside class="sidebar">
+
+          <!-- Name card -->
+          <div class="name-card">
+            <div class="name-text">ANUSH<br>GUPTA</div>
+          </div>
+
+          <!-- Contact -->
+          <div class="contact-block">
+            <div class="contact-item">+91 9982920838</div>
+            <div class="contact-item">anushgupta105@gmail.com</div>
+            <div class="contact-links"><a href="https://www.linkedin.com/in/anushgupta105" target="_blank"
+                rel="noopener">LinkedIn</a> <span>|</span> <a href="https://github.com/solmyst" target="_blank"
+                rel="noopener">GitHub</a> <span>|</span> <a href="https://anush.tech" target="_blank"
+                rel="noopener">Portfolio</a></div>
+          </div>
+
+          <hr class="sb-div">
+
+          <!-- Professional Summary -->
+          <div class="sb-section">
+            <div class="sb-label">Professional Summary</div>
+            <p class="sb-body">4 internships. One company. Increasing ownership each semester. Thinks in funnels, builds
+              in code, measures in outcomes. Product thinker with full-stack depth. Shipping since third year.</p>
+          </div>
+
+          <hr class="sb-div">
+
+          <!-- Career Highlights -->
+          <div class="sb-section">
+            <div class="sb-label">Career Highlights</div>
+            <div class="hl-grid">
+              <div class="hl-card">
+                <div class="hl-value">7x</div>
+                <div class="hl-desc">Motor Insurance DAU growth (2K &rarr; 14K)</div>
+              </div>
+              <div class="hl-card">
+                <div class="hl-value">12x</div>
+                <div class="hl-desc">daily policy sales scaled (5 &rarr; 60)</div>
+              </div>
+              <div class="hl-card">
+                <div class="hl-value">10+</div>
+                <div class="hl-desc">software projects built end-to-end</div>
+              </div>
+              <div class="hl-card">
+                <div class="hl-value">500+</div>
+                <div class="hl-desc">competitive programming problems solved</div>
+              </div>
+            </div>
+          </div>
+
+          <hr class="sb-div">
+
+          <!-- Core Skills -->
+          <div class="sb-section">
+            <div class="sb-label">Core Skills</div>
+            <div class="skill-list">
+              <div>
+                <div class="skill-cat-name">PRODUCT MANAGEMENT</div>
+                <div class="skill-cat-items">PRDs, funnel optimization, A/B thinking, user research, GTM, feature
+                  rollout, stakeholder management</div>
+              </div>
+              <div>
+                <div class="skill-cat-name">DATA &amp; ANALYTICS</div>
+                <div class="skill-cat-items">SQL, Metabase, funnel analysis, Excel, Google Sheets</div>
+              </div>
+              <div>
+                <div class="skill-cat-name">DESIGN &amp; SPECS</div>
+                <div class="skill-cat-items">Figma, Visily, wireframing, prototyping, user flows</div>
+              </div>
+              <div>
+                <div class="skill-cat-name">LANGUAGES</div>
+                <div class="skill-cat-items">C++, Python, JavaScript, TypeScript</div>
+              </div>
+              <div>
+                <div class="skill-cat-name">FRAMEWORKS</div>
+                <div class="skill-cat-items">React, Next.js, Node.js, FastAPI, Flask</div>
+              </div>
+              <div>
+                <div class="skill-cat-name">TOOLS &amp; PLATFORMS</div>
+                <div class="skill-cat-items">Git, Docker, GCP, Firebase, Vercel, GitHub Actions, Jira, Notion, Postman,
+                  MoEngage</div>
+              </div>
+              <div>
+                <div class="skill-cat-name">DATABASES</div>
+                <div class="skill-cat-items">PostgreSQL, SQLite, Redis, ChromaDB</div>
+              </div>
+              <div>
+                <div class="skill-cat-name">CONCEPTS</div>
+                <div class="skill-cat-items">DSA, System Design, LLM Integration, RAG, REST APIs, CI/CD</div>
+              </div>
+            </div>
+          </div>
+
+          <hr class="sb-div">
+
+          <!-- Certifications -->
+          <div class="sb-section">
+            <div class="sb-label">Certifications</div>
+            <div class="cert-block">
+              <div class="cert-issuer">Google Cloud</div>
+              <div class="cert-items">RAG · GenAI Apps with Gemini and Streamlit</div>
+            </div>
+            <div class="cert-block">
+              <div class="cert-issuer">JPMorgan Chase (Forage)</div>
+              <div class="cert-items">Software Engineering Job Simulation</div>
+            </div>
+            <div class="cert-block">
+              <div class="cert-issuer">Microsoft &amp; LinkedIn</div>
+              <div class="cert-items">Career Essentials in Software Development</div>
+            </div>
+          </div>
+
+          <hr class="sb-div">
+
+          <!-- Education -->
+          <div class="sb-section">
+            <div class="sb-label">Education</div>
+            <div class="edu-text">JECRC University</div>
+            <div class="edu-meta">Aug 2023 - Apr 2027</div>
+            <div class="edu-sub">B.Tech, CS (AI and ML) · Xebia Specialization</div>
+          </div>
+
+        </aside>
+
+        <!-- ─── MAIN ─── -->
+        <main class="main">
+
+          <div class="main-heading">Summary</div>
+
+          <p class="main-summary">Product Manager with a strong engineering background and 4 product internships across
+            insurance, automotive, and consumer-trust products, taking on increasing ownership each semester. Part of
+            the core team that scaled the Motor Insurance vertical from <strong>2,000 to 14,000 DAU (7x)</strong> and
+            daily policy sales from <strong>5 to 60 (12x)</strong> in <strong>8 weeks</strong>. Built full-stack and
+            AI-powered products, solved <strong>500+ competitive programming problems</strong>, and leverage technical
+            depth to prototype faster, collaborate effectively with engineering teams, and make stronger product
+            trade-off decisions.</p>
+
+          <div class="main-heading">Professional Experience</div>
+
+          <div class="exp-list">
+
+            <div class="exp-entry">
+              <div class="exp-company">Park+ &mdash; Product Intern Journey (4 Internships)</div>
+              <div class="exp-company-meta">2024 &ndash; 2025 · Gurugram, India</div>
+
+              <div class="exp-role">
+                <div class="exp-role-line">Product Intern, Motor Insurance</div>
+                <div class="exp-role-meta">Jun &ndash; Aug 2025</div>
+                <ul class="exp-bullets">
+                  <li>Joined the Motor Insurance team during the soft-launch phase, conducting <strong>60&ndash;80
+                      customer feedback calls daily (1,000+ total interactions)</strong> to identify friction points
+                    across the insurance purchase journey.</li>
+                  <li>Translated user insights into PRDs, user flows, and wireframes, redesigning key parts of the
+                    funnel including vehicle verification, quote discovery, policy comparison, and pricing presentation
+                    before the full-scale launch.</li>
+                  <li>Pitched and launched a WhatsApp re-engagement channel, segmenting users based on policy-expiry
+                    behavior and delivering <strong>49K+ targeted messages</strong> that generated <strong>3K+ app opens
+                      (~6% open rate)</strong> and reactivated high-intent users.</li>
+                  <li>Part of the core team that scaled the Motor Insurance vertical from <strong>2,000 to 14,000 DAU
+                      (7x)</strong> and daily policy sales from <strong>5 to 60 (12x)</strong> within <strong>8
+                      weeks</strong>, while building internal tooling and workflow automations that drove <strong>15+
+                      additional policy conversions per day</strong>.</li>
+                </ul>
+              </div>
+
+              <div class="exp-role">
+                <div class="exp-role-line">Product Intern, Automotive &amp; Discovery</div>
+                <div class="exp-role-meta">Jan &ndash; March 2025</div>
+                <ul class="exp-bullets">
+                  <li>Analysed friction across the Test Drive booking and lead-management workflows, informing a funnel
+                    redesign that drove daily test-drive bookings from <strong>50 to 100+ (2x increase)</strong>.</li>
+                  <li>Partnered with product, design, and engineering teams to build the Dealer Review and Test Drive
+                    Review ecosystem, defining user flows and feature specifications, generating <strong>150+ reviews in
+                      the first week</strong> and scaling to <strong>200+ dealer reviews and 250+ vehicle reviews
+                      daily</strong>.</li>
+                </ul>
+              </div>
+
+              <div class="exp-role">
+                <div class="exp-role-line">Product Intern, Execution &amp; Growth</div>
+                <div class="exp-role-meta">Jun - Aug 2024</div>
+                <ul class="exp-bullets">
+                  <li>Identified trust as a key barrier in the test-drive journey, where users lacked confidence in
+                    dealers and vehicle recommendations.</li>
+                  <li>Proposed and launched Phonebook, a social-discovery feature that synced users' contacts and
+                    surfaced trusted connections who owned a car or had taken a test drive through Park+.</li>
+                  <li>Scaled the feature to <strong>4,000+ DAU</strong> by syncing and matching <strong>1Cr+ user
+                      contacts</strong> against the Park+ network, enabling trust-based discovery through existing
+                    social connections.</li>
+                  <li>Built prototypes and collaborated on the implementation of contact-sync infrastructure and
+                    matching logic to enable trust-based social discovery.</li>
+                </ul>
+              </div>
+
+              <div class="exp-role">
+                <div class="exp-role-line">Product Intern, Onboarding & Foundations</div>
+                <div class="exp-role-meta">Jan - March 2024</div>
+                <ul class="exp-bullets">
+                  <li>Built a foundation in product management by participating in product discovery, planning, and
+                    execution discussions.</li>
+                  <li>Developed technical understanding by collaborating closely with engineering teams during feature
+                    development.</li>
+                </ul>
+              </div>
+            </div>
+
+          </div>
+
+          <div class="main-heading spaced">Projects</div>
+
+          <div class="proj-entry">
+            <div class="proj-title">AI Interview Coach <span>| Independent, 2025</span></div>
+            <p class="proj-desc">Built a local-first AI mock interview tool, chose local inference (Ollama) over cloud
+              APIs so personal recordings never leave the device. Designed end-to-end: recording flow, AI analysis,
+              critique output.</p>
+          </div>
+
+          <div class="proj-entry">
+            <div class="proj-title">AI Resume Tailor <span>| Independent, 2025</span></div>
+            <p class="proj-desc">Built and launched an AI-powered resume tailoring platform that improves ATS alignment
+              through automated scoring, JD-based optimization, and RAG-driven semantic matching.</p>
+          </div>
+
+        </main>
+
+      </div>
+    </div>
+  </div>
+</body>
+
+</html>

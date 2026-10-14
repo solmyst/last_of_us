@@ -1,0 +1,160 @@
+\documentclass[letterpaper,11pt]{article}
+
+\usepackage[empty]{fullpage}
+\usepackage{titlesec}
+\usepackage[usenames,dvipsnames]{color}
+\usepackage{enumitem}
+\usepackage[hidelinks]{hyperref}
+\usepackage{fancyhdr}
+\usepackage[english]{babel}
+\usepackage{tabularx}
+
+\pagestyle{fancy}
+\fancyhf{}
+\fancyfoot{}
+\renewcommand{\headrulewidth}{0pt}
+\renewcommand{\footrulewidth}{0pt}
+
+\addtolength{\oddsidemargin}{-0.65in}
+\addtolength{\evensidemargin}{-0.65in}
+\addtolength{\textwidth}{1.3in}
+\addtolength{\topmargin}{-1.0in}
+\addtolength{\textheight}{2.1in}
+
+\urlstyle{same}
+\raggedbottom
+\raggedright
+\setlength{\tabcolsep}{0in}
+
+\titleformat{\section}{
+  \vspace{-6pt}\scshape\raggedright\large
+}{}{0em}{}[\color{black}\titlerule \vspace{-6pt}]
+
+\ifdefined\pdfgentounicode
+  \input{glyphtounicode}
+  \pdfgentounicode=1
+\fi
+
+\newcommand{\resumeItem}[1]{\item\small{{#1 \vspace{-2pt}}}}
+
+\newcommand{\resumeSubheading}[4]{
+  \vspace{-1pt}\item
+    \begin{tabular*}{0.97\textwidth}[t]{l@{\extracolsep{\fill}}r}
+      \textbf{#1} & #2 \\
+      \textit{\small#3} & \textit{\small #4} \\
+    \end{tabular*}\vspace{-6pt}
+}
+
+\newcommand{\resumeProjectHeading}[2]{
+    \item
+    \begin{tabular*}{0.97\textwidth}{l@{\extracolsep{\fill}}r}
+      \small#1 & #2 \\
+    \end{tabular*}\vspace{-5pt}
+}
+
+% Two-line project heading so GitHub link and date don't merge visually
+\newcommand{\resumeProjectHeadingTwoLine}[4]{
+    \vspace{-2pt}\item
+    \begin{tabular*}{0.97\textwidth}[t]{l@{\extracolsep{\fill}}r}
+      #1 & #2 \\
+      \emph{\small #3} & \small #4 \\
+    \end{tabular*}\vspace{-7pt}
+}
+
+\newcommand{\resumeSubHeadingListStart}{\begin{itemize}[leftmargin=0.15in, label={}]}
+\newcommand{\resumeSubHeadingListEnd}{\end{itemize}}
+\newcommand{\resumeItemListStart}{\begin{itemize}}
+\newcommand{\resumeItemListEnd}{\end{itemize}\vspace{-6pt}}
+
+\begin{document}
+
+\begin{center}
+    {\Huge \scshape Anush Gupta} \\ \vspace{2pt}
+    \small
+    Jaipur, India $|$
+    \href{mailto:anushgupta105@gmail.com}{anushgupta105@gmail.com} $|$
+    +91-9982920838 \\ \vspace{1pt}
+    \href{https://linkedin.com/in/anush-gupta105}{linkedin.com/in/anush-gupta105} $|$
+    \href{https://github.com/solmyst}{github.com/solmyst} $|$
+    \href{https://anush.tech}{anush.tech}
+\end{center}
+
+\section{Education}
+  \resumeSubHeadingListStart
+    \resumeSubheading
+      {JECRC University}{Jaipur, India}
+      {B.Tech in Computer Science (AI/ML Specialization, XEBIA Track), CGPA 8.7/10}{Aug 2023 - May 2027}
+    \resumeItemListStart
+      \resumeItem{\textbf{Relevant Coursework:} Data Structures and Algorithms, Operating Systems, Database Management Systems, Computer Networks, Artificial Intelligence, Machine Learning, Cloud Computing.}
+    \resumeItemListEnd
+  \resumeSubHeadingListEnd
+
+\section{Experience}
+  \resumeSubHeadingListStart
+    \resumeSubheading
+      {SDE Intern, Motor Insurance}{Jun 2025 - Aug 2025}
+      {Park+ (Insurtech and Mobility)}{Gurugram, India}
+      \resumeItemListStart
+        \resumeItem{Integrated 2 of 5 third-party insurer APIs and delivered the No-Claim Bonus (NCB) engine in \textbf{Go} for the concurrent quote-generation service used by \textbf{15,000+ daily active users}.}
+        \resumeItem{Cut average API response time by \textbf{35\%} (800ms to 520ms) on 4 high-traffic quote endpoints through \textbf{Redis} caching, N+1 query elimination, and \textbf{PostgreSQL} tuning.}
+        \resumeItem{Authored a reusable third-party API integration template adopted across the team, shortening new-insurer onboarding from \textbf{3 weeks to 4 days}; owned the fault-tolerant request, retry, and error-handling layer.}
+      \resumeItemListEnd
+  \resumeSubHeadingListEnd
+
+\section{Projects}
+    \resumeSubHeadingListStart
+
+      \resumeProjectHeadingTwoLine
+          {\textbf{Krate}: Linux container runtime}{Apr 2026}
+          {Go, Linux, Cgroups v2, REST API}{\href{https://github.com/solmyst/krate}{github.com/solmyst/krate}}
+          \resumeItemListStart
+            \resumeItem{Built a Linux container runtime in Go from scratch with \textbf{namespaces}, \textbf{cgroups v2}, and \textbf{overlay filesystems} for process isolation and copy-on-write storage; supports image pull and per-container CPU and memory limits.}
+            \resumeItem{Launched a concurrent \textbf{REST API} daemon and real-time web dashboard for container lifecycle management, with asynchronous control endpoints and low-latency status streaming.}
+          \resumeItemListEnd
+
+      \resumeProjectHeadingTwoLine
+          {\textbf{AI Resume Tailor}: ATS-optimization web app}{Jul 2025}
+          {React, TypeScript, Flask, ChromaDB, RAG, Ollama}{\href{https://github.com/solmyst/ai-resume-tailor}{github.com/solmyst/ai-resume-tailor}}
+          \resumeItemListStart
+            \resumeItem{Shipped a web app that scores resumes against any job description and rewrites them with a transparent 4-part rubric (keyword match, layout, quantification, action verbs); uses multi-provider AI fallback across OpenAI, Gemini, and local \textbf{Ollama}.}
+            \resumeItem{Implemented a local \textbf{RAG} pipeline with \textbf{ChromaDB} and on-device embeddings for project-to-job semantic matching; covered with \textbf{86 Vitest unit tests} and an automated \textbf{GitHub Actions CI/CD} pipeline.}
+          \resumeItemListEnd
+
+      \resumeProjectHeadingTwoLine
+          {\textbf{InterviewAce}: AI mock-interview platform}{Aug 2025}
+          {React, TypeScript, FastAPI, Redis, Docker, Firebase, Whisper}{\href{https://github.com/solmyst/AI-Powered-Interview-Coaching}{github.com/solmyst/AI-Powered-Interview-Coaching}}
+          \resumeItemListStart
+            \resumeItem{Crafted a mock-interview web app that tracks user speech on pace, fillers, and pauses via Web Speech API and \textbf{Whisper}; backed by \textbf{Firebase Auth} and offline-syncing Cloud Firestore, with a Recharts analytics dashboard.}
+            \resumeItem{Designed an asynchronous \textbf{FastAPI} service with a \textbf{Redis} caching layer (24-hour TTL on Whisper transcripts) and a fallback path between OpenAI and Ollama, orchestrated via \textbf{Docker Compose}.}
+          \resumeItemListEnd
+
+    \resumeSubHeadingListEnd
+
+\section{Technical Skills}
+ \begin{itemize}[leftmargin=0.15in, label={}]
+    \small{\item{
+     \textbf{Languages:}{ C++, Java, Python, Go, JavaScript, TypeScript} \\
+     \textbf{Frameworks:}{ React, Next.js, Node.js, Flask, FastAPI, SQLAlchemy, Tailwind CSS, Recharts, Vitest} \\
+     \textbf{Tools and Platforms:}{ Git, Docker, Linux, GitHub Actions, Firebase, Ollama, GCP, Vercel} \\
+     \textbf{Databases:}{ PostgreSQL, Redis, SQLite, ChromaDB, Cloud Firestore} \\
+     \textbf{Concepts:}{ Data Structures and Algorithms, System Design, Concurrency, REST APIs, LLM Integration, RAG, CI/CD, Testing}
+    }}
+ \end{itemize}
+
+\section{Achievements}
+ \begin{itemize}[leftmargin=0.2in, itemsep=1pt, topsep=2pt]
+    \small
+    \item \textbf{Competitive Programming:} Solved \textbf{500+ DSA problems} across LeetCode, Codeforces, and CodeChef.
+    \item \textbf{Hackathon Runner-Up:} Awarded 2nd place out of 200+ teams in University Hackathon (Healthcare Track).
+    \item \textbf{Pitch Competition:} Secured \textbf{2nd Prize} at XEBIA National Conclave for startup product pitch.
+ \end{itemize}
+
+\section{Certifications}
+ \begin{itemize}[leftmargin=0.2in, itemsep=1pt, topsep=2pt]
+    \small
+    \item \textbf{Google Cloud:} RAG, GenAI Apps with Gemini and Streamlit, and Prompt Design on Vertex AI.
+    \item \textbf{JPMorgan Chase (Forage):} Software Engineering Job Simulation --- financial data stream \& interface.
+    \item \textbf{Microsoft \& LinkedIn:} Career Essentials in Software Development.
+ \end{itemize}
+
+\end{document}

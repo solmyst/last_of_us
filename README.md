@@ -18,7 +18,7 @@ We don't use "frameworks." We use **Survival Kits**:
 - **Next.js 14**: Static export with React 18 and TypeScript.
 - **Tailwind CSS**: Rapid styling for when the clickers are chasing you.
 - **Framer Motion**: Ensuring the UI slides smoother than a PM sliding into your DMs.
-- **GitHub Pages**: Hosts the static site at anushgupta.tech. This portfolio has no backend or AI service dependency.
+- **GitHub Pages**: Hosts the static site at anush.tech. This portfolio has no backend or AI service dependency.
 
 ---
 
@@ -55,7 +55,7 @@ npm run dev     # Initiate temporal convergence at localhost:3000
 If you have a job offer, a better way to center a div, or a lead on some rare F1 collectibles, reach out to **Anush Gupta**.
 
 - **Email**: [anushgupta105@gmail.com](mailto:anushgupta105@gmail.com)
-- **Domain**: [anushgupta.tech](https://anushgupta.tech) (Now Live in this dimension!)
+- **Domain**: [anush.tech](https://anush.tech) (Now Live in this dimension!)
 
 ---
 

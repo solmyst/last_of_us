@@ -8,10 +8,10 @@ workflow are retained. Anush confirmed Jan–Feb 2024 for Onboarding & Foundatio
 ## Remaining owner actions
 
 1. **Correct the custom domain DNS.** On 7 September 2026, a public Google DNS
-   lookup returned `127.0.0.1` for `anushgupta.tech`. This points visitors to their
+   lookup returned `127.0.0.1` for `anush.tech`. This points visitors to their
    own machine. In your domain provider, replace that apex (`@`) A record with
    GitHub Pages' four A records: `185.199.108.153`, `185.199.109.153`,
-   `185.199.110.153`, and `185.199.111.153`. Keep `anushgupta.tech` configured in
+   `185.199.110.153`, and `185.199.111.153`. Keep `anush.tech` configured in
    this repository's Settings → Pages. If using `www`, its CNAME should point to
    `solmyst.github.io`. Recheck DNS and enable Enforce HTTPS when available.
    [GitHub's custom-domain instructions](https://docs.github.com/en/pages/configuring-a-custom-domain-for-your-github-pages-site/managing-a-custom-domain-for-your-github-pages-site)

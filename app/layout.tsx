@@ -30,16 +30,16 @@ const fragmentMono = {
 };
 
 export const metadata: Metadata = {
-  metadataBase: new URL('https://anushgupta.tech'),
+  metadataBase: new URL('https://anush.tech'),
   title: "Anush Gupta — Product Manager & Full-Stack Builder",
   description: "Product manager with four Park+ internships and an engineering background. User research, funnel optimization, and AI products built end to end.",
   alternates: {
-    canonical: 'https://anushgupta.tech',
+    canonical: 'https://anush.tech',
   },
   openGraph: {
     title: "Anush Gupta — Product Manager & Full-Stack Builder",
     description: "Product manager with four Park+ internships and an engineering background. User research, funnel optimization, and AI products built end to end.",
-    url: "https://anushgupta.tech",
+    url: "https://anush.tech",
     siteName: "Anush Gupta Portfolio",
     locale: "en_US",
     type: "website",

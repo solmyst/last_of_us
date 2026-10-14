@@ -2,7 +2,7 @@
 
 import { useRef, useEffect } from "react";
 import { motion, useInView, useMotionValue, useTransform, animate } from "framer-motion";
-import { proofStats, proofAttribution } from "@/lib/data";
+import { proofStats } from "@/lib/data";
 import { GitBranch } from "lucide-react";
 
 function AnimatedNumber({ value }: { value: string }) {
@@ -71,7 +71,6 @@ export default function ProofBanner() {
           ))}
         </div>
       </div>
-      <p className="max-w-4xl mx-auto px-6 pb-4 text-center text-xs leading-relaxed text-text-secondary">{proofAttribution}</p>
     </div>
   );
 }

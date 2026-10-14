@@ -351,6 +351,20 @@ export const experiences: Experience[] = [
     ],
     tech: ["User Research", "PRDs", "Funnel Optimization", "User Flows", "Re-engagement"]
   },
+
+  {
+    id: "park-plus-discovery",
+    role: "Product Intern, Automotive & Discovery",
+    company: "Park+",
+    period: "January 2025 - March 2025",
+    location: "Gurugram, India",
+    description: "Improved test-drive booking and helped build the dealer and vehicle review ecosystem with product, design, and engineering teams.",
+    achievements: [
+      "Analysed friction in test-drive booking and lead management, informing a funnel redesign that grew daily bookings from 50 to 100+ (2×).",
+      "Defined user flows and feature specifications for Dealer Review and Test Drive Review, generating 150+ reviews in the first week and scaling to 200+ dealer reviews and 250+ vehicle reviews daily."
+    ],
+    tech: ["Funnel Analysis", "User Flows", "Feature Specifications", "Stakeholder Management"]
+  },
   {
     id: "park-plus-growth",
     role: "Product Intern, Execution & Growth",
@@ -367,23 +381,10 @@ export const experiences: Experience[] = [
     tech: ["Product Discovery", "Prototyping", "Social Discovery", "Feature Rollout"]
   },
   {
-    id: "park-plus-discovery",
-    role: "Product Intern, Automotive & Discovery",
-    company: "Park+",
-    period: "January 2024 - March 2024",
-    location: "Gurugram, India",
-    description: "Improved test-drive booking and helped build the dealer and vehicle review ecosystem with product, design, and engineering teams.",
-    achievements: [
-      "Analysed friction in test-drive booking and lead management, informing a funnel redesign that grew daily bookings from 50 to 100+ (2×).",
-      "Defined user flows and feature specifications for Dealer Review and Test Drive Review, generating 150+ reviews in the first week and scaling to 200+ dealer reviews and 250+ vehicle reviews daily."
-    ],
-    tech: ["Funnel Analysis", "User Flows", "Feature Specifications", "Stakeholder Management"]
-  },
-  {
     id: "park-plus-foundations",
     role: "Product Intern, Onboarding & Foundations",
     company: "Park+",
-    period: "January 2024 - February 2024",
+    period: "January 2024 - March 2024",
     location: "Gurugram, India",
     description: "Built a foundation in product management through product discovery, planning, and execution discussions.",
     achievements: [
@@ -579,26 +580,26 @@ export const dualBrainData = {
 
 export const loadingScreenData = {
   lines: [
-    { delay: 0,    dur: 0,    type: 'spacer' },
-    { delay: 100,  dur: 400,  prefix: 'SYS',   cls: 'text-white/20',    text: 'initializing runtime environment...' },
-    { delay: 560,  dur: 280,  prefix: 'OK',     cls: 'text-emerald-400',     text: 'product thinking · engineering depth' },
-    { delay: 900,  dur: 0,    type: 'spacer' },
-    { delay: 950,  dur: 340,  prefix: 'LOAD',   cls: 'text-white/20',    text: 'reading subject profile...' },
-    { delay: 1340, dur: 220,  prefix: 'FIELD',  cls: 'text-white/50',    text: `name           anush gupta` },
-    { delay: 1600, dur: 220,  prefix: 'FIELD',  cls: 'text-white/50',    text: `alias          sol / solmyst` },
-    { delay: 1860, dur: 220,  prefix: 'FIELD',  cls: 'text-white/50',    text: `degree         b.tech cse — graduating 2027` },
-    { delay: 2120, dur: 220,  prefix: 'FIELD',  cls: 'text-white/50',    text: 'location       india' },
-    { delay: 2380, dur: 0,    type: 'spacer' },
-    { delay: 2440, dur: 300,  prefix: 'SCAN',   cls: 'text-white/20',    text: 'detecting active modes...' },
-    { delay: 2780, dur: 160,  prefix: 'MODE',   cls: 'text-indigo-400', text: 'engineering    python · next.js · llm integration', tag: 'ENG' },
-    { delay: 2980, dur: 160,  prefix: 'MODE',   cls: 'text-cyan-400',     text: 'product        prd writing · user flows · decisions',  tag: 'PM' },
-    { delay: 3180, dur: 0,    type: 'spacer' },
-    { delay: 3240, dur: 280,  prefix: 'CHECK',  cls: 'text-white/20',    text: 'verifying shipped work...' },
-    { delay: 3560, dur: 140,  prefix: 'OK',     cls: 'text-emerald-400',     text: '4 internships  increasing product ownership' },
-    { delay: 3740, dur: 140,  prefix: 'OK',     cls: 'text-emerald-400',     text: '10+ projects   built end-to-end' },
-    { delay: 3920, dur: 140,  prefix: 'WARN',   cls: 'text-amber-500',   text: 'internship     socket: open — accepting connections' },
-    { delay: 4100, dur: 0,    type: 'spacer' },
-    { delay: 4180, dur: 320,  prefix: 'BOOT',   cls: 'text-white/80',   text: 'all systems nominal. launching portfolio...' },
+    { delay: 0, dur: 0, type: 'spacer' },
+    { delay: 100, dur: 400, prefix: 'SYS', cls: 'text-white/20', text: 'initializing runtime environment...' },
+    { delay: 560, dur: 280, prefix: 'OK', cls: 'text-emerald-400', text: 'product thinking · engineering depth' },
+    { delay: 900, dur: 0, type: 'spacer' },
+    { delay: 950, dur: 340, prefix: 'LOAD', cls: 'text-white/20', text: 'reading subject profile...' },
+    { delay: 1340, dur: 220, prefix: 'FIELD', cls: 'text-white/50', text: `name           anush gupta` },
+    { delay: 1600, dur: 220, prefix: 'FIELD', cls: 'text-white/50', text: `alias          sol / solmyst` },
+    { delay: 1860, dur: 220, prefix: 'FIELD', cls: 'text-white/50', text: `degree         b.tech cse — graduating 2027` },
+    { delay: 2120, dur: 220, prefix: 'FIELD', cls: 'text-white/50', text: 'location       india' },
+    { delay: 2380, dur: 0, type: 'spacer' },
+    { delay: 2440, dur: 300, prefix: 'SCAN', cls: 'text-white/20', text: 'detecting active modes...' },
+    { delay: 2780, dur: 160, prefix: 'MODE', cls: 'text-indigo-400', text: 'engineering    python · next.js · llm integration', tag: 'ENG' },
+    { delay: 2980, dur: 160, prefix: 'MODE', cls: 'text-cyan-400', text: 'product        prd writing · user flows · decisions', tag: 'PM' },
+    { delay: 3180, dur: 0, type: 'spacer' },
+    { delay: 3240, dur: 280, prefix: 'CHECK', cls: 'text-white/20', text: 'verifying shipped work...' },
+    { delay: 3560, dur: 140, prefix: 'OK', cls: 'text-emerald-400', text: '4 internships  increasing product ownership' },
+    { delay: 3740, dur: 140, prefix: 'OK', cls: 'text-emerald-400', text: '10+ projects   built end-to-end' },
+    { delay: 3920, dur: 140, prefix: 'WARN', cls: 'text-amber-500', text: 'internship     socket: open — accepting connections' },
+    { delay: 4100, dur: 0, type: 'spacer' },
+    { delay: 4180, dur: 320, prefix: 'BOOT', cls: 'text-white/80', text: 'all systems nominal. launching portfolio...' },
   ]
 };
 

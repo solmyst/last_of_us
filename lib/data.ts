@@ -83,6 +83,7 @@ export const projects: Project[] = [
       }
     ],
     stack: ["Go", "Linux Namespaces", "cgroups v2", "OverlayFS", "Cobra", "Gin", "HTML5/JS"],
+    image: "/projects/krate.png",
     links: {
       github: "https://github.com/solmyst/krate",
     },

@@ -33,10 +33,10 @@ export default function Home() {
     >
       <Nav />
       
-      <main className="flex-1 w-full">
+      <main id="main-content" tabIndex={-1} className="flex-1 w-full">
         <Hero />
         <ProofBanner />
-        <DualIdentity />
+        <Projects />
         
         <div className="w-full h-px bg-border-subtle max-w-7xl mx-auto my-12" />
         
@@ -44,7 +44,7 @@ export default function Home() {
         
         <div className="w-full h-px bg-border-subtle max-w-7xl mx-auto my-12" />
         
-        <Projects />
+        <DualIdentity />
         
         <div className="w-full h-px bg-border-subtle max-w-7xl mx-auto my-12" />
         

@@ -2,7 +2,7 @@
 // All portfolio content lives here. Components just render this data.
 // Update here only — never hardcode content in JSX.
 
-export type ProjectStatus = "live" | "shipped" | "wip" | "academic";
+export type ProjectStatus = "live" | "shipped" | "wip" | "academic" | "pilot" | "demo";
 
 export interface Project {
   id: string;
@@ -92,30 +92,29 @@ export const projects: Project[] = [
   {
     id: "interview-ace",
     number: "002",
-    status: "live",
-    name: "AI Interview Coach",
-    tagline: "Local-first AI for anxiety-free interview prep.",
-    userProblem: "Interview prep is either passive (reading) or expensive (mock interviews). Users need a low-pressure way to practice real-time speech and get instant feedback without cloud latency or cost.",
-    outcome: "Built a local-first mock interview tool with a complete recording, AI analysis, and critique flow. Chose local inference so personal recordings stay on the user's device.",
-    whatIBuilt: "Designed the end-to-end interview practice experience, from recording a response to reviewing AI-generated feedback, with Ollama powering local inference.",
+    status: "pilot",
+    name: "InterviewAce",
+    tagline: "Practice aloud. Turn feedback into your next better answer.",
+    userProblem: "Students and job seekers need more than a list of interview questions. They need realistic spoken practice, feedback grounded in their answers, and a way to act on that feedback.",
+    outcome: "A working voice-first coaching pilot: personalized interviews across six rounds, adaptive follow-ups, eight-dimension feedback, saved learning history, and spoken retry and transfer practice in Answer Lab.",
+    whatIBuilt: "A React and TypeScript interview workspace backed by an Express API and persistent SQLite. NVIDIA inference powers questions and reports, AssemblyAI transcribes answers, Sarvam voices the interviewer, and MediaPipe processes camera landmarks on-device. Ollama is an optional text-generation provider.",
     decisions: [
       {
-        id: "ia-local-llm",
-        date: "Feb 2025",
-        context: "architecture",
-        statement: "Local Ollama vs. OpenAI API for analysis",
-        optionA: { label: "Local Ollama", why: "Zero cost per session, maximum privacy for user data." },
-        optionB: { label: "OpenAI GPT-4o", why: "Higher quality reasoning and better instruction following." },
+        id: "ia-feedback-to-practice",
+        date: "Oct 2026",
+        context: "product",
+        statement: "Turn a feedback report into a focused practice loop",
+        optionA: { label: "Answer Lab", why: "Use transcript evidence, fixed checkpoints, spoken retries, and changed scenarios to make feedback actionable." },
+        optionB: { label: "Report only", why: "Simpler to ship, but leaves the candidate to translate critique into practice." },
         chose: "A",
-        because: "Privacy is paramount for interview prep. Users are more honest when they know their practice sessions aren't being sent to a cloud server. Local Llama-3.1-8B is fast enough for real-time coaching.",
-        wouldDoDifferently: "Optimize the MediaPipe initialization as it currently blocks the main thread for ~1.2s on startup."
+        because: "A score alone does not tell a candidate what to practice next. Answer Lab connects feedback to retry and transfer attempts while preserving original interview scores. Exact quote checks establish transcript provenance; they do not validate the model's interpretation.",
+        wouldDoDifferently: "Validate coaching quality and learning outcomes with expert review before a broader public launch."
       }
     ],
-    stack: ["React", "TypeScript", "Ollama", "MediaPipe", "Web Speech API", "Tailwind CSS"],
-    image: "/projects/Interview-practice.png",
+    stack: ["React", "TypeScript", "Express", "SQLite", "NVIDIA", "AssemblyAI", "Sarvam", "MediaPipe"],
     links: {
       github: "https://github.com/solmyst/AI-Powered-Interview-Coaching",
-      live: "https://solmyst.github.io/AI-Powered-Interview-Coaching/",
+      live: "https://interviewace-anush.indiasouthcentral.cloudapp.azure.com",
     },
     featured: true,
   },
@@ -298,16 +297,41 @@ export const projects: Project[] = [
     },
     featured: false,
   },
+  {
+    id: "relay-voice",
+    number: "009",
+    status: "demo",
+    name: "Relay Voice",
+    tagline: "Better conversations. Clearer next steps.",
+    userProblem: "Teams exploring AI calling need to test a real conversation and inspect what happened afterward, before connecting phone lines or automating customer actions.",
+    outcome: "A single-workspace browser voice demo with English, Hindi, and Hinglish conversations, automatic interruption, session memory, saved transcripts, and operator-reviewed local follow-up tasks. Telephone dialing and external CRM or calendar actions remain disabled.",
+    whatIBuilt: "An API-backed workspace with Python, SQLite persistence, agent and contact management, a call studio, and history. Gnani Prisma/Timbre provides streaming speech, Bifrost powers conversation, and Silero detects interruptions. Structured request review ties extracted preferences to customer transcript evidence.",
+    decisions: [
+      {
+        id: "relay-review-before-action",
+        date: "Oct 2026",
+        context: "scope",
+        statement: "Validate conversations before enabling external actions",
+        optionA: { label: "Browser voice + operator review", why: "Inspect transcript evidence and corrections before saving a workspace-local lead or task." },
+        optionB: { label: "Telephone and CRM automation", why: "A broader workflow, with additional integration and operational requirements." },
+        chose: "A",
+        because: "The demo separates conversational quality from external execution. Operators can review evidence, correct details, and assign follow-ups without implying a phone call, calendar booking, or CRM update occurred.",
+        wouldDoDifferently: "Validate one pilot workflow and its measurable outcome before expanding into multi-tenant SaaS or telephony."
+      }
+    ],
+    stack: ["Python", "SQLite", "JavaScript", "Gnani", "Bifrost", "Silero VAD"],
+    image: "/projects/relay-voice.png",
+    links: { github: "https://github.com/solmyst/calling-sas" },
+    featured: true,
+  },
 ];
 
 // ─── STANDALONE DECISIONS LOG ─────────────────────────────────────────────────
 
 export const decisionsLog: Decision[] = [
-  projects[0].decisions[0], // krate: Go vs Rust
-  projects[1].decisions[0], // Interview: local vs cloud
-  projects[2].decisions[0], // Resume: Python vs Node
-  projects[3].decisions[0], // MemeForge: local vs cloud
-  projects[4].decisions[0], // F1: Electron vs Web
+  ...["interview-ace", "relay-voice", "krate", "resume-tailor", "memeforge"].flatMap(
+    id => projects.find(project => project.id === id)?.decisions.slice(0, 1) ?? []
+  ),
   {
     id: "global-state-management",
     date: "Feb 2025",
@@ -332,7 +356,7 @@ export const decisionsLog: Decision[] = [
   }
 ];
 
-export const featuredProjectIds = ["interview-ace", "resume-tailor"];
+export const featuredProjectIds = ["interview-ace", "relay-voice"];
 
 export const experienceIntro = "Four product internships at Park+, with increasing ownership across motor insurance, automotive discovery, and consumer trust.";
 
@@ -456,7 +480,7 @@ export const proofAttribution = "Motor Insurance results achieved as part of the
 // ─── CURRENTLY BLOCK ─────────────────────────────────────────────────────────
 
 export const currently = {
-  building: "This Portfolio — focusing on Bento aesthetics and performance",
+  building: "InterviewAce coaching loops and Relay Voice browser conversations",
   learning: "System design at scale, Advanced Go patterns, LLM Agents",
   reading: "Inspired by Marty Cagan and Clean Architecture",
   listening: "Lofi Beats for deep work",
@@ -494,9 +518,14 @@ export const personal = {
 
 export const timeline = [
   {
+    year: "2026",
+    title: "From practice to conversation",
+    description: "Evolved InterviewAce into a voice-first coaching pilot with Answer Lab. Built Relay Voice, a browser voice demo with interruption, session memory, and operator-reviewed follow-ups."
+  },
+  {
     year: "2025",
     title: "AI products, built end to end",
-    description: "Built AI Interview Coach for local-first practice and AI Resume Tailor for ATS alignment, job-description-based optimization, and semantic matching."
+    description: "Built the first AI Interview Coach prototype for local-first practice and AI Resume Tailor for ATS alignment, job-description-based optimization, and semantic matching."
   },
   {
     year: "2025",

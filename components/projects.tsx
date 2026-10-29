@@ -1,296 +1,253 @@
 "use client";
 
-import { useState } from "react";
-import { motion, AnimatePresence } from "framer-motion";
-import { projects, featuredProjectIds } from "@/lib/data";
 import Image from "next/image";
-import { GitBranch, ExternalLink, Code2 } from "lucide-react";
+import {
+  ArrowUpRight,
+  ChevronDown,
+  GitBranch,
+  Mic,
+  MessageSquare,
+  RotateCcw,
+} from "lucide-react";
+import { projects, featuredProjectIds, type Project } from "@/lib/data";
 
-const orderedProjects = [
-  ...featuredProjectIds.flatMap(id => projects.filter(project => project.id === id)),
-  ...projects.filter(project => !featuredProjectIds.includes(project.id)),
-];
+const featured = featuredProjectIds.flatMap((id) =>
+  projects.filter((project) => project.id === id),
+);
+const archive = projects.filter(
+  (project) => !featuredProjectIds.includes(project.id),
+);
+const statusLabels = {
+  live: "Live project",
+  shipped: "Built",
+  wip: "In progress",
+  academic: "Academic",
+  pilot: "Working pilot",
+  demo: "Browser voice demo",
+};
 
 export default function Projects() {
-  const [expandedId, setExpandedId] = useState<string | null>(null);
-
   return (
-    <section id="projects" className="py-24 max-w-7xl mx-auto px-6">
-      <motion.div 
-        className="mb-16 md:mb-20"
-        initial={{ opacity: 0, y: 20 }}
-        whileInView={{ opacity: 1, y: 0 }}
-        viewport={{ once: true }}
-      >
-        <div className="flex items-center gap-4 mb-4 relative">
-          <span className="font-mono text-sm tracking-widest text-accent uppercase">02. WORK</span>
-          <div className="h-[1px] w-24 bg-border-subtle" />
-          <span className="font-mono text-[10px] text-text-tertiary absolute -top-4 right-0 opacity-40 select-none">
-            {`// hint: try typing 'init' in the terminal_`}
-          </span>
+    <section id="projects" className="py-20 max-w-7xl mx-auto px-6">
+      <div className="section-heading">
+        <div>
+          <p className="eyebrow">01 / Selected work</p>
+          <h2 className="section-title">
+            From user problem
+            <br />
+            to working product.
+          </h2>
         </div>
-        <h2 className="text-2xl md:text-4xl font-bold text-text-primary uppercase tracking-tight">SHIPPED WORK</h2>
-        <p className="text-text-secondary mt-2 max-w-2xl">
-          A selection of projects where I handled the full lifecycle from system design to production deployment. 
-          Focusing on performance, privacy, and high-fidelity UX.
+        <p className="max-w-sm text-text-secondary leading-relaxed">
+          Two AI products I’m building end to end. The experience, the systems
+          behind it, and the decisions that connect them.
         </p>
-      </motion.div>
-
-      {/* Dynamic Bento Grid */}
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 md:gap-8 items-start">
-        {orderedProjects.map((project, i) => (
-          <ProjectEntry 
-            key={project.id} 
-            project={project} 
-            isExpanded={expandedId === project.id}
-            isThumbnail={expandedId !== null && expandedId !== project.id}
-            onToggle={() => setExpandedId(expandedId === project.id ? null : project.id)}
-            index={i}
-          />
+      </div>
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 items-start">
+        {featured.map((project, index) => (
+          <FeaturedProject key={project.id} project={project} index={index} />
         ))}
       </div>
+      <details className="project-archive mt-10 border-y border-border-default">
+        <summary className="flex items-center justify-between gap-4 py-6 cursor-pointer text-text-primary">
+          <span>
+            More things I’ve built{" "}
+            <span className="font-mono text-xs text-text-secondary ml-2">
+              / {archive.length} projects
+            </span>
+          </span>
+          <ChevronDown className="details-chevron w-5 h-5" />
+        </summary>
+        <div className="grid sm:grid-cols-2 gap-x-10 pb-6">
+          {archive.map((project) => (
+            <article
+              key={project.id}
+              className="border-t border-border-default py-6"
+            >
+              <h3 className="font-semibold text-lg">{project.name}</h3>
+              <p className="text-sm text-text-secondary mt-2 mb-4 leading-relaxed">
+                {project.tagline}
+              </p>
+              <ProjectLinks project={project} />
+              <ProjectCaseStudy project={project} />
+            </article>
+          ))}
+        </div>
+      </details>
     </section>
   );
 }
 
-function ProjectEntry({ 
-  project, 
-  isExpanded,
-  isThumbnail, 
-  onToggle,
-  index 
-}: { 
-  project: typeof projects[0], 
-  isExpanded: boolean,
-  isThumbnail: boolean,
-  onToggle: () => void,
-  index: number
+function FeaturedProject({
+  project,
+  index,
+}: {
+  project: Project;
+  index: number;
 }) {
-  // Dynamic grid span based on state
-  const colSpanClass = isExpanded ? "lg:col-span-2" : "lg:col-span-1";
-
-  // THUMBNAIL STATE (When another card is expanded)
-  if (isThumbnail) {
-    return (
-      <motion.div 
-        layout
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        exit={{ opacity: 0 }}
-        className={`col-span-1 relative group flex items-center gap-4 bg-bg-surface/30 border border-border-subtle hover:border-border-default rounded-xl p-3 sm:p-4 cursor-pointer transition-all duration-300 hover:bg-bg-elevated/40`}
-        onClick={onToggle}
-      >
-        <motion.div layout="position" className="relative h-16 w-24 shrink-0 rounded-lg overflow-hidden bg-bg-elevated">
-          {project.image ? (
-            <Image src={project.image} alt={project.name} fill className="object-cover opacity-60 group-hover:opacity-100 transition-opacity" />
-          ) : (
-             <div className="w-full h-full bg-border-subtle flex items-center justify-center">
-               <Code2 className="w-5 h-5 text-text-tertiary/20" />
-             </div>
-          )}
-        </motion.div>
-        <motion.div layout="position" className="flex flex-col flex-1 min-w-0">
-          <span className="text-[10px] font-mono text-text-tertiary mb-1 uppercase tracking-wider">
-            {String(index + 1).padStart(3, "0")} — {project.status}
-          </span>
-          <h3 className="text-sm font-medium text-text-primary truncate group-hover:text-accent transition-colors">
-            {project.name}
-          </h3>
-        </motion.div>
-      </motion.div>
-    );
-  }
-
-  // NORMAL & EXPANDED STATES
   return (
-    <motion.div 
-      layout
-      initial={{ opacity: 0, y: 30 }}
-      whileInView={{ opacity: 1, y: 0 }}
-      viewport={{ once: true, margin: "-100px" }}
-      transition={{ duration: 0.5, delay: index * 0.1 }}
-      className={`relative group flex flex-col bg-bg-surface/40 border border-border-subtle hover:border-border-default rounded-3xl p-6 md:p-8 transition-all duration-300 ${isExpanded ? "bg-bg-surface/80 shadow-2xl z-20" : "hover:bg-bg-surface/60"} ${colSpanClass}`}
-      data-cursor={isExpanded ? "collapse" : "project"}
-      onClick={onToggle}
+    <article
+      id={project.id}
+      className="project-feature overflow-hidden rounded-2xl border border-border-default bg-bg-surface"
     >
-      <div className="absolute inset-0 bg-gradient-to-br from-accent/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity rounded-3xl pointer-events-none" />
-
-      {/* Header Section */}
-      <motion.div layout="position" className="flex flex-col mb-6 relative z-10">
-        <div className="flex items-start justify-between mb-4 gap-4">
-          <div className="flex items-start gap-4">
-            <div className="w-10 h-10 shrink-0 rounded-xl bg-bg-elevated/80 border border-border-subtle flex items-center justify-center font-mono text-sm text-accent shadow-inner">
-              {String(index + 1).padStart(3, "0")}
-            </div>
-            
-            <div className="flex flex-col">
-              <h3 className={`font-bold text-text-primary leading-tight transition-all ${isExpanded ? "text-3xl md:text-4xl" : "text-xl md:text-2xl"}`}>
-                {project.name}
-              </h3>
-              <span className="font-mono text-[10px] text-text-tertiary opacity-60 mt-1 select-none">
-                {"//"} {project.id}.config.ts
-              </span>
-            </div>
-          </div>
-        </div>
-
-        {/* Status & Tech Stack Row */}
-        <div className="flex flex-wrap items-center gap-3">
-          <span className={`px-2.5 py-1 rounded-md border text-[9px] font-mono uppercase tracking-widest inline-flex items-center gap-1.5 ${
-            project.status === "live" ? "border-green/30 bg-green/10 text-green" :
-            project.status === "shipped" ? "border-accent/30 bg-accent/10 text-accent" :
-            project.status === "wip" ? "border-amber/30 bg-amber/10 text-amber" :
-            "border-text-tertiary/30 bg-text-tertiary/10 text-text-secondary"
-          }`}>
-            <span className={`w-1 h-1 rounded-full animate-pulse ${project.status === "live" ? "bg-green" : project.status === "shipped" ? "bg-accent" : project.status === "wip" ? "bg-amber" : "bg-text-tertiary"}`} /> 
-            {project.status === "live" ? "PRODUCTION" : project.status}
-          </span>
-
-          <div className="flex flex-wrap gap-2">
-            {project.stack.slice(0, isExpanded ? 10 : 3).map((tech) => (
-              <span key={tech} className="px-2 py-1 rounded border border-border-subtle bg-bg-elevated/50 text-[9px] font-mono text-text-secondary uppercase tracking-wider">
-                {tech}
-              </span>
-            ))}
-            {!isExpanded && project.stack.length > 3 && (
-              <span className="px-2 py-1 rounded border border-border-subtle bg-bg-elevated/50 text-[9px] font-mono text-text-tertiary">
-                +{project.stack.length - 3}
-              </span>
-            )}
-          </div>
-        </div>
-      </motion.div>
-
-      {/* Front Body: Image + Description */}
-      <motion.div layout="position" className="flex flex-col xl:flex-row gap-8 relative z-10">
-        {/* Left Image / Placeholder */}
-        <div className={`relative w-full aspect-video rounded-2xl overflow-hidden bg-bg-elevated shrink-0 border border-border-subtle transition-all duration-500 group-hover:border-accent/30 group-hover:shadow-2xl group-hover:shadow-accent/10 ${isExpanded ? "xl:w-[55%]" : "xl:w-[45%]"}`}>
-          {project.image ? (
-            <>
-              <Image 
+      <div className="project-cover">
+        {project.image ? (
+          <figure className="h-full">
+            <div className="relative h-full overflow-hidden">
+              <Image
                 src={project.image}
-                alt={project.name}
+                alt="Relay Voice dashboard with agent management, call studio, and conversation history"
                 fill
-                className="object-cover object-top transition-transform duration-700 group-hover:scale-110 opacity-90 group-hover:opacity-100"
+                sizes="(min-width: 1024px) 600px, 100vw"
+                className="object-cover object-top"
               />
-              <div className="absolute inset-0 bg-gradient-to-t from-bg-base/40 to-transparent opacity-60" />
-            </>
-          ) : (
-            <div className="w-full h-full flex flex-col items-center justify-center gap-4 bg-bg-elevated/50">
-              <Code2 className="w-12 h-12 text-text-tertiary/20" />
-              <span className="font-mono text-[10px] text-text-tertiary tracking-widest uppercase">system_preview.sh</span>
             </div>
-          )}
-          <div className="absolute top-4 right-4 flex gap-2 z-20">
-            <div className="w-2 h-2 rounded-full bg-red-500/30 backdrop-blur-md" />
-            <div className="w-2 h-2 rounded-full bg-yellow-500/30 backdrop-blur-md" />
-            <div className="w-2 h-2 rounded-full bg-green-500/30 backdrop-blur-md" />
-          </div>
-        </div>
-        
-        {/* Right Description */}
-        <div className="flex-1 flex flex-col justify-start py-2">
-          <p className="text-[15px] leading-relaxed text-text-secondary">
-            <span className="text-text-primary font-bold block mb-3 text-lg">{project.tagline}</span>
-            <span className={isExpanded ? "" : "line-clamp-4"}>{project.userProblem}</span>
-          </p>
-
-          {/* Front Quick Links */}
-          {!isExpanded && (
-            <div className="flex items-center gap-5 mt-6 font-mono text-[10px] tracking-widest uppercase">
-              {project.links.github && (
-                <a href={project.links.github} target="_blank" onClick={(e) => e.stopPropagation()} className="text-text-tertiary hover:text-accent transition-all flex items-center gap-2 group/link">
-                  <GitBranch className="w-3.5 h-3.5 group-hover/link:rotate-12 transition-transform" /> 
-                  <span className="border-b border-transparent group-hover/link:border-accent/50 pb-0.5">SOURCE</span>
-                </a>
-              )}
-              {project.links.live && (
-                <a href={project.links.live} target="_blank" onClick={(e) => e.stopPropagation()} className="text-text-tertiary hover:text-accent transition-all flex items-center gap-2 group/link">
-                  <ExternalLink className="w-3.5 h-3.5" /> 
-                  <span className="border-b border-transparent group-hover/link:border-accent/50 pb-0.5">DEPLOYMENT</span>
-                </a>
-              )}
-            </div>
-          )}
-        </div>
-      </motion.div>
-
-      {/* Expanded Content: KEY FEATURES */}
-      <AnimatePresence>
-        {isExpanded && (
-          <motion.div
-            initial={{ opacity: 0, height: 0 }}
-            animate={{ opacity: 1, height: "auto" }}
-            exit={{ opacity: 0, height: 0 }}
-            transition={{ duration: 0.4, ease: [0.16, 1, 0.3, 1] }}
-            className="overflow-hidden relative z-10"
-          >
-            <div className="pt-10 mt-10 border-t border-border-subtle/50">
-              
-              {/* Heading */}
-              <div className="flex items-center justify-between mb-8">
-                <div className="flex items-center gap-3">
-                  <div className="w-1.5 h-5 bg-accent rounded-full" />
-                  <h4 className="font-mono text-xs font-bold text-text-primary tracking-widest uppercase">Technical Brief</h4>
-                </div>
-
-                <div className="flex items-center gap-4 font-mono text-[10px]">
-                  {project.links.github && (
-                    <a href={project.links.github} target="_blank" onClick={(e) => e.stopPropagation()} className="px-3 py-1.5 rounded-lg border border-border-subtle bg-bg-elevated/50 text-text-secondary hover:text-accent hover:border-accent/30 transition-all flex items-center gap-2">
-                      <GitBranch className="w-3.5 h-3.5" /> REPOSITORY
-                    </a>
-                  )}
-                  {project.links.live && (
-                    <a href={project.links.live} target="_blank" onClick={(e) => e.stopPropagation()} className="px-3 py-1.5 rounded-lg border border-border-subtle bg-bg-elevated/50 text-text-secondary hover:text-accent hover:border-accent/30 transition-all flex items-center gap-2">
-                      <ExternalLink className="w-3.5 h-3.5" /> LIVE PREVIEW
-                    </a>
-                  )}
-                </div>
-              </div>
-              
-              {/* Feature Grid */}
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                <FeatureBox title="THE BUILD" text={project.whatIBuilt} icon={<Code2 className="w-4 h-4" />} />
-                <FeatureBox title="THE OUTCOME" text={project.outcome} icon={<div className="w-1.5 h-1.5 rounded-full bg-green" />} />
-                
-                {/* Decision Insight */}
-                <div className="md:col-span-2 bg-accent/5 border border-accent/10 rounded-2xl p-6 md:p-8">
-                   <h5 className="font-mono text-[10px] text-accent font-bold uppercase tracking-[0.2em] mb-4">Architectural Decision Log</h5>
-                   <p className="text-[14px] leading-relaxed text-text-primary/80 italic font-medium">
-                     &quot;{project.decisions[0].statement}&quot;
-                   </p>
-                   <p className="text-[13px] leading-relaxed text-text-secondary mt-4">
-                     {project.decisions[0].because}
-                   </p>
-                   <div className="mt-6 flex gap-4 text-[10px] font-mono text-text-tertiary">
-                     <span className="flex items-center gap-1.5 text-accent/70"><div className="w-1 h-1 rounded-full bg-accent" /> Chose A over B</span>
-                     <span className="opacity-40">|</span>
-                     <span>Lesson: {project.decisions[0].wouldDoDifferently}</span>
-                   </div>
-                </div>
-              </div>
-
-              {/* Bottom padding for bento balance */}
-              <div className="h-4" />
-            </div>
-          </motion.div>
+            <figcaption className="cover-caption">
+              Early demo interface · simulated example data
+            </figcaption>
+          </figure>
+        ) : (
+          <InterviewOverview />
         )}
-      </AnimatePresence>
-
-    </motion.div>
+      </div>
+      <div className="p-6 md:p-8">
+        <div className="flex justify-between items-center gap-4 mb-5 font-mono text-xs">
+          <span className="text-text-tertiary">0{index + 1} / AI PRODUCTS</span>
+          <span className="project-status">{statusLabels[project.status]}</span>
+        </div>
+        <h3 className="text-3xl font-semibold tracking-tight">
+          {project.name}
+        </h3>
+        <p className="text-text-primary text-lg mt-3 leading-relaxed">
+          {project.tagline}
+        </p>
+        <p className="text-text-secondary mt-4 text-sm leading-7">
+          {project.userProblem}
+        </p>
+        <ul
+          aria-label={`${project.name} technologies`}
+          className="flex flex-wrap gap-2 mt-6 mb-6"
+        >
+          {project.stack.map((tech) => (
+            <li
+              key={tech}
+              className="rounded-md bg-bg-elevated px-2.5 py-1.5 text-xs text-text-secondary"
+            >
+              {tech}
+            </li>
+          ))}
+        </ul>
+        <ProjectLinks project={project} />
+        <ProjectCaseStudy project={project} />
+      </div>
+    </article>
   );
 }
 
-function FeatureBox({ title, text, icon }: { title: string, text: string, icon: React.ReactNode }) {
+function ProjectCaseStudy({ project }: { project: Project }) {
   return (
-    <div className="bg-bg-elevated/30 border border-border-subtle/50 rounded-2xl p-6 flex flex-col gap-4 hover:bg-bg-elevated/50 transition-colors group/box">
-      <div className="flex items-center gap-2.5">
-        <div className="w-8 h-8 rounded-lg bg-bg-surface border border-border-subtle flex items-center justify-center text-text-tertiary group-hover/box:text-accent transition-colors">
-          {icon}
+    <details className="case-study mt-6 border-t border-border-default">
+      <summary className="py-5 flex items-center justify-between cursor-pointer font-medium text-sm">
+        Explore the case study{" "}
+        <ChevronDown className="details-chevron w-4 h-4" />
+      </summary>
+      <div className="space-y-6 pb-4 text-sm leading-7 text-text-secondary">
+        <div>
+          <h4 className="case-label">What I built</h4>
+          <p>{project.whatIBuilt}</p>
         </div>
-        <h5 className="font-mono text-[10px] text-text-tertiary font-bold uppercase tracking-widest">{title}</h5>
+        <div>
+          <h4 className="case-label">What works today</h4>
+          <p>{project.outcome}</p>
+        </div>
+        {project.decisions.map((decision) => (
+          <div key={decision.id} className="decision-note">
+            <h4 className="case-label">The product decision</h4>
+            <p className="font-semibold text-text-primary mb-3">
+              {decision.statement}
+            </p>
+            <p>{decision.because}</p>
+            <p className="mt-3">
+              <strong className="text-text-primary">Next:</strong>{" "}
+              {decision.wouldDoDifferently}
+            </p>
+          </div>
+        ))}
       </div>
-      <p className="text-[13.5px] leading-relaxed text-text-secondary">{text}</p>
+    </details>
+  );
+}
+
+function ProjectLinks({ project }: { project: Project }) {
+  return (
+    <div className="flex flex-wrap items-center gap-5 text-sm font-medium">
+      {project.links.live && (
+        <a
+          className="inline-flex min-h-11 items-center gap-2 text-accent hover:underline underline-offset-4"
+          href={project.links.live}
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          {project.status === "pilot" ? "Open pilot" : "Open project"}{" "}
+          <ArrowUpRight className="w-4 h-4" />
+          <span className="sr-only">: {project.name} (opens in new tab)</span>
+        </a>
+      )}
+      {project.links.github && (
+        <a
+          className="inline-flex min-h-11 items-center gap-2 text-text-secondary hover:text-text-primary"
+          href={project.links.github}
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          <GitBranch className="w-4 h-4" />
+          Source & docs
+          <span className="sr-only">: {project.name} (opens in new tab)</span>
+        </a>
+      )}
+    </div>
+  );
+}
+
+function InterviewOverview() {
+  return (
+    <div
+      className="interview-overview h-full p-6 md:p-8 flex flex-col justify-between"
+      aria-label="InterviewAce workflow illustration"
+    >
+      <div className="flex items-center justify-between text-xs font-mono">
+        <span>InterviewAce</span>
+        <span className="opacity-70">THE PRACTICE LOOP</span>
+      </div>
+      <div className="flex items-center gap-4 my-5">
+        <div className="voice-mark">
+          <Mic className="w-7 h-7" />
+        </div>
+        <div>
+          <p className="text-xl font-semibold">
+            A better answer
+            <br />
+            starts with practice.
+          </p>
+        </div>
+      </div>
+      <div className="grid grid-cols-3 gap-2 text-xs">
+        <div className="workflow-step">
+          <Mic className="w-4 h-4 mb-2" />
+          01 · Speak
+        </div>
+        <div className="workflow-step">
+          <MessageSquare className="w-4 h-4 mb-2" />
+          02 · Reflect
+        </div>
+        <div className="workflow-step">
+          <RotateCcw className="w-4 h-4 mb-2" />
+          03 · Retry
+        </div>
+      </div>
+      <p className="text-[11px] mt-3 opacity-70">
+        Workflow illustration · Interview → Report → Answer Lab
+      </p>
     </div>
   );
 }

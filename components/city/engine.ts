@@ -1,3 +1,6 @@
+import { cityWeather } from "@/lib/city-weather";
+import { createConstruction } from "./construction";
+import { createWeather } from "./weather";
 import * as THREE from "three";
 import { OrbitControls } from "three/examples/jsm/controls/OrbitControls.js";
 import { RoomEnvironment } from "three/examples/jsm/environments/RoomEnvironment.js";
@@ -34,6 +37,7 @@ export type CitySnapshot = {
   driving: boolean;
   nearCar: boolean;
   car: CarState;
+  weather?: ReturnType<typeof cityWeather>;
 };
 type Options = {
   onEnter: (id: string, floor: number) => void;
@@ -216,6 +220,9 @@ export function createCity(canvas: HTMLCanvasElement, options: Options) {
   stars.visible = false;
   scene.add(stars);
   const sky = createSky(scene, kit);
+  const construction = createConstruction(city, kit);
+  const weatherView = createWeather(scene, kit);
+  let living = true, worldSeconds = 0;
   // Time of day: 0 is noon, 1 is night; toggling sweeps through a sunset.
   let timeOfDay = 0,
     timeTarget = 0;
@@ -265,6 +272,7 @@ export function createCity(canvas: HTMLCanvasElement, options: Options) {
       driving,
       nearCar: !driving && carDistance() < 3.4,
       car: { ...carState },
+      weather: living ? cityWeather(worldSeconds) : undefined,
     });
   }
   function carDistance() {
@@ -612,7 +620,15 @@ export function createCity(canvas: HTMLCanvasElement, options: Options) {
       camera.fov += (fov - camera.fov) * (1 - Math.exp(-6 * delta));
       camera.updateProjectionMatrix();
     }
-    if (timeOfDay !== timeTarget) {
+    if (living && !paused && !blocked && !preference.matches) {
+      worldSeconds += delta;
+      const weather = cityWeather(worldSeconds);
+      timeTarget = weather.darkness;
+      applyTime(timeTarget);
+      sun.intensity *= 1 - weather.cloud * 0.4;
+      weatherView.update(worldSeconds, weather);
+    }
+    if (!living && timeOfDay !== timeTarget) {
       const step = delta / 3.5;
       applyTime(
         timeTarget > timeOfDay
@@ -633,6 +649,7 @@ export function createCity(canvas: HTMLCanvasElement, options: Options) {
       );
       citizenRing.rotation.z = elapsed * 0.2;
       island.update(elapsed);
+      construction.update(elapsed, delta);
       crowd.update(
         delta,
         elapsed,
@@ -848,6 +865,13 @@ export function createCity(canvas: HTMLCanvasElement, options: Options) {
         controls.update();
       }
       sync();
+    },
+    setLiving(value: boolean) {
+      living = value;
+      weatherView.update(worldSeconds, value ? cityWeather(worldSeconds) : null);
+      if (value) applyTime(cityWeather(worldSeconds).darkness);
+      update();
+      draw();
     },
     setNight(value: boolean) {
       timeTarget = value ? 1 : 0;

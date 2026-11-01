@@ -72,6 +72,7 @@ export default function CityApp() {
   const [directory, setDirectory] = useState(false),
     [help, setHelp] = useState(true),
     [expanded, setExpanded] = useState(false);
+  const [living, setLiving] = useState(true);
   const [night, setNight] = useState(false),
     [paused, setPaused] = useState(false);
   const [hover, setHover] = useState("");
@@ -306,13 +307,14 @@ export default function CityApp() {
       );
     }
   }, [waypointDistance < 3.4]); // eslint-disable-line react-hooks/exhaustive-deps
+  useEffect(() => { engine.current?.setLiving(living); }, [ready, living]);
   const nearby = cityBuildings.find(
     (building) => building.id === snapshot.nearby,
   );
   return (
     <main
       id="main-content"
-      className={`city-app ${ready ? "city-ready" : ""} ${night ? "city-night" : ""}`}
+      className={`city-app ${ready ? "city-ready" : ""} ${(living ? snapshot.weather?.night : night) ? "city-night" : ""}`}
       tabIndex={-1}
     >
       <h1 className="sr-only">
@@ -388,14 +390,18 @@ export default function CityApp() {
           </span>
           <small>HIRE LEVEL</small>
         </div>
+          <button type="button" className="city-weather-control" aria-pressed={living} aria-label="Automatic simulated weather and day cycle" onClick={() => setLiving(!living)}>
+            {living && snapshot.weather ? `SIM · ${String(Math.floor(snapshot.weather.hour)).padStart(2, "0")}:${String(Math.floor(snapshot.weather.hour % 1 * 60)).padStart(2, "0")} · ${snapshot.weather.temperature}°C · ${snapshot.weather.condition}` : "Live world"}
+          </button>
         <div className="city-top-actions">
+
           <button
             type="button"
             className="city-icon"
-            onClick={() => setNight(!night)}
-            aria-label={night ? "Switch to daylight" : "Switch to night"}
+            onClick={() => { const target = !(living ? snapshot.weather?.night : night); setLiving(false); setNight(target); engine.current?.setNight(target); }}
+            aria-label={(living ? snapshot.weather?.night : night) ? "Switch to daylight" : "Switch to night"}
           >
-            {night ? <Sun size={18} /> : <Moon size={18} />}
+            {(living ? snapshot.weather?.night : night) ? <Sun size={18} /> : <Moon size={18} />}
           </button>
           <button
             type="button"

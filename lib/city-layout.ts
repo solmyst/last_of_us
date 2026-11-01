@@ -218,6 +218,7 @@ export const islandEdge = 49;
 export const ringRoad = 44;
 // Solid landmarks outside the building grid, as footprint boxes.
 export const cityProps = [
+  { id: "construction", x: -33, z: 22, width: 8, depth: 10 },
   { id: "ferris-wheel", x: -28, z: -38.5, width: 13, depth: 2.4 },
   { id: "lighthouse", x: 38.5, z: -38.5, width: 3.4, depth: 3.4 },
 ];

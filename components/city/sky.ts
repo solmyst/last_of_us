@@ -25,6 +25,7 @@ export function createSky(scene: THREE.Scene, kit: SceneKit) {
 void main() {
   vDir = normalize(position);
   gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0);
+  gl_Position.z = gl_Position.w;
 }`,
         fragmentShader: `uniform vec3 top; uniform vec3 horizon; uniform vec3 sunColor; uniform vec3 sunDirection; uniform float glow;
 varying vec3 vDir;

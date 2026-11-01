@@ -37,3 +37,9 @@ Each address has its own massing: interlocked workshop volumes, curved-eave stud
 Rounded edges, smooth cylinders, procedural roughness, distinct stone/wood/metal/glass materials, and a locally generated environment map improve surface quality. Rendering targets 60 frames per second with time-based camera easing and damped orbit/zoom. Desktop pixel ratio is capped at 2 and mobile at 1.75; actual frame rate depends on the device. A pond, curved footbridge, bamboo, and blossom trees frame the district.
 
 Rendering references: https://threejs.org/docs/pages/WebGLRenderer.html and https://threejs.org/docs/pages/RoomEnvironment.html.
+
+## Living world
+
+The automatic world clock represents 24 hours in ten minutes of active play. Local simulated cloud cover, rain, and temperature follow smooth cycles; the HUD labels this as SIM, not real-world weather. The automatic cycle can be disabled; manual day/night lighting remains available. Pausing, hiding the tab, opening a dossier, or requesting reduced motion stops the automatic simulation.
+
+A fenced construction site on the western waterfront represents the existing `currently.learning` portfolio data. Four scripted workers, a lifting/slewing crane, an unfinished frame, and material stacks show work in progress. The footprint blocks visitors and cars. Selecting the site opens the Observatory dossier. This is a visual metaphor for learning, not a claim of an upcoming internship. No AI service, external weather feed, credentials, or paid API is required.

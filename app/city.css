@@ -1528,3 +1528,20 @@
     display: none;
   }
 }
+
+.city-weather-control {
+  position: fixed;
+  top: 85px;
+  right: 24px;
+  padding: 3px 10px;
+  border: 1px solid var(--hud-line);
+  border-radius: 8px;
+  background: var(--hud);
+  color: var(--text);
+  font: 11px/1.4 var(--font-jetbrains-mono), monospace;
+  cursor: pointer;
+}
+.city-weather-control:focus-visible { outline: 2px solid #b9e5ce; outline-offset: 3px; }
+@media (max-width: 650px) {
+  .city-weather-control { top: 76px; right: 12px; padding: 6px 8px; font-size: 10px; }
+}

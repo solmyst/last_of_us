@@ -3,6 +3,7 @@ import type { SceneKit } from "./scene-kit";
 // The hero's coupe. Forward is +z, matching the character and driveCar heading.
 export function createHeroCar(kit: SceneKit) {
   const root = new THREE.Group();
+  root.scale.setScalar(0.65);
   const body = new THREE.Group();
   root.add(body);
   kit.box(body, [1.9, 0.42, 3.9], [0, 0.55, 0], "#e69a6f");
@@ -43,7 +44,7 @@ export function createHeroCar(kit: SceneKit) {
     },
     animate(delta: number, speed: number, steer: number) {
       for (const wheel of wheels) {
-        for (const part of wheel.spin) part.rotation.x += (speed * delta) / 0.38;
+        for (const part of wheel.spin) part.rotation.x += (speed * delta) / (0.38 * 0.65);
         if (wheel.front) wheel.pivot.rotation.y = -steer * 0.45;
       }
       // Body leans out of corners and squats under speed for weight.

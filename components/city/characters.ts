@@ -42,6 +42,7 @@ export function crowdLook(seed: number): Look {
 }
 export function createCharacter(kit: SceneKit, look: Look) {
   const root = new THREE.Group();
+  root.scale.setScalar(0.72);
   const pivot = (parent: THREE.Object3D, x: number, y: number, z = 0) => {
     const group = new THREE.Group();
     group.position.set(x, y, z);

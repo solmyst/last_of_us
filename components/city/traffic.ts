@@ -18,6 +18,7 @@ const lanes: Array<{ lane: TrafficLane; cars: number; speed: number }> = [
 const paints = ["#91bdbb", "#e7b58a", "#cab4e8", "#f4f1e8", "#d1495b", "#3d7ea6", "#f2cc8f", "#2f4858"];
 function makeCar(kit: SceneKit, color: string, van: boolean) {
   const car = new THREE.Group();
+  car.scale.setScalar(0.9);
   kit.box(car, [1, van ? 0.9 : 0.5, 2], [0, van ? 0.75 : 0.55, 0], color);
   kit.box(car, [0.86, 0.36, van ? 0.6 : 0.95], [0, van ? 1.3 : 0.95, van ? 0.55 : -0.1], "#203b47");
   for (const x of [-0.32, 0.32]) {

@@ -58,7 +58,7 @@ export function createCrowd(parent: THREE.Object3D, kit: SceneKit, count = 16) {
   const people = Array.from({ length: count }, (_, i) => {
     const lane = lanes[i % lanes.length];
     const character = createCharacter(kit, crowdLook(i + 3));
-    character.root.scale.setScalar(0.92 + (i % 4) * 0.04);
+    character.root.scale.setScalar(0.72 * (0.92 + (i % 4) * 0.04));
     const speech = bubble(kit, lines[i % lines.length]);
     speech.position.y = 2.35;
     character.root.add(speech);

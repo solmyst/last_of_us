@@ -29,14 +29,14 @@ const fragmentMono = {
 
 export const metadata: Metadata = {
   metadataBase: new URL('https://anush.tech'),
-  title: "Anush Gupta — Product Manager & Full-Stack Builder",
-  description: "Product manager with four Park+ internships and an engineering background. User research, funnel optimization, and AI products built end to end.",
+  title: "Anush Gupta — Buildverse City",
+  description: "Explore Anush Gupta’s 3D portfolio city: project buildings, engineering floors, product decisions, and experience at Park+.",
   alternates: {
     canonical: 'https://anush.tech',
   },
   openGraph: {
-    title: "Anush Gupta — Product Manager & Full-Stack Builder",
-    description: "Product manager with four Park+ internships and an engineering background. User research, funnel optimization, and AI products built end to end.",
+    title: "Anush Gupta — Buildverse City",
+    description: "Explore Anush Gupta’s 3D portfolio city: project buildings, engineering floors, product decisions, and experience at Park+.",
     url: "https://anush.tech",
     siteName: "Anush Gupta Portfolio",
     locale: "en_US",
@@ -44,8 +44,8 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: "summary",
-    title: "Anush Gupta — Product Manager & Full-Stack Builder",
-    description: "Product manager with four Park+ internships and an engineering background. User research, funnel optimization, and AI products built end to end.",
+    title: "Anush Gupta — Buildverse City",
+    description: "Explore Anush Gupta’s 3D portfolio city: project buildings, engineering floors, product decisions, and experience at Park+.",
   },
 };
 

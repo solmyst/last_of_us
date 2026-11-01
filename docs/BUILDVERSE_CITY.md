@@ -14,6 +14,8 @@ The whole portfolio becomes one spatial experience. There is no scrolling landin
 
 ## Verification
 
-Pure navigation tests cover project/building coverage, movement speed bounds, collision/edge sliding, nearby entrances, and valid/invalid floor deep links. Browser tests must cover actual room changes, dossier content, URL navigation, walking, mobile HUD, and canvas rendering.
+Seven automated tests cover project/building coverage, all 50 floors’ written content, movement speed bounds, collision/edge sliding, nearby entrances, and valid/invalid floor deep links. The production static export, ESLint, and TypeScript checks pass.
+
+Browser verification covers rendered city and furnished rooms, clicking the physical display, elevators (including the eighth skills floor), dossier content, back/forward routes, walking, E door entry, return to street, day/night, and native dialog focus wrapping. Responsive checks cover 320, 375, 768, 1024, and 1440 pixel widths. The production browser console is free of errors and warnings. The avatar uses footprint collision outdoors and bounded movement indoors; furniture is decorative rather than a physics simulation.
 
 Three.js reference: https://threejs.org/docs/pages/OrbitControls.html and https://threejs.org/docs/pages/Raycaster.html. No downloaded 3D models or copied portfolio assets.

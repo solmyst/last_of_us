@@ -154,6 +154,15 @@ export function floorContent(
       { label: "LinkedIn", href: personal.linkedin },
       { label: "Resume", href: personal.resume },
     ];
+  if (building.kind === "contact")
+    result.links = [
+      { label: "Email Anush", href: `mailto:${personal.email}` },
+      { label: "LinkedIn", href: personal.linkedin },
+      { label: "GitHub", href: personal.github },
+      { label: "LeetCode", href: personal.leetcode },
+      { label: "X / Twitter", href: personal.twitter },
+      { label: "Resume", href: personal.resume },
+    ];
   return result;
 }
 export const cityProjectCount = cityBuildings.filter(

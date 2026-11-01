@@ -69,3 +69,66 @@ test("deep links round-trip floors and reading mode and reject invalid destinati
   assert.equal(parseCityRoute("#city/relay-voice/-1"), null);
   assert.equal(parseCityRoute("#city/relay-voice/1/unknown"), null);
 });
+
+const dataSource = readFileSync(
+  new URL("../lib/data.ts", import.meta.url),
+  "utf8",
+);
+const dataCode = ts.transpileModule(dataSource, {
+  compilerOptions: {
+    module: ts.ModuleKind.ES2022,
+    target: ts.ScriptTarget.ES2022,
+  },
+}).outputText;
+const dataUrl = `data:text/javascript;base64,${Buffer.from(dataCode).toString("base64")}`;
+const layoutUrl = `data:text/javascript;base64,${Buffer.from(compiled).toString("base64")}`;
+const contentSource = readFileSync(
+  new URL("../lib/city-content.ts", import.meta.url),
+  "utf8",
+)
+  .replaceAll('"@/lib/data"', JSON.stringify(dataUrl))
+  .replaceAll('"@/lib/city-layout"', JSON.stringify(layoutUrl));
+const contentCode = ts.transpileModule(contentSource, {
+  compilerOptions: {
+    module: ts.ModuleKind.ES2022,
+    target: ts.ScriptTarget.ES2022,
+  },
+}).outputText;
+const { floorContent } = await import(
+  `data:text/javascript;base64,${Buffer.from(contentCode).toString("base64")}`
+);
+
+test("every physical floor resolves real written content", () => {
+  let floorCount = 0;
+  for (const building of cityBuildings)
+    for (let floor = 0; floor < building.floors.length; floor++) {
+      const content = floorContent(building, floor);
+      floorCount++;
+      assert.ok(content.title.length > 0, `${building.id}/${floor}: title`);
+      assert.ok(
+        content.sections.length > 0,
+        `${building.id}/${floor}: sections`,
+      );
+      assert.ok(
+        content.sections.every(
+          (section) => section.text?.length || section.bullets?.length,
+        ),
+        `${building.id}/${floor}: actual content`,
+      );
+      assert.ok(
+        content.links.every((link) =>
+          /^(https:\/\/|mailto:|\/)/.test(link.href),
+        ),
+        `${building.id}/${floor}: link`,
+      );
+    }
+  assert.equal(floorCount, 50);
+});
+test("project floors separate the problem, implementation, and decisions", () => {
+  const interview = cityBuildings.find(
+    (building) => building.id === "interview-ace",
+  );
+  assert.equal(floorContent(interview, 0).sections[0].heading, "The problem");
+  assert.equal(floorContent(interview, 1).sections[0].heading, "What I built");
+  assert.match(floorContent(interview, 2).sections[0].text, /Answer Lab/);
+});

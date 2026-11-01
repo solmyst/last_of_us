@@ -22,6 +22,9 @@ import { buildGardens } from "./gardens";
 import { createCharacter, heroLook } from "./characters";
 import { createCrowd } from "./crowd";
 import { createHeroCar } from "./vehicles";
+import { buildIsland } from "./island";
+import { createTraffic } from "./traffic";
+import { createSky } from "./sky";
 export type CitySnapshot = {
   mode: "overview" | "street" | "room" | "building";
   position: CityPoint;
@@ -61,10 +64,9 @@ export function createCity(canvas: HTMLCanvasElement, options: Options) {
   scene.environmentIntensity = 0.65;
   roomEnvironment.dispose();
   pmrem.dispose();
-  scene.background = new THREE.Color("#b9ced0");
-  scene.fog = new THREE.Fog("#b9ced0", 200, 500);
+  scene.fog = new THREE.Fog("#d3e4df", 200, 500);
   const camera = new THREE.PerspectiveCamera(48, 1, 0.1, 600);
-  camera.position.set(60, 52, 68);
+  camera.position.set(80, 70, 92);
   const controls = new OrbitControls(camera, canvas);
   controls.target.set(0, 5, 0);
   controls.enableDamping = true;
@@ -83,12 +85,12 @@ export function createCity(canvas: HTMLCanvasElement, options: Options) {
   sun.castShadow = true;
   sun.shadow.mapSize.set(2048, 2048);
   Object.assign(sun.shadow.camera, {
-    left: -40,
-    right: 40,
-    top: 40,
-    bottom: -40,
+    left: -58,
+    right: 58,
+    top: 58,
+    bottom: -58,
     near: 0.1,
-    far: 140,
+    far: 170,
   });
   sun.shadow.bias = -0.0005;
   sun.shadow.normalBias = 0.035;
@@ -97,16 +99,7 @@ export function createCity(canvas: HTMLCanvasElement, options: Options) {
   const kit = createSceneKit();
   const city = new THREE.Group();
   scene.add(city);
-  kit.box(city, [73, 1.6, 73], [0, -0.95, 0], "#304e5a");
-  kit.box(city, [71, 0.2, 71], [0, -0.05, 0], "#688c87");
-  for (const p of [-15, 0, 15]) {
-    kit.box(city, [p === 0 ? 6 : 3.5, 0.035, 71], [p, 0.075, 0], "#304650");
-    kit.box(city, [71, 0.035, p === 0 ? 6 : 3.5], [0, 0.077, p], "#304650");
-  }
-  for (let i = -33; i <= 33; i += 3) {
-    kit.box(city, [0.08, 0.012, 1.2], [0, 0.101, i], "#c6c8aa");
-    kit.box(city, [1.2, 0.012, 0.08], [i, 0.102, 0], "#c6c8aa");
-  }
+  const island = buildIsland(city, scene, kit);
   kit.cylinder(city, 5.2, 0.13, [0, 0.13, 5], "#83a59a", 48);
   kit.ring(city, 4.6, [0, 0.21, 5], "#bad7b7");
   const district = buildDistrict(city, kit);
@@ -145,7 +138,8 @@ export function createCity(canvas: HTMLCanvasElement, options: Options) {
   const crowd = createCrowd(city, kit);
   const heroCar = createHeroCar(kit);
   city.add(heroCar.root);
-  let carState: CarState = { x: -6, z: 1.5, heading: Math.PI / 2, speed: 0 };
+  // Parked on the plaza, clear of the traffic lanes.
+  let carState: CarState = { x: 3, z: 9.5, heading: 0, speed: 0 };
   let driving = false;
   heroCar.root.position.set(carState.x, 0.1, carState.z);
   heroCar.root.rotation.y = carState.heading;
@@ -207,19 +201,7 @@ export function createCity(canvas: HTMLCanvasElement, options: Options) {
     sprinting = false,
     lastDrag = -Infinity;
   player.position.set(position.x, groundY(position), position.z);
-  const cars: THREE.Group[] = [];
-  for (let i = 0; i < 4; i++) {
-    const car = new THREE.Group();
-    kit.box(car, [0.9, 0.45, 1.8], [0, 0.5, 0], i % 2 ? "#e7b58a" : "#91bdbb");
-    kit.box(car, [0.75, 0.3, 0.85], [0, 0.86, -0.15], "#2c525e");
-    for (const x of [-0.5, 0.5])
-      for (const z of [-0.55, 0.55]) {
-        const wheel = kit.cylinder(car, 0.2, 0.14, [x, 0.27, z], "#162f3b", 10);
-        wheel.rotation.z = Math.PI / 2;
-      }
-    city.add(car);
-    cars.push(car);
-  }
+  const traffic = createTraffic(city, kit);
   const starsGeometry = kit.track(new THREE.BufferGeometry());
   const starsArray = new Float32Array(160 * 3);
   for (let i = 0; i < 160; i++) {
@@ -237,6 +219,22 @@ export function createCity(canvas: HTMLCanvasElement, options: Options) {
   );
   stars.visible = false;
   scene.add(stars);
+  const sky = createSky(scene, kit);
+  // Time of day: 0 is noon, 1 is night; toggling sweeps through a sunset.
+  let timeOfDay = 0,
+    timeTarget = 0;
+  function applyTime(t: number) {
+    timeOfDay = t;
+    sky.apply(t, { ambient, sun });
+    const dark = t > 0.6;
+    stars.visible = dark;
+    if (dark !== night) {
+      night = dark;
+      district.setNight(dark);
+      heroCar.setNight(dark);
+      island.setNight(dark);
+    }
+  }
   let mode: CitySnapshot["mode"] = "overview",
     room: ReturnType<typeof createFloorRoom> | null = null,
     active: CityBuilding | null = null;
@@ -439,6 +437,7 @@ export function createCity(canvas: HTMLCanvasElement, options: Options) {
   // Bloom only runs at night, where emissive windows, lamps and lights glow neon.
   let composer: EffectComposer | null = null,
     night = false;
+  applyTime(0);
   function bloom() {
     if (!composer) {
       composer = new EffectComposer(renderer);
@@ -508,6 +507,11 @@ export function createCity(canvas: HTMLCanvasElement, options: Options) {
           },
           delta,
         );
+      for (const other of traffic.positions())
+        if (Math.hypot(other.x - carState.x, other.z - carState.z) < 2.3) {
+          carState = { ...carState, x: previous.x, z: previous.z, speed: -carState.speed * 0.3 };
+          break;
+        }
       heroCar.animate(preference.matches ? 0 : delta, carState.speed, steer);
       heroCar.root.position.set(carState.x, 0.1, carState.z);
       heroCar.root.rotation.y = carState.heading;
@@ -612,18 +616,27 @@ export function createCity(canvas: HTMLCanvasElement, options: Options) {
       camera.fov += (fov - camera.fov) * (1 - Math.exp(-6 * delta));
       camera.updateProjectionMatrix();
     }
+    if (timeOfDay !== timeTarget) {
+      const step = delta / 3.5;
+      applyTime(
+        timeTarget > timeOfDay
+          ? Math.min(timeTarget, timeOfDay + step)
+          : Math.max(timeTarget, timeOfDay - step),
+      );
+    }
     if (checkpoint.visible && !preference.matches) {
       checkpoint.scale.set(1 + Math.sin(time * 0.004) * 0.08, 1, 1 + Math.sin(time * 0.004) * 0.08);
       checkpoint.rotation.y = time * 0.001;
     }
     if (!paused && !preference.matches && !blocked) {
       elapsed += delta;
-      cars.forEach((car, i) => {
-        const z = ((elapsed * 2.5 + i * 17) % 66) - 33;
-        car.position.set(i % 2 ? 1.5 : -1.5, 0, z);
-        car.rotation.y = i % 2 ? Math.PI : 0;
-      });
+      // Traffic yields to whatever the visitor is controlling.
+      traffic.update(
+        delta,
+        mode === "street" ? [{ x: position.x, z: position.z }] : [],
+      );
       citizenRing.rotation.z = elapsed * 0.2;
+      island.update(elapsed);
       crowd.update(
         delta,
         elapsed,
@@ -655,7 +668,7 @@ export function createCity(canvas: HTMLCanvasElement, options: Options) {
   }
   controls.addEventListener("change", drawOnControlChange);
   function overviewPosition() {
-    return new THREE.Vector3(60, 52, 68).multiplyScalar(Math.max(1, 1.25 / camera.aspect));
+    return new THREE.Vector3(80, 70, 92).multiplyScalar(Math.max(1, 1.25 / camera.aspect));
   }
   const resize = new ResizeObserver(() => {
     const rect = canvas.getBoundingClientRect();
@@ -841,15 +854,8 @@ export function createCity(canvas: HTMLCanvasElement, options: Options) {
       sync();
     },
     setNight(value: boolean) {
-      night = value;
-      scene.background = new THREE.Color(value ? "#081721" : "#b9ced0");
-      scene.fog = new THREE.Fog(value ? "#081721" : "#b9ced0", 200, 500);
-      ambient.intensity = value ? 1.1 : 2.7;
-      sun.intensity = value ? 0.7 : 3.5;
-      stars.visible = value;
-      scene.environmentIntensity = value ? 0.35 : 0.65;
-      district.setNight(value);
-      heroCar.setNight(value);
+      timeTarget = value ? 1 : 0;
+      if (paused || preference.matches || !lastTime) applyTime(timeTarget);
       draw();
     },
     dispose() {

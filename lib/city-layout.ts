@@ -213,11 +213,19 @@ export const cityBuildings: CityBuilding[] = [
 export type CityPoint = { x: number; z: number };
 export type CityRoute = { id: string; floor: number; reading: boolean };
 export const floorHeight = 3.2;
+// The district sits on an island; a ring highway circles it inside the beach.
+export const islandEdge = 49;
+export const ringRoad = 44;
+// Solid landmarks outside the building grid, as footprint boxes.
+export const cityProps = [
+  { id: "ferris-wheel", x: -28, z: -38.5, width: 13, depth: 2.4 },
+  { id: "lighthouse", x: 38.5, z: -38.5, width: 3.4, depth: 3.4 },
+];
 export function isBlocked(point: CityPoint, margin: number) {
-  return cityBuildings.some(
-    (building) =>
-      Math.abs(point.x - building.x) < building.width / 2 + margin &&
-      Math.abs(point.z - building.z) < building.depth / 2 + margin,
+  return [...cityBuildings, ...cityProps].some(
+    (item) =>
+      Math.abs(point.x - item.x) < item.width / 2 + margin &&
+      Math.abs(point.z - item.z) < item.depth / 2 + margin,
   );
 }
 export type CarState = { x: number; z: number; heading: number; speed: number };
@@ -243,7 +251,9 @@ export function driveCar(car: CarState, input: CarInput, delta: number): CarStat
     car.heading - input.steer * (input.brake ? 3.4 : 2.3) * grip * dt;
   const step = speed * dt;
   const free = (x: number, z: number) =>
-    Math.abs(x) <= 33 && Math.abs(z) <= 33 && !isBlocked({ x, z }, 1.1);
+    Math.abs(x) <= islandEdge - 1 &&
+    Math.abs(z) <= islandEdge - 1 &&
+    !isBlocked({ x, z }, 1.1);
   const x = car.x + Math.sin(heading) * step,
     z = car.z + Math.cos(heading) * step;
   if (free(x, z)) return { x, z, heading, speed };
@@ -251,6 +261,38 @@ export function driveCar(car: CarState, input: CarInput, delta: number): CarStat
   if (free(x, car.z)) return { x, z: car.z, heading, speed: speed * 0.7 };
   if (free(car.x, z)) return { x: car.x, z, heading, speed: speed * 0.7 };
   return { x: car.x, z: car.z, heading, speed: -speed * 0.25 };
+}
+// Ambient traffic: a point and heading at distance s along a lane.
+export type TrafficLane =
+  | { kind: "ring"; radius: number; direction: 1 | -1 }
+  | { kind: "street"; axis: "x" | "z"; at: number; direction: 1 | -1 };
+export function laneLength(lane: TrafficLane) {
+  return lane.kind === "ring" ? lane.radius * 8 : ringRoad * 2;
+}
+export function lanePoint(lane: TrafficLane, s: number) {
+  const length = laneLength(lane);
+  const d = ((s % length) + length) % length;
+  if (lane.kind === "street") {
+    const along = (d - ringRoad) * lane.direction;
+    return lane.axis === "z"
+      ? { x: lane.at, z: along, heading: lane.direction > 0 ? 0 : Math.PI }
+      : { x: along, z: lane.at, heading: (lane.direction * Math.PI) / 2 };
+  }
+  // Walk the square ring clockwise (direction 1) or counter-clockwise.
+  const r = lane.radius,
+    side = 2 * r;
+  const t = lane.direction > 0 ? d : length - d;
+  const leg = Math.min(3, Math.floor(t / side)),
+    u = t - leg * side - r;
+  const corners = [
+    { x: u, z: -r, heading: Math.PI / 2 },
+    { x: r, z: u, heading: 0 },
+    { x: -u, z: r, heading: -Math.PI / 2 },
+    { x: -r, z: -u, heading: Math.PI },
+  ][leg];
+  return lane.direction > 0
+    ? corners
+    : { ...corners, heading: corners.heading + Math.PI };
 }
 export const cityMissions = [
   {
@@ -282,9 +324,9 @@ export function moveCitizen(
   const dx = (input.x / Math.max(length, 1)) * distance,
     dz = (input.z / Math.max(length, 1)) * distance;
   const blocked = (x: number, z: number) => isBlocked({ x, z }, 0.45);
-  let x = Math.max(-32, Math.min(32, position.x + dx));
+  let x = Math.max(-islandEdge, Math.min(islandEdge, position.x + dx));
   if (blocked(x, position.z)) x = position.x;
-  let z = Math.max(-32, Math.min(32, position.z + dz));
+  let z = Math.max(-islandEdge, Math.min(islandEdge, position.z + dz));
   if (blocked(x, z)) z = position.z;
   return { x, z };
 }

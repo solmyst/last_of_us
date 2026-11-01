@@ -24,6 +24,11 @@ const {
   cityMissions,
   doorPoint,
   isBlocked,
+  islandEdge,
+  cityProps,
+  lanePoint,
+  laneLength,
+  ringRoad,
 } =
   await import(
     `data:text/javascript;base64,${Buffer.from(compiled).toString("base64")}`
@@ -48,7 +53,7 @@ test("movement is frame-time safe and stays inside the district", () => {
   let position = { x: 0, z: 0 };
   for (let i = 0; i < 2000; i++)
     position = moveCitizen(position, { x: 1, z: 0 }, 0.1);
-  assert.ok(position.x <= 32 && position.x >= -32);
+  assert.ok(position.x <= islandEdge && position.x >= -islandEdge);
 });
 test("sprinting is faster than walking but still frame-time safe and collides", () => {
   const walk = moveCitizen({ x: 0, z: 7 }, { x: 1, z: 0 }, 0.1);
@@ -175,4 +180,38 @@ test("missions only visit real addresses", () => {
     for (const stop of mission.stops) assert.ok(doorPoint(stop));
   }
   assert.equal(doorPoint("nowhere"), null);
+});
+
+test("traffic lanes stay on the road and keep a continuous heading", () => {
+  const lanes = [
+    { kind: "ring", radius: ringRoad - 1.5, direction: 1 },
+    { kind: "ring", radius: ringRoad + 1.5, direction: -1 },
+    { kind: "street", axis: "z", at: 1.5, direction: -1 },
+  ];
+  for (const lane of lanes) {
+    let previous = lanePoint(lane, 0);
+    for (let s = 0.25; s <= laneLength(lane) * 2; s += 0.25) {
+      const point = lanePoint(lane, s);
+      assert.ok(!isBlocked(point, 0.9), `${lane.kind} hits a footprint at ${s}`);
+      const step = Math.hypot(point.x - previous.x, point.z - previous.z);
+      // Only the street lanes wrap back to their start.
+      if (lane.kind === "ring") assert.ok(step < 0.3);
+      // Heading points along the direction of travel (corners excepted).
+      const corner =
+        lane.kind === "ring" &&
+        Math.abs(Math.abs(point.x) - lane.radius) < 0.5 &&
+        Math.abs(Math.abs(point.z) - lane.radius) < 0.5;
+      if (step > 0.1 && step < 0.3 && !corner) {
+        const heading = Math.atan2(point.x - previous.x, point.z - previous.z);
+        const diff = Math.abs(Math.atan2(Math.sin(heading - point.heading), Math.cos(heading - point.heading)));
+        assert.ok(diff < 0.01, `heading off by ${diff}`);
+      }
+      previous = point;
+    }
+  }
+});
+test("island landmarks block walking like buildings do", () => {
+  for (const prop of cityProps) assert.ok(isBlocked({ x: prop.x, z: prop.z }, 0));
+  const edge = moveCitizen({ x: islandEdge - 0.1, z: 0 }, { x: 1, z: 0 }, 0.2, 11);
+  assert.ok(edge.x <= islandEdge);
 });

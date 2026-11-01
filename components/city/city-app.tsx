@@ -41,7 +41,7 @@ const initialSnapshot: CitySnapshot = {
   sprinting: false,
   driving: false,
   nearCar: false,
-  car: { x: -6, z: 1.5, heading: Math.PI / 2, speed: 0 },
+  car: { x: 3, z: 9.5, heading: 0, speed: 0 },
 };
 const visitKey = "anush-buildverse-city-addresses";
 // Addresses discovered to reach each Hire Level star.

@@ -1,4 +1,10 @@
-import { cityBuildings, type CityPoint } from "@/lib/city-layout";
+import {
+  cityBuildings,
+  cityProps,
+  islandEdge,
+  ringRoad,
+  type CityPoint,
+} from "@/lib/city-layout";
 const radius = 22;
 // Radar view: centred on the visitor and rotated so the camera's forward is up.
 export default function CityMinimap({
@@ -52,18 +58,52 @@ export default function CityMinimap({
             <circle r={radius - 0.6} />
           </clipPath>
         </defs>
-        <circle r={radius} fill="#0f2430" />
+        <circle r={radius} fill="#174a57" />
         <g clipPath="url(#city-radar-clip)">
           <g
             transform={`rotate(${degrees}) translate(${-position.x} ${-position.z})`}
           >
-            <rect x="-36" y="-36" width="72" height="72" fill="#1a3541" />
+            <rect
+              x={-islandEdge - 1}
+              y={-islandEdge - 1}
+              width={islandEdge * 2 + 2}
+              height={islandEdge * 2 + 2}
+              fill="#d8c79c"
+            />
+            <rect
+              x={-islandEdge + 1}
+              y={-islandEdge + 1}
+              width={islandEdge * 2 - 2}
+              height={islandEdge * 2 - 2}
+              fill="#1a3541"
+            />
             {[-15, 0, 15].map((p) => (
               <path
                 key={p}
-                d={`M ${p} -36 V36 M-36 ${p} H36`}
+                d={`M ${p} ${-ringRoad - 3} V${ringRoad + 3} M${-ringRoad - 3} ${p} H${ringRoad + 3}`}
                 stroke="#3d5d68"
                 strokeWidth={p === 0 ? 6 : 3.5}
+              />
+            ))}
+            <rect
+              x={-ringRoad}
+              y={-ringRoad}
+              width={ringRoad * 2}
+              height={ringRoad * 2}
+              fill="none"
+              stroke="#3d5d68"
+              strokeWidth="6"
+            />
+            {cityProps.map((prop) => (
+              <rect
+                key={prop.id}
+                x={prop.x - prop.width / 2}
+                y={prop.z - prop.depth / 2}
+                width={prop.width}
+                height={prop.depth}
+                rx=".6"
+                fill="#f4f1e8"
+                opacity=".55"
               />
             ))}
             {cityBuildings.map((building) => (

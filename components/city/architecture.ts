@@ -26,6 +26,21 @@ export function buildDistrict(parent: THREE.Group, kit: SceneKit) {
     kit.box(root, [w + 0.5, 0.25, d + 0.5], [0, 0.32, 0], "#c8c9b5");
     kit.box(root, [1.7, 0.22, 1.8], [0, 0.5, d / 2 + 0.55], "#d6d3bc");
     const landmark = createLandmark(kit, root, building);
+    // A consistent, human-scale entrance makes every address discoverable on foot.
+    const entrance = new THREE.Group();
+    entrance.position.z = d / 2 + 0.18;
+    entrance.userData = { buildingId: building.id, floor: 0 };
+    root.add(entrance);
+    kit.box(entrance, [1.25, 1.95, 0.12], [0, 1.32, 0], "#16343e");
+    for (const x of [-0.68, 0.68])
+      kit.box(entrance, [0.1, 2.1, 0.18], [x, 1.35, 0.06], building.color);
+    kit.box(entrance, [1.75, 0.12, 0.85], [0, 2.45, 0.27], building.color);
+    kit.box(entrance, [0.035, 0.48, 0.05], [0.37, 1.25, 0.1], "#d9bb77");
+    kit.box(entrance, [0.55, 0.06, 0.12], [0, 2.34, 0.25], "#e7d8b1", true);
+    for (const x of [-1.1, 1.1]) {
+      kit.box(entrance, [0.42, 0.4, 0.42], [x, 0.55, 0.25], "#9caa98");
+      kit.sphere(entrance, 0.28, [x, 0.92, 0.25], "#527b62");
+    }
     glasses.push(landmark.glass);
     const roof = 0.5 + building.floors.length * floorHeight;
     const name = kit.label(root, building.name, [0, roof + 4.3, 0], building.color, 8);

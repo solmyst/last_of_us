@@ -100,8 +100,6 @@ export function createCity(canvas: HTMLCanvasElement, options: Options) {
   const city = new THREE.Group();
   scene.add(city);
   const island = buildIsland(city, scene, kit);
-  kit.cylinder(city, 5.2, 0.13, [0, 0.13, 5], "#83a59a", 48);
-  kit.ring(city, 4.6, [0, 0.21, 5], "#bad7b7");
   const district = buildDistrict(city, kit);
   for (const x of [-30, -15, 0, 15, 30])
     for (const z of [-30, 30]) {
@@ -161,9 +159,7 @@ export function createCity(canvas: HTMLCanvasElement, options: Options) {
   scene.add(checkpoint);
   const citizenRing = kit.ring(player, 0.6, [0, 0.04, 0], "#dcecc7");
   let position: CityPoint = { x: 0, z: 7 };
-  // The central plaza disc is raised; everywhere else is street level.
-  const groundY = (point: CityPoint) =>
-    Math.hypot(point.x, point.z - 5) < 5.2 ? 0.2 : 0.1;
+  const groundY = 0.1;
   const velocity = new THREE.Vector2();
   // Building volumes the street camera must not pass through.
   const blockers = cityBuildings.map(
@@ -200,7 +196,7 @@ export function createCity(canvas: HTMLCanvasElement, options: Options) {
     jumpSpeed = 0,
     sprinting = false,
     lastDrag = -Infinity;
-  player.position.set(position.x, groundY(position), position.z);
+  player.position.set(position.x, groundY, position.z);
   const traffic = createTraffic(city, kit);
   const starsGeometry = kit.track(new THREE.BufferGeometry());
   const starsArray = new Float32Array(160 * 3);
@@ -346,7 +342,7 @@ export function createCity(canvas: HTMLCanvasElement, options: Options) {
     parkHero();
     if (active && room)
       position = { x: active.x, z: active.z + active.depth / 2 + 1.2 };
-    player.position.set(position.x, groundY(position), position.z);
+    player.position.set(position.x, groundY, position.z);
     clearRoom();
     active = null;
     mode = "overview";
@@ -366,7 +362,7 @@ export function createCity(canvas: HTMLCanvasElement, options: Options) {
     clearRoom();
     active = null;
     mode = "street";
-    player.position.set(position.x, groundY(position), position.z);
+    player.position.set(position.x, groundY, position.z);
     controls.minDistance = 5;
     controls.maxDistance = 32;
     setFlight(
@@ -388,7 +384,7 @@ export function createCity(canvas: HTMLCanvasElement, options: Options) {
     clearRoom();
     active = building;
     position = { x: building.x, z: building.z + building.depth / 2 + 1.2 };
-    player.position.set(position.x, groundY(position), position.z);
+    player.position.set(position.x, groundY, position.z);
     mode = "building";
     district.blocks.get(id)!.beacon.visible = true;
     district.blocks.forEach((block, key) => { block.name.visible = key === id; });
@@ -602,7 +598,7 @@ export function createCity(canvas: HTMLCanvasElement, options: Options) {
     }
     player.position.set(
       position.x,
-      (room ? room.floorY + 0.18 : groundY(position)) + jumpY,
+      (room ? room.floorY + 0.18 : groundY) + jumpY,
       position.z,
     );
     const fov = preference.matches

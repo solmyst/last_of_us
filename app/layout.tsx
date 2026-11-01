@@ -2,10 +2,8 @@ import type { Metadata } from "next";
 import { Inter, JetBrains_Mono } from "next/font/google";
 
 import "./globals.css";
-import Cursor from "@/components/cursor";
 import AmbientBackground from "@/components/ambient-background";
 import { ThemeProvider } from "@/components/theme-provider";
-import LoadingScreen from "@/components/loading-screen";
 
 const inter = Inter({ 
   subsets: ["latin"], 
@@ -31,14 +29,14 @@ const fragmentMono = {
 
 export const metadata: Metadata = {
   metadataBase: new URL('https://anush.tech'),
-  title: "Anush Gupta — Product Manager & Full-Stack Builder",
-  description: "Product manager with four Park+ internships and an engineering background. User research, funnel optimization, and AI products built end to end.",
+  title: "Anush Gupta — Buildverse City",
+  description: "Explore Anush Gupta’s 3D portfolio city: project buildings, engineering floors, product decisions, and experience at Park+.",
   alternates: {
     canonical: 'https://anush.tech',
   },
   openGraph: {
-    title: "Anush Gupta — Product Manager & Full-Stack Builder",
-    description: "Product manager with four Park+ internships and an engineering background. User research, funnel optimization, and AI products built end to end.",
+    title: "Anush Gupta — Buildverse City",
+    description: "Explore Anush Gupta’s 3D portfolio city: project buildings, engineering floors, product decisions, and experience at Park+.",
     url: "https://anush.tech",
     siteName: "Anush Gupta Portfolio",
     locale: "en_US",
@@ -46,8 +44,8 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: "summary",
-    title: "Anush Gupta — Product Manager & Full-Stack Builder",
-    description: "Product manager with four Park+ internships and an engineering background. User research, funnel optimization, and AI products built end to end.",
+    title: "Anush Gupta — Buildverse City",
+    description: "Explore Anush Gupta’s 3D portfolio city: project buildings, engineering floors, product decisions, and experience at Park+.",
   },
 };
 
@@ -57,15 +55,14 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" className="scroll-smooth">
+    <html lang="en" className="scroll-smooth" suppressHydrationWarning>
       <body
         className={`${inter.variable} ${jetbrainsMono.variable} ${fragmentMono.variable} antialiased text-text-primary bg-bg-base overflow-x-hidden transition-colors duration-300`}
       >
         <ThemeProvider attribute="class" defaultTheme="dark" enableSystem={false}>
-          <LoadingScreen />
+          <a href="#main-content" className="skip-link">Skip to content</a>
           <AmbientBackground />
           {children}
-          <Cursor />
         </ThemeProvider>
       </body>
     </html>

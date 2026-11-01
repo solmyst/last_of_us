@@ -40,6 +40,9 @@ jobs:
       - name: Run TypeScript type check
         run: npm run type-check
 
+      - name: Test city navigation, content, and architecture
+        run: npm test
+
   # ─── BUILD ──────────────────────────────────────────────────────────────────
   build:
     name: Build Next.js Static Export

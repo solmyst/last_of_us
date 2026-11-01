@@ -6,6 +6,7 @@ import {
 } from "@/lib/city-layout";
 import { floorContent } from "@/lib/city-content";
 import { createSceneKit, type SceneKit } from "./scene-kit";
+import { createLandmark } from "./landmarks";
 export type BuiltBlock = {
   root: THREE.Group;
   floors: THREE.Group[];
@@ -14,149 +15,31 @@ export type BuiltBlock = {
 };
 export function buildDistrict(parent: THREE.Group, kit: SceneKit) {
   const blocks = new Map<string, BuiltBlock>();
-  const windowTransforms: THREE.Matrix4[] = [];
-  const windowDummy = new THREE.Object3D();
+  const glasses: THREE.MeshStandardMaterial[] = [];
   for (const building of cityBuildings) {
     const root = new THREE.Group();
     root.position.set(building.x, 0, building.z);
     root.userData.buildingId = building.id;
     parent.add(root);
-    const w = building.width,
-      d = building.depth;
-    kit.box(root, [w + 2, 0.2, d + 2], [0, 0.1, 0], "#607b7a");
-    kit.box(root, [w + 0.5, 0.25, d + 0.5], [0, 0.32, 0], "#b3c1b8");
+    const w = building.width, d = building.depth;
+    kit.box(root, [w + 2, 0.2, d + 2], [0, 0.1, 0], "#738b82");
+    kit.box(root, [w + 0.5, 0.25, d + 0.5], [0, 0.32, 0], "#c8c9b5");
     kit.box(root, [1.7, 0.22, 1.8], [0, 0.5, d / 2 + 0.55], "#d6d3bc");
-    const floors: THREE.Group[] = [];
-    building.floors.forEach((_, floor) => {
-      const level = new THREE.Group();
-      level.position.y = 0.5 + floor * floorHeight;
-      level.userData = { buildingId: building.id, floor };
-      root.add(level);
-      floors.push(level);
-      const body =
-        building.style === "tower"
-          ? kit.cylinder(level, w * 0.46, 2.9, [0, 1.45, 0], "#243f50", 8)
-          : kit.box(level, [w, 2.9, d], [0, 1.45, 0], "#294653");
-      body.userData = { buildingId: building.id, floor };
-      kit.box(level, [w + 0.22, 0.22, d + 0.22], [0, 0.1, 0], building.color);
-      kit.box(level, [w + 0.22, 0.18, d + 0.22], [0, 3.04, 0], "#617c80");
-      for (const x of [-w / 2 + 0.12, w / 2 - 0.12])
-        for (const z of [-d / 2 + 0.12, d / 2 - 0.12])
-          kit.box(level, [0.24, 2.85, 0.24], [x, 1.5, z], building.color);
-      // Windows share one instanced draw call for the whole city.
-      for (let i = -1; i <= 1; i++)
-        for (const side of [-1, 1]) {
-          windowDummy.position.set(
-            building.x + i * w * 0.26,
-            0.5 + floor * floorHeight + 1.65,
-            building.z + side * (d / 2 + 0.035),
-          );
-          windowDummy.rotation.set(0, 0, 0);
-          windowDummy.scale.set(w * 0.2, 1.5, 0.045);
-          windowDummy.updateMatrix();
-          windowTransforms.push(windowDummy.matrix.clone());
-          windowDummy.position.set(
-            building.x + side * (w / 2 + 0.035),
-            0.5 + floor * floorHeight + 1.65,
-            building.z + i * d * 0.26,
-          );
-          windowDummy.rotation.y = Math.PI / 2;
-          windowDummy.updateMatrix();
-          windowTransforms.push(windowDummy.matrix.clone());
-        }
-      const floorNumber = kit.label(
-        level,
-        `F${String(floor + 1).padStart(2, "0")}`,
-        [w / 2 + 0.42, 1.5, d / 2 + 0.42],
-        building.color,
-        1.35,
-      );
-      floorNumber.userData = { buildingId: building.id, floor };
-    });
+    const landmark = createLandmark(kit, root, building);
+    glasses.push(landmark.glass);
     const roof = 0.5 + building.floors.length * floorHeight;
-    kit.box(root, [w + 0.5, 0.28, d + 0.5], [0, roof, 0], building.color);
-    if (building.style === "tower") {
-      kit.cylinder(root, 0.1, 3, [0, roof + 1.5, 0], "#d6c9ac");
-      const dish = new THREE.Mesh(
-        kit.track(
-          new THREE.SphereGeometry(
-            0.95,
-            20,
-            12,
-            0,
-            Math.PI * 2,
-            0,
-            Math.PI / 2,
-          ),
-        ),
-        kit.material(building.color),
-      );
-      dish.position.set(0, roof + 2, 0);
-      dish.rotation.z = 0.6;
-      root.add(dish);
-    } else if (building.style === "observatory") {
-      const dome = new THREE.Mesh(
-        kit.track(
-          new THREE.SphereGeometry(2.7, 24, 12, 0, Math.PI * 2, 0, Math.PI / 2),
-        ),
-        kit.material("#9eb7c9"),
-      );
-      dome.position.y = roof + 0.1;
-      root.add(dome);
-      const telescope = kit.cylinder(
-        root,
-        0.32,
-        3,
-        [1, roof + 1.8, 0],
-        building.color,
-      );
-      telescope.rotation.z = -0.7;
-    } else if (building.style === "warehouse") {
-      for (let i = 0; i < 3; i++)
-        kit.box(
-          root,
-          [w * 0.22, 0.8, d * 0.65],
-          [(i - 1) * w * 0.28, roof + 0.5, 0],
-          i % 2 ? "#829eaa" : building.color,
-        );
-    } else {
-      kit.box(root, [w * 0.6, 0.16, d * 0.45], [0, roof + 0.22, 0], "#1a4b66");
-      for (let i = 0; i < 4; i++)
-        kit.box(
-          root,
-          [0.035, 0.025, d * 0.45],
-          [(i - 1.5) * w * 0.14, roof + 0.32, 0],
-          "#7aa5a8",
-        );
-    }
-    const name = kit.label(
-      root,
-      building.name,
-      [0, roof + 3.9, 0],
-      building.color,
-      9,
-    );
+    const name = kit.label(root, building.name, [0, roof + 4.3, 0], building.color, 8);
     name.userData = { buildingId: building.id, floor: 0 };
-    const beacon = kit.ring(
-      root,
-      Math.max(w, d) * 0.72,
-      [0, 0.25, 0],
-      building.color,
-    );
+    const beacon = kit.ring(root, Math.max(w, d) * 0.72, [0, 0.25, 0], building.color);
     beacon.visible = false;
-    blocks.set(building.id, { root, floors, beacon, name });
+    blocks.set(building.id, { root, floors: landmark.floors, beacon, name });
   }
-  const windows = new THREE.InstancedMesh(
-    kit.track(new THREE.BoxGeometry(1, 1, 1)),
-    kit.material("#9bd3cb", true),
-    windowTransforms.length,
-  );
-  windowTransforms.forEach((matrix, index) =>
-    windows.setMatrixAt(index, matrix),
-  );
-  windows.instanceMatrix.needsUpdate = true;
-  parent.add(windows);
-  return { blocks, windows };
+  return {
+    blocks,
+    setNight(night: boolean) {
+      for (const glass of glasses) glass.emissiveIntensity = night ? 0.55 : 0.08;
+    },
+  };
 }
 export function createFloorRoom(building: CityBuilding, floor: number) {
   const kit = createSceneKit();

@@ -1,13 +1,36 @@
 import * as THREE from "three";
+import { RoundedBoxGeometry } from "three/examples/jsm/geometries/RoundedBoxGeometry.js";
 export function createSceneKit() {
   const resources: Array<{ dispose: () => void }> = [];
   const track = <T extends { dispose: () => void }>(resource: T): T => {
     resources.push(resource);
     return resource;
   };
-  const cube = track(new THREE.BoxGeometry(1, 1, 1));
+  const cube = track(new RoundedBoxGeometry(1, 1, 1, 2, 0.045));
   const mats = new Map<string, THREE.MeshStandardMaterial>();
   const labels = new Map<string, THREE.Texture>();
+  const finishes = new Map<string, THREE.MeshStandardMaterial>();
+  // Deterministic micro-grain gives stone a surface without downloading textures.
+  const grain = new Uint8Array(128 * 128 * 4);
+  for (let i = 0; i < 128 * 128; i++) {
+    const value = 170 + ((i * 73 + (i >> 7) * 19) % 70);
+    grain.set([value, value, value, 255], i * 4);
+  }
+  const roughness = track(new THREE.DataTexture(grain, 128, 128));
+  roughness.wrapS = roughness.wrapT = THREE.RepeatWrapping;
+  roughness.magFilter = THREE.LinearFilter;
+  roughness.needsUpdate = true;
+  function finish(color: string, kind: "stone" | "metal" | "glass" | "wood" = "stone") {
+    const key = kind + color;
+    if (!finishes.has(key)) finishes.set(key, track(new THREE.MeshStandardMaterial({
+      color,
+      roughness: kind === "glass" ? 0.17 : kind === "metal" ? 0.29 : 0.78,
+      metalness: kind === "glass" ? 0.58 : kind === "metal" ? 0.75 : 0.05,
+      ...(kind === "stone" || kind === "wood" ? { roughnessMap: roughness } : {}),
+      ...(kind === "glass" ? { emissive: color, emissiveIntensity: 0.12 } : {}),
+    })));
+    return finishes.get(key)!;
+  }
   function material(color: string, emissive = false) {
     const key = color + emissive;
     if (!mats.has(key))
@@ -45,7 +68,7 @@ export function createSceneKit() {
     height: number,
     position: [number, number, number],
     color: string,
-    vertices = 16,
+    vertices = 48,
     top = radius,
   ) {
     const geometry = track(
@@ -65,7 +88,7 @@ export function createSceneKit() {
     color: string,
   ) {
     const mesh = new THREE.Mesh(
-      track(new THREE.SphereGeometry(radius, 16, 10)),
+      track(new THREE.SphereGeometry(radius, 32, 20)),
       material(color),
     );
     mesh.position.set(...position);
@@ -94,6 +117,7 @@ export function createSceneKit() {
     context.fillText(text, 384, 66, 700);
     const texture = track(new THREE.CanvasTexture(canvas));
     texture.colorSpace = THREE.SRGBColorSpace;
+    texture.anisotropy = 8;
     labels.set(key, texture);
     return texture;
   }
@@ -185,6 +209,7 @@ export function createSceneKit() {
     );
     const texture = track(new THREE.CanvasTexture(canvas));
     texture.colorSpace = THREE.SRGBColorSpace;
+    texture.anisotropy = 8;
     return texture;
   }
   return {
@@ -195,6 +220,7 @@ export function createSceneKit() {
     label,
     ring,
     material,
+    finish,
     screenTexture,
     dispose() {
       resources.forEach((resource) => resource.dispose());

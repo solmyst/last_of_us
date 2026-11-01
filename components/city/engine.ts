@@ -1,5 +1,6 @@
 import * as THREE from "three";
 import { OrbitControls } from "three/examples/jsm/controls/OrbitControls.js";
+import { RoomEnvironment } from "three/examples/jsm/environments/RoomEnvironment.js";
 import {
   cityBuildings,
   moveCitizen,
@@ -10,6 +11,7 @@ import {
 } from "@/lib/city-layout";
 import { createSceneKit } from "./scene-kit";
 import { buildDistrict, createFloorRoom } from "./architecture";
+import { buildGardens } from "./gardens";
 export type CitySnapshot = {
   mode: "overview" | "street" | "room" | "building";
   position: CityPoint;
@@ -28,34 +30,44 @@ export function createCity(canvas: HTMLCanvasElement, options: Options) {
   const renderer = new THREE.WebGLRenderer({
     canvas,
     antialias: true,
-    powerPreference: "low-power",
+    powerPreference: "high-performance",
   });
   renderer.setPixelRatio(
-    Math.min(devicePixelRatio, innerWidth < 768 ? 1.15 : 1.5),
+    Math.min(devicePixelRatio, innerWidth < 768 ? 1.75 : 2),
   );
   renderer.toneMapping = THREE.ACESFilmicToneMapping;
-  renderer.toneMappingExposure = 1.15;
+  renderer.toneMappingExposure = 1.05;
   renderer.shadowMap.enabled = innerWidth >= 900;
   renderer.shadowMap.type = THREE.PCFShadowMap;
   const scene = new THREE.Scene();
+  const roomEnvironment = new RoomEnvironment();
+  const pmrem = new THREE.PMREMGenerator(renderer);
+  const environment = pmrem.fromScene(roomEnvironment, 0.04);
+  scene.environment = environment.texture;
+  scene.environmentIntensity = 0.65;
+  roomEnvironment.dispose();
+  pmrem.dispose();
   scene.background = new THREE.Color("#b9ced0");
-  scene.fog = new THREE.Fog("#b9ced0", 95, 200);
-  const camera = new THREE.PerspectiveCamera(48, 1, 0.1, 240);
+  scene.fog = new THREE.Fog("#b9ced0", 200, 500);
+  const camera = new THREE.PerspectiveCamera(48, 1, 0.1, 600);
   camera.position.set(60, 52, 68);
   const controls = new OrbitControls(camera, canvas);
   controls.target.set(0, 5, 0);
-  controls.enableDamping = false;
+  controls.enableDamping = true;
+  controls.dampingFactor = 0.075;
+  controls.rotateSpeed = 0.65;
+  controls.zoomSpeed = 0.7;
   controls.maxPolarAngle = Math.PI * 0.47;
   controls.minPolarAngle = 0.18;
   controls.minDistance = 8;
-  controls.maxDistance = 135;
+  controls.maxDistance = 330;
   controls.update();
   const ambient = new THREE.HemisphereLight(0xe7f0ef, 0x416373, 2.7);
   scene.add(ambient);
   const sun = new THREE.DirectionalLight(0xffe3bf, 3.5);
   sun.position.set(-25, 60, 25);
   sun.castShadow = true;
-  sun.shadow.mapSize.set(1024, 1024);
+  sun.shadow.mapSize.set(2048, 2048);
   Object.assign(sun.shadow.camera, {
     left: -40,
     right: 40,
@@ -65,6 +77,8 @@ export function createCity(canvas: HTMLCanvasElement, options: Options) {
     far: 140,
   });
   sun.shadow.bias = -0.0005;
+  sun.shadow.normalBias = 0.035;
+  sun.shadow.radius = 3;
   scene.add(sun);
   const kit = createSceneKit();
   const city = new THREE.Group();
@@ -105,10 +119,11 @@ export function createCity(canvas: HTMLCanvasElement, options: Options) {
   }
   const park = kit.box(city, [10, 0.13, 10], [23, 0.16, 23], "#719b85");
   park.receiveShadow = true;
+  buildGardens(city, kit);
   for (const offset of [-2, 2]) {
-    kit.box(city, [2, 0.18, 0.7], [23 + offset, 0.6, 23], "#b8a380");
+    kit.box(city, [2, 0.18, 0.7], [23 + offset, 0.6, 28], "#b8a380");
     for (const x of [-0.7, 0.7])
-      kit.box(city, [0.1, 0.5, 0.5], [23 + offset + x, 0.3, 23], "#3d5a5e");
+      kit.box(city, [0.1, 0.5, 0.5], [23 + offset + x, 0.3, 28], "#3d5a5e");
   }
   const player = new THREE.Group();
   scene.add(player);
@@ -205,6 +220,8 @@ export function createCity(canvas: HTMLCanvasElement, options: Options) {
     });
   }
   function setFlight(point: THREE.Vector3, target: THREE.Vector3) {
+    options.onHover("");
+    lastHover = "";
     controls.enabled = false;
     flight = { position: point, target };
     if (paused || preference.matches) {
@@ -225,8 +242,8 @@ export function createCity(canvas: HTMLCanvasElement, options: Options) {
     district.blocks.forEach((block) => {
       block.root.visible = true;
       block.beacon.visible = false;
+      block.name.visible = true;
     });
-    district.windows.visible = true;
   }
   function overview() {
     if (active && room)
@@ -236,8 +253,8 @@ export function createCity(canvas: HTMLCanvasElement, options: Options) {
     active = null;
     mode = "overview";
     controls.minDistance = 15;
-    controls.maxDistance = 135;
-    setFlight(new THREE.Vector3(60, 52, 68), new THREE.Vector3(0, 5, 0));
+    controls.maxDistance = 330;
+    setFlight(overviewPosition(), new THREE.Vector3(0, 5, 0));
     update();
   }
   function walk() {
@@ -264,11 +281,13 @@ export function createCity(canvas: HTMLCanvasElement, options: Options) {
     player.position.set(position.x, 0.22, position.z);
     mode = "building";
     district.blocks.get(id)!.beacon.visible = true;
+    district.blocks.forEach((block, key) => { block.name.visible = key === id; });
     const height = building.floors.length * floorHeight;
+    const distance = Math.max(24, height * 1.8);
     controls.minDistance = 8;
     controls.maxDistance = 80;
     setFlight(
-      new THREE.Vector3(building.x + 15, height * 0.65 + 9, building.z + 19),
+      new THREE.Vector3(building.x + distance * 0.66, height * 0.45 + distance * 0.45, building.z + distance * 0.85),
       new THREE.Vector3(building.x, height * 0.45, building.z),
     );
     update();
@@ -280,7 +299,7 @@ export function createCity(canvas: HTMLCanvasElement, options: Options) {
     active = building;
     mode = "room";
     district.blocks.get(id)!.root.visible = false;
-    district.windows.visible = false;
+    district.blocks.forEach((block) => { block.name.visible = false; });
     room = createFloorRoom(building, floor);
     scene.add(room.root);
     position = { x: building.x, z: building.z + 1.8 };
@@ -309,12 +328,13 @@ export function createCity(canvas: HTMLCanvasElement, options: Options) {
     renderer.render(scene, camera);
   }
   function frame(time: number) {
-    if (time - lastTime < 1000 / 30) return;
+    if (time - lastTime < 1000 / 60 - 1) return;
     const delta = lastTime ? Math.min((time - lastTime) / 1000, 0.1) : 0;
     lastTime = time;
     if (flight) {
-      camera.position.lerp(flight.position, 0.12);
-      controls.target.lerp(flight.target, 0.12);
+      const smoothing = 1 - Math.exp(-7 * delta);
+      camera.position.lerp(flight.position, smoothing);
+      controls.target.lerp(flight.target, smoothing);
       if (
         camera.position.distanceTo(flight.position) < 0.05 &&
         controls.target.distanceTo(flight.target) < 0.05
@@ -402,6 +422,7 @@ export function createCity(canvas: HTMLCanvasElement, options: Options) {
       });
       citizenRing.rotation.z = elapsed * 0.2;
     }
+    if (!flight && controls.enabled) controls.update();
     draw();
     if (time - lastEmit > 180) {
       lastEmit = time;
@@ -416,13 +437,27 @@ export function createCity(canvas: HTMLCanvasElement, options: Options) {
     if (visible && !document.hidden && !paused)
       renderer.setAnimationLoop(frame);
   }
-  controls.addEventListener("change", draw);
+  function drawOnControlChange() {
+    if (paused) draw();
+  }
+  controls.addEventListener("change", drawOnControlChange);
+  function overviewPosition() {
+    return new THREE.Vector3(60, 52, 68).multiplyScalar(Math.max(1, 1.25 / camera.aspect));
+  }
   const resize = new ResizeObserver(() => {
     const rect = canvas.getBoundingClientRect();
     if (!rect.width || !rect.height) return;
     camera.aspect = rect.width / rect.height;
     camera.updateProjectionMatrix();
     renderer.setSize(rect.width, rect.height, false);
+    if (mode === "overview") {
+      if (flight) flight.position.copy(overviewPosition());
+      else {
+        camera.position.copy(overviewPosition());
+        controls.target.set(0, 5, 0);
+        controls.update();
+      }
+    }
     draw();
   });
   resize.observe(canvas);
@@ -577,17 +612,19 @@ export function createCity(canvas: HTMLCanvasElement, options: Options) {
     },
     setNight(value: boolean) {
       scene.background = new THREE.Color(value ? "#081721" : "#b9ced0");
-      scene.fog = new THREE.Fog(value ? "#081721" : "#b9ced0", 95, 200);
+      scene.fog = new THREE.Fog(value ? "#081721" : "#b9ced0", 200, 500);
       ambient.intensity = value ? 1.1 : 2.7;
       sun.intensity = value ? 0.7 : 3.5;
       stars.visible = value;
+      scene.environmentIntensity = value ? 0.35 : 0.65;
+      district.setNight(value);
       draw();
     },
     dispose() {
       renderer.setAnimationLoop(null);
       resize.disconnect();
       intersection.disconnect();
-      controls.removeEventListener("change", draw);
+      controls.removeEventListener("change", drawOnControlChange);
       controls.dispose();
       canvas.removeEventListener("pointerdown", pointerDown);
       canvas.removeEventListener("pointermove", pointerMove);
@@ -600,6 +637,7 @@ export function createCity(canvas: HTMLCanvasElement, options: Options) {
       preference.removeEventListener("change", sync);
       room?.kit.dispose();
       kit.dispose();
+      environment.dispose();
       renderer.dispose();
     },
   };

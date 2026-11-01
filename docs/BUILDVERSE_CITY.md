@@ -14,8 +14,16 @@ The whole portfolio becomes one spatial experience. There is no scrolling landin
 
 ## Verification
 
-Seven automated tests cover project/building coverage, all 50 floors’ written content, movement speed bounds, collision/edge sliding, nearby entrances, and valid/invalid floor deep links. The production static export, ESLint, and TypeScript checks pass.
+Eight automated tests cover project/building coverage, all 50 floors’ written content, movement speed bounds, collision/edge sliding, nearby entrances, valid/invalid floor deep links, and finite/pickable architectural geometry at every address. These tests also run in CI. The production static export, ESLint, and TypeScript checks pass.
 
 Browser verification covers rendered city and furnished rooms, clicking the physical display, elevators (including the eighth skills floor), dossier content, back/forward routes, walking, E door entry, return to street, day/night, and native dialog focus wrapping. Responsive checks cover 320, 375, 768, 1024, and 1440 pixel widths. The production browser console is free of errors and warnings. The avatar uses footprint collision outdoors and bounded movement indoors; furniture is decorative rather than a physics simulation.
 
 Three.js reference: https://threejs.org/docs/pages/OrbitControls.html and https://threejs.org/docs/pages/Raycaster.html. No downloaded 3D models or copied portfolio assets.
+
+## Architecture and rendering
+
+Each address has its own massing: interlocked workshop volumes, curved-eave studios, ribbon tower, folded atelier, offset capsules, twin-pier headquarters, helical academy, aerodynamic garage, timber gateway, orbital observatory, dune terraces, pixel clusters, tiered library, and lotus terminal. The roofs are original generated meshes inspired by East Asian architectural forms. All 50 content floors retain their own picking identity after static facade meshes are batched by material.
+
+Rounded edges, smooth cylinders, procedural roughness, distinct stone/wood/metal/glass materials, and a locally generated environment map improve surface quality. Rendering targets 60 frames per second with time-based camera easing and damped orbit/zoom. Desktop pixel ratio is capped at 2 and mobile at 1.75; actual frame rate depends on the device. A pond, curved footbridge, bamboo, and blossom trees frame the district.
+
+Rendering references: https://threejs.org/docs/pages/WebGLRenderer.html and https://threejs.org/docs/pages/RoomEnvironment.html.

@@ -40,7 +40,7 @@ export default function BuildverseDialog({
   useEffect(() => {
     if (!project && dialog.current?.open) {
       dialog.current.close();
-      returnFocus.current?.focus();
+      returnFocus.current?.focus({ preventScroll: true });
     }
   }, [project]);
   const index = project ? buildOrder.indexOf(project.id) + 1 : 0;
@@ -50,6 +50,23 @@ export default function BuildverseDialog({
       ref={dialog}
       className="build-dialog"
       aria-labelledby="build-dialog-title"
+      onKeyDown={(event) => {
+        if (event.key !== "Tab") return;
+        const controls = Array.from(
+          event.currentTarget.querySelectorAll<HTMLElement>(
+            "button:not([disabled]), a[href], input:not([disabled]), [tabindex='0']",
+          ),
+        ).filter((element) => element.getClientRects().length > 0);
+        const first = controls[0];
+        const last = controls[controls.length - 1];
+        if (event.shiftKey && document.activeElement === first) {
+          event.preventDefault();
+          last?.focus();
+        } else if (!event.shiftKey && document.activeElement === last) {
+          event.preventDefault();
+          first?.focus();
+        }
+      }}
       onCancel={(event) => {
         event.preventDefault();
         onClose();

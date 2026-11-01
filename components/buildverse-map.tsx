@@ -1,7 +1,15 @@
 "use client";
 
 import { useEffect, useRef, useState, type CSSProperties } from "react";
-import { ArrowUpRight, Check, Compass, Pause, Play } from "lucide-react";
+import {
+  ArrowUpRight,
+  Check,
+  Compass,
+  Pause,
+  Play,
+  RotateCcw,
+  Scan,
+} from "lucide-react";
 import { landmarks } from "@/lib/buildverse";
 import type { createBuildverse } from "@/components/buildverse-world";
 
@@ -16,6 +24,7 @@ export default function BuildverseMap({ onSelect, visited, selected }: Props) {
   const engine = useRef<ReturnType<typeof createBuildverse>>();
   const selectRef = useRef(onSelect);
   selectRef.current = onSelect;
+  const [topView, setTopView] = useState(false);
   const [ready, setReady] = useState(false);
   const [paused, setPaused] = useState(false);
   const [reduced, setReduced] = useState(false);
@@ -31,7 +40,10 @@ export default function BuildverseMap({ onSelect, visited, selected }: Props) {
         if (disposed) return;
         try {
           engine.current = createBuildverse(canvas.current!, {
-            onSelect: (id) => selectRef.current(id),
+            onSelect: (id) => {
+              pinRefs.current.get(id)?.focus({ preventScroll: true });
+              selectRef.current(id);
+            },
             onUnavailable: () => {
               setFallback(true);
               setReady(false);
@@ -138,23 +150,52 @@ export default function BuildverseMap({ onSelect, visited, selected }: Props) {
           </span>
           places discovered
         </span>
-        <span className="map-hint">Select a landmark to step inside ↗</span>
-        {ready && !reduced && (
-          <button
-            type="button"
-            className="world-motion"
-            aria-label={
-              paused ? "Resume world animation" : "Pause world animation"
-            }
-            aria-pressed={paused}
-            onClick={() => {
-              const next = !paused;
-              setPaused(next);
-              engine.current?.setPaused(next);
-            }}
-          >
-            {paused ? <Play size={14} /> : <Pause size={14} />}
-          </button>
+        <span className="map-hint">Drag to turn · Select to explore</span>
+        {ready && (
+          <div className="world-view-controls">
+            <button
+              type="button"
+              className="world-motion"
+              aria-label={
+                topView
+                  ? "Switch to isometric view"
+                  : "Switch to bird’s-eye view"
+              }
+              aria-pressed={topView}
+              onClick={() => {
+                const next = !topView;
+                setTopView(next);
+                engine.current?.setView(next);
+              }}
+            >
+              <Scan size={14} />
+            </button>
+            <button
+              type="button"
+              className="world-motion"
+              aria-label="Reset world rotation"
+              onClick={() => engine.current?.resetView()}
+            >
+              <RotateCcw size={14} />
+            </button>
+            {!reduced && (
+              <button
+                type="button"
+                className="world-motion"
+                aria-label={
+                  paused ? "Resume world animation" : "Pause world animation"
+                }
+                aria-pressed={paused}
+                onClick={() => {
+                  const next = !paused;
+                  setPaused(next);
+                  engine.current?.setPaused(next);
+                }}
+              >
+                {paused ? <Play size={14} /> : <Pause size={14} />}
+              </button>
+            )}
+          </div>
         )}
         {reduced && <span className="map-version">STILL MODE</span>}
       </div>

@@ -24,3 +24,19 @@ A bespoke explorable product diorama, not a streaming-service clone. Use the int
 ## Scope
 
 Procedural local assets, existing Next.js/Three.js/Framer Motion dependencies, existing verified project content. No accounts, external analytics, sound autoplay, new provider integrations, or production deployment.
+
+## Implementation and verification notes
+
+- Built the diorama procedurally in Three.js: studio, voice antenna, container yard, resume workshop, sandbox, trees, and a small F1 silhouette. No external models or copied artwork.
+- Added drag-to-turn, a bird's-eye/isometric camera switch, rotation reset, pause, reduced-motion handling, and an interactive fallback map. Project labels remain ordinary accessible buttons, independent of WebGL hit testing.
+- Session discovery tracks opened project stories. Five map stops and all nine field-guide entries use the existing project records; the three-stop tour is InterviewAce → Relay Voice → krate.
+- Native modal: story/build/decisions views, visible tour controls, contained scrolling, Escape, focus return, and original source/live links.
+- Browser checks: tour sequence and completion; field-guide district counts (AI 4, Systems 2, Playground 3); no-results recovery to all 9; session progress after reload; keyboard opening/Escape focus restoration; five-stop discovery completion.
+- Responsive checks at 320/768/1024/1440 pixels found no horizontal overflow. The mobile view uses numbered map pins with a labelled project key.
+- Production export and TypeScript checks pass. The existing caniuse-lite data emits a maintenance notice during build; dependencies were not changed in this iteration.
+
+This is a focused creative implementation, not a guarantee that no other website shares any concept. The world is intentionally small and the professional portfolio is one click away. WebGL fallback and reduced-motion behavior are implemented; browser emulation of unavailable WebGL and the OS motion setting was not performed.
+
+Final interaction checks also covered selecting an actual 3D building (Resume Tailor), dragging the world without accidentally opening a story, the alternate camera view, rotation reset, and explicit backward/forward focus wrapping in the modal. The full professional story is inside the main landmark. No runtime console errors or warnings were observed in the final inspected preview.
+
+The final build also verifies that the world pause freezes the rendered viewport (matching screenshot hashes), and that closing a story opened through a 3D object returns focus to its corresponding labelled map pin.

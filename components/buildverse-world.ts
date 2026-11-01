@@ -318,6 +318,12 @@ export function createBuildverse(
     pointerX = 0,
     pointerY = 0,
     selected = "";
+  let rotation = -0.16;
+  let dragging = false;
+  let dragged = false;
+  let dragStartX = 0;
+  let dragStartRotation = rotation;
+  const cameraTarget = new THREE.Vector3(12, 12, 15);
   const preference = window.matchMedia("(prefers-reduced-motion: reduce)");
   const raycaster = new THREE.Raycaster();
   function projectPins() {
@@ -342,7 +348,8 @@ export function createBuildverse(
     if (time && lastTime) elapsed += Math.min((time - lastTime) / 1000, 0.1);
     lastTime = time;
     if (!paused && !preference.matches) {
-      world.rotation.y += (-0.16 + pointerX * 0.09 - world.rotation.y) * 0.04;
+      world.rotation.y +=
+        (rotation + pointerX * 0.09 - world.rotation.y) * 0.08;
       world.rotation.x += (pointerY * 0.025 - world.rotation.x) * 0.04;
       world.position.y = Math.sin(elapsed * 0.45) * 0.045;
       animated.forEach((object, i) => {
@@ -359,6 +366,8 @@ export function createBuildverse(
       );
       courier.position.y = 0.08;
     }
+    camera.position.lerp(cameraTarget, 0.12);
+    camera.lookAt(0, 0.3, 0);
     sceneStops.forEach((stop, id) => {
       const target = id === selected ? 1.16 : 1;
       stop.halo.scale.setScalar(target);
@@ -396,14 +405,34 @@ export function createBuildverse(
   observer.observe(canvas);
   function pointer(event: PointerEvent) {
     const rect = canvas.getBoundingClientRect();
+    if (dragging) {
+      const delta = event.clientX - dragStartX;
+      if (Math.abs(delta) > 4) dragged = true;
+      rotation = dragStartRotation + delta * 0.008;
+      if (paused || preference.matches) {
+        world.rotation.y = rotation;
+        render();
+      }
+    }
     pointerX = (event.clientX - rect.left) / rect.width - 0.5;
     pointerY = (event.clientY - rect.top) / rect.height - 0.5;
+  }
+  function pointerDown(event: PointerEvent) {
+    dragging = true;
+    dragged = false;
+    dragStartX = event.clientX;
+    dragStartRotation = rotation;
+    canvas.setPointerCapture(event.pointerId);
+  }
+  function pointerUp() {
+    dragging = false;
   }
   function resetPointer() {
     pointerX = 0;
     pointerY = 0;
   }
   function select(event: MouseEvent) {
+    if (dragged) return;
     const rect = canvas.getBoundingClientRect();
     raycaster.setFromCamera(
       new THREE.Vector2(
@@ -430,6 +459,10 @@ export function createBuildverse(
     renderer.setAnimationLoop(null);
     options.onUnavailable();
   }
+  canvas.addEventListener("pointerdown", pointerDown);
+  canvas.addEventListener("pointerup", pointerUp);
+  canvas.addEventListener("pointercancel", pointerUp);
+  canvas.addEventListener("lostpointercapture", pointerUp);
   canvas.addEventListener("pointermove", pointer);
   canvas.addEventListener("pointerleave", resetPointer);
   canvas.addEventListener("click", select);
@@ -441,6 +474,20 @@ export function createBuildverse(
       paused = value;
       sync();
     },
+    setView(top: boolean) {
+      cameraTarget.set(
+        ...((top ? [0, 22, 8] : [12, 12, 15]) as [number, number, number]),
+      );
+      if (paused || preference.matches) camera.position.copy(cameraTarget);
+      if (!lost) render();
+    },
+    resetView() {
+      rotation = -0.16;
+      pointerX = 0;
+      pointerY = 0;
+      world.rotation.y = rotation;
+      if (!lost) render();
+    },
     setSelected(id: string) {
       selected = id;
       if (!lost) render();
@@ -449,6 +496,10 @@ export function createBuildverse(
       renderer.setAnimationLoop(null);
       resize.disconnect();
       observer.disconnect();
+      canvas.removeEventListener("pointerdown", pointerDown);
+      canvas.removeEventListener("pointerup", pointerUp);
+      canvas.removeEventListener("pointercancel", pointerUp);
+      canvas.removeEventListener("lostpointercapture", pointerUp);
       canvas.removeEventListener("pointermove", pointer);
       canvas.removeEventListener("pointerleave", resetPointer);
       canvas.removeEventListener("click", select);

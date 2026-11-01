@@ -1389,3 +1389,31 @@
     padding: 0.5rem;
   }
 }
+.world-canvas {
+  touch-action: pan-y;
+  cursor: grab;
+}
+.world-canvas:active {
+  cursor: grabbing;
+}
+.world-view-controls {
+  display: flex;
+  gap: 0.375rem;
+}
+@media (min-width: 1101px) and (max-width: 1390px) {
+  .map-hint {
+    display: none;
+  }
+}
+@media (max-width: 500px) {
+  .verse-asterisk {
+    position: absolute;
+    right: 0.4rem;
+    top: 0;
+    margin: 0;
+    font-size: 0.4em;
+  }
+}
+.tour-dialog-footer button {
+  white-space: nowrap;
+}

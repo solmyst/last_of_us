@@ -6,7 +6,14 @@ The whole portfolio becomes one spatial experience. There is no scrolling landin
 
 - Full-viewport 3D city with perspective camera, zoom/orbit, streets, an avatar, and multi-storey buildings.
 - Click a facade floor or use the directory to visit it. Enter the floor for a furnished, cutaway 3D room. Select the room display to read its complete dossier.
-- WASD/arrow keys move the citizen, bounded by the district and blocked by building footprints; E enters a nearby doorway. A touch direction pad provides the same movement.
+- WASD/arrow keys move the hero relative to the camera, bounded by the district and blocked by building footprints. Shift sprints, Space jumps, E enters a nearby doorway. A touch direction pad provides the same movement.
+- In the street the camera chases the hero, swings behind it while walking unless the visitor is dragging, and pulls in front of any building between it and the hero.
+- A title screen (Enter or Play) opens over a slowly orbiting city. A Hire Level of five stars fills as addresses are discovered (1, 3, 6, 9, 12) with a level-up banner.
+- A parked coupe near the plaza: F gets in or out (or the on-screen prompt). W/S throttle and brake/reverse, A/D steer, Shift boosts, Space handbrakes. Arcade physics (`driveCar`) scrape along walls and bounce off head-on hits; the camera chases the car and widens with speed. Pedestrians leap clear of a fast car.
+- Missions (`cityMissions`) chain real addresses: a glowing checkpoint column marks the next door, a tracker shows the stop and distance, and arriving triggers Checkpoint / Mission passed banners.
+- The minimap is a circular radar centred on the visitor, rotated to the camera, with building blips, the parked car, and the mission waypoint clamped to the rim.
+- Night mode adds a bloom pass so lit windows, lamps, headlights and the checkpoint glow; bloom is skipped in daylight.
+- Pedestrians walk sidewalk lanes clear of every footprint. Near the hero they stop, turn, and speak a line drawn from real project taglines and proof stats.
 - The floor selector works as an elevator. City overview, exit, camera reset, day/night, animation pause, and minimap remain reachable.
 - Floor/dossier URLs are shareable hashes. Browser back/forward resolves the same destination. Unknown floors do not crash the city.
 - Readable HTML pages and HUD controls are allowed when entering a place, as requested. They are not a second 2D portfolio. A directory is also the keyboard and WebGL-unavailable navigation path.

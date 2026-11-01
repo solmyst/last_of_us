@@ -5,6 +5,7 @@ import {
   ArrowUpRight,
   BookOpen,
   Building2,
+  CarFront,
   ChevronDown,
   ChevronUp,
   Footprints,
@@ -14,12 +15,15 @@ import {
   Moon,
   Pause,
   Play,
+  Star,
   Sun,
   X,
 } from "lucide-react";
 import {
   cityBuildings,
+  cityMissions,
   cityRoute,
+  doorPoint,
   parseCityRoute,
   type CityRoute,
 } from "@/lib/city-layout";
@@ -34,8 +38,18 @@ const initialSnapshot: CitySnapshot = {
   position: { x: 0, z: 7 },
   nearby: null,
   heading: 0,
+  sprinting: false,
+  driving: false,
+  nearCar: false,
+  car: { x: -6, z: 1.5, heading: Math.PI / 2, speed: 0 },
 };
 const visitKey = "anush-buildverse-city-addresses";
+// Addresses discovered to reach each Hire Level star.
+const hireSteps = [1, 3, 6, 9, 12];
+const buildingName = (id: string) =>
+  cityBuildings.find((building) => building.id === id)?.name ?? id;
+const hireLevel = (count: number) =>
+  hireSteps.filter((step) => count >= step).length;
 export default function CityApp() {
   const canvas = useRef<HTMLCanvasElement>(null);
   const engine = useRef<ReturnType<typeof createCity>>();
@@ -43,10 +57,12 @@ export default function CityApp() {
     enter: (id: string, floor: number) => void;
     read: () => void;
     exit: () => void;
+    play: () => void;
   }>({
     enter: () => {},
     read: () => {},
     exit: () => {},
+    play: () => {},
   });
   const routeRef = useRef<CityRoute | null>(null);
   const [route, setRoute] = useState<CityRoute | null>(null);
@@ -62,6 +78,18 @@ export default function CityApp() {
   const [travel, setTravel] = useState<"overview" | "walk">("overview");
   const [enterVersion, setEnterVersion] = useState(0);
   const [visited, setVisited] = useState<string[]>([]);
+  // One big GTA-style announcement at a time: level ups, checkpoints, missions.
+  const [banner, setBanner] = useState<{
+    id: number;
+    title: string;
+    sub: string;
+    stars?: number;
+  } | null>(null);
+  const announce = (title: string, sub: string, stars?: number) =>
+    setBanner({ id: Date.now(), title, sub, stars });
+  const [mission, setMission] = useState<{ index: number; stop: number } | null>(
+    null,
+  );
   const active =
     cityBuildings.find((building) => building.id === route?.id) ?? null;
   const floor = route?.floor ?? 0;
@@ -82,6 +110,19 @@ export default function CityApp() {
     setExpanded(window.innerWidth > 650);
     updateRoute({ id, floor: level, reading: reading || unavailable });
     setEnterVersion((current) => current + 1);
+    if (
+      !visited.includes(id) &&
+      hireLevel(visited.length + 1) > hireLevel(visited.length)
+    ) {
+      const level = hireLevel(visited.length + 1);
+      announce(
+        level === 5 ? "Hire level maxed" : "Hire level up",
+        level === 5
+          ? "The Contact Terminal is waiting for you."
+          : `${hireSteps[level] - visited.length - 1} more addresses to the next star`,
+        level,
+      );
+    }
     setVisited((current) => {
       const next = current.includes(id) ? current : [...current, id];
       try {
@@ -106,12 +147,21 @@ export default function CityApp() {
     engine.current?.overview();
   }
   function goWalking() {
+    if (!mission) {
+      setMission({ index: 0, stop: 0 });
+      announce(cityMissions[0].title, `Mission start · go to ${buildingName(cityMissions[0].stops[0])}`);
+    }
     setHelp(false);
     setTravel("walk");
     updateRoute(null);
     engine.current?.walk();
   }
-  actions.current = { enter: visit, read: openDossier, exit: goWalking };
+  actions.current = {
+    enter: visit,
+    read: openDossier,
+    exit: goWalking,
+    play: goWalking,
+  };
   useEffect(() => {
     const synchronize = () => {
       const next = parseCityRoute(window.location.hash);
@@ -202,6 +252,60 @@ export default function CityApp() {
   useEffect(() => {
     engine.current?.setPaused(paused);
   }, [ready, paused]);
+  const titleScreen = help && !route;
+  useEffect(() => {
+    engine.current?.setAttract(titleScreen && snapshot.mode === "overview");
+  }, [ready, titleScreen, snapshot.mode]);
+  useEffect(() => {
+    if (!titleScreen) return;
+    const start = (event: KeyboardEvent) => {
+      if (
+        event.key === "Enter" &&
+        !(event.target as HTMLElement)?.closest?.("button,a,input,dialog")
+      )
+        actions.current.play();
+    };
+    window.addEventListener("keydown", start);
+    return () => window.removeEventListener("keydown", start);
+  }, [titleScreen]);
+  useEffect(() => {
+    if (!banner) return;
+    const timer = setTimeout(() => setBanner(null), 3600);
+    return () => clearTimeout(timer);
+  }, [banner]);
+  const currentMission =
+    mission && mission.index < cityMissions.length
+      ? cityMissions[mission.index]
+      : null;
+  const waypoint =
+    currentMission && mission ? doorPoint(currentMission.stops[mission.stop]) : null;
+  const waypointDistance = waypoint
+    ? Math.hypot(snapshot.position.x - waypoint.x, snapshot.position.z - waypoint.z)
+    : Infinity;
+  useEffect(() => {
+    engine.current?.setCheckpoint(route ? null : waypoint);
+  }, [ready, route, waypoint?.x, waypoint?.z]); // eslint-disable-line react-hooks/exhaustive-deps
+  // Fires once each time the visitor arrives at the current waypoint.
+  useEffect(() => {
+    if (!currentMission || !mission || waypointDistance > 3.4) return;
+    const next = mission.stop + 1;
+    if (next < currentMission.stops.length) {
+      setMission({ index: mission.index, stop: next });
+      announce(
+        "Checkpoint",
+        `${next}/${currentMission.stops.length} · next: ${buildingName(currentMission.stops[next])}`,
+      );
+    } else {
+      setMission({ index: mission.index + 1, stop: 0 });
+      const upcoming = cityMissions[mission.index + 1];
+      announce(
+        "Mission passed",
+        upcoming
+          ? `${currentMission.title} · Respect + · next: ${upcoming.title}`
+          : `${currentMission.title} · Respect + · every mission complete`,
+      );
+    }
+  }, [waypointDistance < 3.4]); // eslint-disable-line react-hooks/exhaustive-deps
   const nearby = cityBuildings.find(
     (building) => building.id === snapshot.nearby,
   );
@@ -219,7 +323,7 @@ export default function CityApp() {
         className="city-canvas"
         tabIndex={0}
         role="application"
-        aria-label="Buildverse City. Drag to orbit, scroll to zoom, use W A S D or arrow keys to walk, E to enter a nearby building or read a room display. The city directory provides keyboard navigation to every destination."
+        aria-label="Buildverse City. Drag to look around, scroll to zoom, use W A S D or arrow keys to walk, hold Shift to sprint, Space to jump, F to get in or out of the car, E to enter a nearby building or read a room display. The city directory provides keyboard navigation to every destination."
       />
       {!ready && !unavailable && (
         <div className="city-loading" role="status">
@@ -268,6 +372,22 @@ export default function CityApp() {
               : "EST. 2023 · ALWAYS BUILDING"}
           </small>
         </div>
+        <div
+          className="city-hire"
+          role="img"
+          aria-label={`Hire level ${hireLevel(visited.length)} of 5`}
+        >
+          <span>
+            {hireSteps.map((step, index) => (
+              <Star
+                key={step}
+                size={15}
+                className={index < hireLevel(visited.length) ? "is-earned" : ""}
+              />
+            ))}
+          </span>
+          <small>HIRE LEVEL</small>
+        </div>
         <div className="city-top-actions">
           <button
             type="button"
@@ -309,30 +429,29 @@ export default function CityApp() {
           </a>
         </div>
       </header>
-      {help && !active && (
-        <aside className="city-welcome">
+      {titleScreen && (
+        <aside className="city-title" aria-labelledby="city-title-heading">
           <button
             type="button"
             className="city-icon welcome-close"
-            aria-label="Hide welcome panel"
+            aria-label="Hide title screen"
             onClick={() => setHelp(false)}
           >
             <X size={15} />
           </button>
-          <p className="city-kicker">WELCOME TO MY DATA SOCIETY</p>
-          <h2>
-            Every building
-            <br />
-            has a story.
+          <p className="city-title-eyebrow">ANUSH GUPTA PRESENTS</p>
+          <h2 id="city-title-heading" className="city-title-logo">
+            <span>BUILD</span>
+            <span>VERSE</span>
           </h2>
-          <p>
-            Projects are places. Floors are chapters. There’s a whole portfolio
-            behind these doors.
+          <p className="city-title-tagline">
+            Fourteen buildings. Nine projects. One city you can walk.
           </p>
-          <div>
-            <button type="button" className="city-primary" onClick={goWalking}>
-              <Footprints size={16} />
-              Walk the streets
+          <div className="city-title-actions">
+            <button type="button" className="city-play" onClick={goWalking}>
+              <Play size={18} />
+              Play
+              <kbd>ENTER</kbd>
             </button>
             <button
               type="button"
@@ -343,18 +462,24 @@ export default function CityApp() {
               <ArrowUpRight size={15} />
             </button>
           </div>
-          <ul>
+          <ul className="city-title-controls">
             <li>
-              <kbd>DRAG</kbd>Orbit the city
+              <kbd>W A S D</kbd>Move
             </li>
             <li>
-              <kbd>SCROLL</kbd>Zoom in & out
+              <kbd>SHIFT</kbd>Sprint
             </li>
             <li>
-              <kbd>W A S D</kbd>Walk · arrows work too
+              <kbd>SPACE</kbd>Jump
             </li>
             <li>
-              <kbd>E</kbd>Enter / read the display
+              <kbd>E</kbd>Enter
+            </li>
+            <li>
+              <kbd>F</kbd>Drive
+            </li>
+            <li>
+              <kbd>DRAG</kbd>Look
             </li>
           </ul>
         </aside>
@@ -433,12 +558,51 @@ export default function CityApp() {
       )}
       <CityMinimap
         position={snapshot.position}
+        heading={snapshot.heading}
         active={active?.id ?? null}
+        car={snapshot.car}
+        driving={snapshot.driving}
+        waypoint={route ? null : waypoint}
         onOpen={() => setDirectory(true)}
       />
+      {currentMission && mission && !titleScreen && !route && (
+        <div className="city-objective" role="status">
+          <small>
+            MISSION {mission.index + 1}/{cityMissions.length}
+          </small>
+          <strong>{currentMission.title}</strong>
+          <p>
+            Go to <b>{buildingName(currentMission.stops[mission.stop])}</b>
+            <span>{Math.round(waypointDistance)}m</span>
+          </p>
+          <i
+            style={{
+              width: `${(mission.stop / currentMission.stops.length) * 100}%`,
+            }}
+          />
+        </div>
+      )}
       {(snapshot.mode === "street" || snapshot.mode === "room") && (
         <DirectionPad onMove={(point) => engine.current?.setMovement(point)} />
       )}
+      <div
+        className={`city-speed ${snapshot.sprinting ? "is-on" : ""}`}
+        aria-hidden="true"
+      />
+      <div className="city-levelup" role="status">
+        {banner && (
+          <div key={banner.id}>
+            <strong>{banner.title}</strong>
+            {banner.stars !== undefined && (
+              <span aria-hidden="true">
+                {"★".repeat(banner.stars)}
+                <i>{"★".repeat(5 - banner.stars)}</i>
+              </span>
+            )}
+            <p>{banner.sub}</p>
+          </div>
+        )}
+      </div>
       <div className="city-hover-note" role="status">
         {hover && (
           <>
@@ -471,7 +635,19 @@ export default function CityApp() {
           </button>
         </div>
         <div className="city-interact">
-          {snapshot.mode === "room" ? (
+          {snapshot.driving ? (
+            <button type="button" onClick={() => engine.current?.toggleCar()}>
+              <kbd>F</kbd>Exit car
+              <span className="city-interact-hint">
+                SHIFT BOOST · SPACE HANDBRAKE
+              </span>
+            </button>
+          ) : snapshot.nearCar && snapshot.mode === "street" ? (
+            <button type="button" onClick={() => engine.current?.toggleCar()}>
+              <kbd>F</kbd>Get in the car
+              <CarFront size={14} />
+            </button>
+          ) : snapshot.mode === "room" ? (
             <button type="button" onClick={openDossier}>
               <kbd>E</kbd>Read this floor’s dossier
               <ArrowUpRight size={14} />
@@ -484,7 +660,7 @@ export default function CityApp() {
           ) : (
             <span>
               {snapshot.mode === "street"
-                ? "WASD / ARROWS TO WALK · FIND A DOOR"
+                ? "WASD MOVE · SHIFT SPRINT · SPACE JUMP · F DRIVE"
                 : "SELECT A BUILDING OR A FACADE FLOOR TO ENTER"}
             </span>
           )}

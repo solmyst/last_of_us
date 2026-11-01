@@ -37,7 +37,7 @@ export function buildDistrict(parent: THREE.Group, kit: SceneKit) {
   return {
     blocks,
     setNight(night: boolean) {
-      for (const glass of glasses) glass.emissiveIntensity = night ? 0.55 : 0.08;
+      for (const glass of glasses) glass.emissiveIntensity = night ? 0.32 : 0.08;
     },
   };
 }

@@ -14,7 +14,17 @@ const compiled = ts.transpileModule(source, {
     target: ts.ScriptTarget.ES2022,
   },
 }).outputText;
-const { cityBuildings, moveCitizen, nearestDoor, parseCityRoute, cityRoute } =
+const {
+  cityBuildings,
+  moveCitizen,
+  nearestDoor,
+  parseCityRoute,
+  cityRoute,
+  driveCar,
+  cityMissions,
+  doorPoint,
+  isBlocked,
+} =
   await import(
     `data:text/javascript;base64,${Buffer.from(compiled).toString("base64")}`
   );
@@ -39,6 +49,15 @@ test("movement is frame-time safe and stays inside the district", () => {
   for (let i = 0; i < 2000; i++)
     position = moveCitizen(position, { x: 1, z: 0 }, 0.1);
   assert.ok(position.x <= 32 && position.x >= -32);
+});
+test("sprinting is faster than walking but still frame-time safe and collides", () => {
+  const walk = moveCitizen({ x: 0, z: 7 }, { x: 1, z: 0 }, 0.1);
+  const sprint = moveCitizen({ x: 0, z: 7 }, { x: 1, z: 0 }, 0.1, 11);
+  assert.ok(sprint.x > walk.x);
+  assert.ok(moveCitizen({ x: 0, z: 7 }, { x: 1, z: 0 }, 5, 11).x <= 2.21);
+  const building = cityBuildings[0];
+  const start = { x: building.x - building.width / 2 - 0.5, z: building.z };
+  assert.equal(moveCitizen(start, { x: 1, z: 0 }, 0.1, 11).x, start.x);
 });
 test("a citizen cannot walk through buildings, but can slide along their edge", () => {
   const building = cityBuildings[0];
@@ -131,4 +150,29 @@ test("project floors separate the problem, implementation, and decisions", () =>
   assert.equal(floorContent(interview, 0).sections[0].heading, "The problem");
   assert.equal(floorContent(interview, 1).sections[0].heading, "What I built");
   assert.match(floorContent(interview, 2).sections[0].text, /Answer Lab/);
+});
+
+test("the car accelerates, steers, respects top speed and never enters a building", () => {
+  const go = { throttle: 1, steer: 0, boost: false, brake: false };
+  let car = { x: 0, z: 0, heading: 0, speed: 0 };
+  for (let i = 0; i < 400; i++) car = driveCar(car, go, 1 / 60);
+  assert.ok(car.speed > 0 && car.speed <= 20.01);
+  const turned = driveCar({ x: 0, z: 0, heading: 0, speed: 10 }, { ...go, steer: 1 }, 0.1);
+  assert.ok(turned.heading < 0);
+  const parked = driveCar({ x: 0, z: 0, heading: 0, speed: 0 }, { ...go, throttle: 0, steer: 1 }, 0.1);
+  assert.equal(parked.heading, 0);
+  // Drive straight at a building: the car stops outside it.
+  const building = cityBuildings[0];
+  car = { x: building.x, z: building.z + building.depth / 2 + 3, heading: Math.PI, speed: 0 };
+  for (let i = 0; i < 600; i++) {
+    car = driveCar(car, go, 1 / 30);
+    assert.ok(!isBlocked(car, 1.1));
+  }
+});
+test("missions only visit real addresses", () => {
+  for (const mission of cityMissions) {
+    assert.ok(mission.stops.length > 0);
+    for (const stop of mission.stops) assert.ok(doorPoint(stop));
+  }
+  assert.equal(doorPoint("nowhere"), null);
 });

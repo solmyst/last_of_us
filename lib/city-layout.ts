@@ -213,22 +213,75 @@ export const cityBuildings: CityBuilding[] = [
 export type CityPoint = { x: number; z: number };
 export type CityRoute = { id: string; floor: number; reading: boolean };
 export const floorHeight = 3.2;
+export function isBlocked(point: CityPoint, margin: number) {
+  return cityBuildings.some(
+    (building) =>
+      Math.abs(point.x - building.x) < building.width / 2 + margin &&
+      Math.abs(point.z - building.z) < building.depth / 2 + margin,
+  );
+}
+export type CarState = { x: number; z: number; heading: number; speed: number };
+export type CarInput = {
+  throttle: number;
+  steer: number;
+  boost: boolean;
+  brake: boolean;
+};
+// Arcade handling: heading is the yaw whose forward vector is (sin, cos).
+export function driveCar(car: CarState, input: CarInput, delta: number): CarState {
+  const dt = Math.min(Math.max(delta, 0), 0.1);
+  const top = input.boost ? 30 : 20;
+  let speed = car.speed;
+  if (input.throttle) {
+    const braking = speed && Math.sign(input.throttle) !== Math.sign(speed);
+    speed += input.throttle * (braking ? 32 : input.boost ? 22 : 14) * dt;
+  } else speed -= Math.sign(speed) * Math.min(Math.abs(speed), 6 * dt);
+  if (input.brake) speed -= Math.sign(speed) * Math.min(Math.abs(speed), 26 * dt);
+  speed = Math.max(-8, Math.min(speed, Math.max(top, car.speed - 20 * dt)));
+  const grip = Math.max(-1, Math.min(1, speed / 6));
+  const heading =
+    car.heading - input.steer * (input.brake ? 3.4 : 2.3) * grip * dt;
+  const step = speed * dt;
+  const free = (x: number, z: number) =>
+    Math.abs(x) <= 33 && Math.abs(z) <= 33 && !isBlocked({ x, z }, 1.1);
+  const x = car.x + Math.sin(heading) * step,
+    z = car.z + Math.cos(heading) * step;
+  if (free(x, z)) return { x, z, heading, speed };
+  // Scrape along a wall when one axis is still open, bounce off a head-on hit.
+  if (free(x, car.z)) return { x, z: car.z, heading, speed: speed * 0.7 };
+  if (free(car.x, z)) return { x: car.x, z, heading, speed: speed * 0.7 };
+  return { x: car.x, z: car.z, heading, speed: -speed * 0.25 };
+}
+export const cityMissions = [
+  {
+    id: "recruiter",
+    title: "The Recruiter's Tour",
+    stops: ["about", "interview-ace", "relay-voice", "contact"],
+  },
+  {
+    id: "engineer",
+    title: "Under the Hood",
+    stops: ["krate", "skills", "decisions"],
+  },
+];
+export function doorPoint(id: string): CityPoint | null {
+  const building = cityBuildings.find((item) => item.id === id);
+  return building
+    ? { x: building.x, z: building.z + building.depth / 2 + 1.2 }
+    : null;
+}
 export function moveCitizen(
   position: CityPoint,
   input: CityPoint,
   delta: number,
+  speed = 6,
 ): CityPoint {
   const length = Math.hypot(input.x, input.z);
   if (!length) return { ...position };
-  const distance = Math.min(Math.max(delta, 0), 0.2) * 6;
+  const distance = Math.min(Math.max(delta, 0), 0.2) * speed;
   const dx = (input.x / Math.max(length, 1)) * distance,
     dz = (input.z / Math.max(length, 1)) * distance;
-  const blocked = (x: number, z: number) =>
-    cityBuildings.some(
-      (building) =>
-        Math.abs(x - building.x) < building.width / 2 + 0.45 &&
-        Math.abs(z - building.z) < building.depth / 2 + 0.45,
-    );
+  const blocked = (x: number, z: number) => isBlocked({ x, z }, 0.45);
   let x = Math.max(-32, Math.min(32, position.x + dx));
   if (blocked(x, position.z)) x = position.x;
   let z = Math.max(-32, Math.min(32, position.z + dz));
